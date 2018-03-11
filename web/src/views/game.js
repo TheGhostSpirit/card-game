@@ -1,5 +1,16 @@
+import Solitaire from 'models/solitaire';
+import { inject } from 'aurelia-framework';
+
+@inject(Solitaire)
 export class Game {
-  constructor(){
-      this.message = 'toto';
+
+  constructor(solitaire) {
+    this.solitaire = solitaire;
+    this.message = 'toto';
+    this.solitaire.prepare();
+  }
+
+  activate() {
+
   }
 }
