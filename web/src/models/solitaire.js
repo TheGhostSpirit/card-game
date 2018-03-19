@@ -1,5 +1,5 @@
 import { inject } from 'aurelia-framework';
-import Deck from 'models/deck';
+import { Deck } from 'models/deck';
 
 @inject(Deck)
 export class Solitaire {
@@ -10,6 +10,7 @@ export class Solitaire {
     this.stub = [];
     this.returnedStub = [];
     this.slots = [];
+    for (let i = 0; i < 7; i++) this.slots.push([]);
   }
 
   prepare() {
@@ -18,13 +19,12 @@ export class Solitaire {
   }
 
   fillSlots() {
-    // let card = this.deck.pop()  this.slots[i][j] = card ...
-    for(let i = 0; i < 7; i++)
-    {
-      for(let j = 0; j < i + 1; j ++){
-        this.slots[i][j] = this.deck.cards.pop();
-        console.log(this.slots);
+    //let card = this.deck.pop()  this.slots[i][j] = card;
+    for (let i = 0; i < 7; i++) {
+      for (let j = 0; j < i + 1; j++) {
+        this.slots[i].push(this.deck.cards.pop());
       }
     }
+    console.log(this.slots);
   }
 }

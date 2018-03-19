@@ -14,5 +14,7 @@ export class Card {
     this.suit = suit;
     this.name = name;
     this.value = value;
+    this.rank = name.toLowerCase();
+    this.cssSuit = `&${this.suit};`;
   }
 }

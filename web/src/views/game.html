@@ -1,5 +1,5 @@
 <template>
-    <h2>game</h2>
+  <h2>game</h2>
     <!-- 
       databinder
       solitaire.slots[0] .. solitaire.slots[6]
@@ -7,4 +7,76 @@
       solitaire.stub .. solitaire.returnedStub
       sur des ul / li
     -->
+  <div class="playingCards slotsContainer">
+    <span>
+      <ul>
+        <li repeat.for="card of solitaire.slots[0]" class="deck">
+          <div class="card rank-${card.rank} ${card.suit}">
+            <span class="rank">${card.name}</span>
+            <span class="suit" innerhtml.bind="card.cssSuit"></span>
+          </div>
+        </li>
+      </ul>
+    </span>
+    <span>
+      <ul>
+        <li repeat.for="card of solitaire.slots[1]" class="deck">
+          <div class="card rank-${card.rank} ${card.suit}">
+            <span class="rank">${card.name}</span>
+            <span class="suit" innerhtml.bind="card.cssSuit"></span>
+          </div>
+        </li>
+      </ul>
+    </span>
+    <span>
+      <ul>
+        <li repeat.for="card of solitaire.slots[2]" class="deck">
+          <div class="card rank-${card.rank} ${card.suit}">
+            <span class="rank">${card.name}</span>
+            <span class="suit" innerhtml.bind="card.cssSuit"></span>
+          </div>
+        </li>
+      </ul>
+    </span>
+    <span>
+      <ul>
+        <li repeat.for="card of solitaire.slots[3]" class="deck">
+          <div class="card rank-${card.rank} ${card.suit}">
+            <span class="rank">${card.name}</span>
+            <span class="suit" innerhtml.bind="card.cssSuit"></span>
+          </div>
+        </li>
+      </ul>
+    </span>
+    <span>
+      <ul>
+        <li repeat.for="card of solitaire.slots[4]" class="deck">
+          <div class="card rank-${card.rank} ${card.suit}">
+            <span class="rank">${card.name}</span>
+            <span class="suit" innerhtml.bind="card.cssSuit"></span>
+          </div>
+        </li>
+      </ul>
+    </span>
+    <span>
+      <ul>
+        <li repeat.for="card of solitaire.slots[5]" class="deck">
+          <div class="card rank-${card.rank} ${card.suit}">
+            <span class="rank">${card.name}</span>
+            <span class="suit" innerhtml.bind="card.cssSuit"></span>
+          </div>
+        </li>
+      </ul>
+    </span>
+    <span>
+      <ul>
+        <li repeat.for="card of solitaire.slots[6]" class="deck">
+          <div class="card rank-${card.rank} ${card.suit}">
+            <span class="rank">${card.name}</span>
+            <span class="suit" innerhtml.bind="card.cssSuit"></span>
+          </div>
+        </li>
+      </ul>
+    </span>
+  </div>
 </template>
