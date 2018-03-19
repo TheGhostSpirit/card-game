@@ -6,10 +6,8 @@ export class Game {
 
   constructor(solitaire) {
     this.solitaire = solitaire;
-    this.solitaire.prepare();
   }
 
   activate() {
-
   }
 }

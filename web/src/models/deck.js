@@ -24,6 +24,5 @@ export class Deck {
       this.cards[location1] = this.cards[location2];
       this.cards[location2] = tmp;
     }
-
   }
 }

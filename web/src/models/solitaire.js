@@ -10,7 +10,7 @@ export class Solitaire {
     this.stub = [];
     this.returnedStub = [];
     this.slots = [];
-    for (let i = 0; i < 7; i++) this.slots.push([]);
+    this.prepare();
   }
 
   prepare() {
@@ -19,12 +19,11 @@ export class Solitaire {
   }
 
   fillSlots() {
-    //let card = this.deck.pop()  this.slots[i][j] = card;
+    for (let i = 0; i < 7; i++) this.slots.push([]);
     for (let i = 0; i < 7; i++) {
       for (let j = 0; j < i + 1; j++) {
         this.slots[i].push(this.deck.cards.pop());
       }
     }
-    console.log(this.slots);
   }
 }
