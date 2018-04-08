@@ -1,45 +1,40 @@
 <template>
+
   <h2>game</h2>
-  <div class="playingCards slotsContainer">
-    <span>
+  <div class="playingCards">
+
+    <!-- -->
+    <span id="solitaire-stub">
       <ul class="deck cardsize" click.trigger="solitaire.returnStub()">
         <li repeat.for="card of solitaire.stub" class="slots">
-          <div class="card back">
-            <span class="rank">${card.name}</span>
-            <span class="suit" innerhtml.bind="card.cssSuit"></span>
-          </div>
+          <compose view="../models/card.html" containerless></compose>
         </li>
       </ul>
     </span>
-    <span>
+
+    <span id="solitaire-returned-stub">
       <ul>
-        <li repeat.for="card of solitaire.returnedStub" class="slots">
-          <div class="card ${card.returned?'back':'rank-${card.rank} ${card.suit}'}" click.trigger="solitaire.returnCard(card)">
-            <span class="rank">${card.name}</span>
-            <span class="suit" innerhtml.bind="card.cssSuit"></span>
-          </div>
+        <li repeat.for="card of solitaire.returnedStub" class="slots" click.trigger="solitaire.returnCard(card)">
+          <compose view="../models/card.html" containerless></compose>
         </li>
       </ul>
     </span>
-    <span>
-      <ul>
-        <li repeat.for="card of solitaire.kingCells" class="slots">
-          <div class="card rank-${card.rank} ${card.suit}">
-            <span class="rank">${card.name}</span>
-            <span class="suit" innerhtml.bind="card.cssSuit"></span>
-          </div>
+
+    <span id="solitaire-king-slots">
+      <ul repeat.for="i of 4" class="cardsize">
+        <li repeat.for="card of solitaire.kingCells[i]" class="slots">
+          <compose view="../models/card.html" containerless></compose>
         </li>
       </ul>
     </span>
-    <span repeat.for="i of 7">
-      <ul click.trigger="solitaire.moveFromSlotToSlot(i)">
+
+    <span id="solitaire-slots" class="slotsContainer">
+      <ul repeat.for="i of 7" click.trigger="solitaire.moveFromSlotToSlot(i)">
         <li repeat.for="card of solitaire.slots[i]" class="slots">
-          <div class="card rank-${card.rank} ${card.suit} ${card.selected?'selected-card':''}">
-            <span class="rank">${card.name}</span>
-            <span class="suit" innerhtml.bind="card.cssSuit"></span>
-          </div>
+          <compose view="../models/card.html" containerless></compose>
         </li>
       </ul>
     </span>
+
   </div>
 </template>

@@ -51,8 +51,7 @@ export class Solitaire {
       if (this.check(this.previousSlot, currentSlot) === true) {
         this.selectCard(this.slots[this.previousSlot][previousLastCard]);
         this.slots[currentSlot].push(this.slots[this.previousSlot].pop());
-      }
-      else {
+      } else {
         this.selectCard(this.slots[this.previousSlot][previousLastCard]);
       }
       this.previousSlot = undefined;
@@ -64,7 +63,7 @@ export class Solitaire {
   }
 
   returnStub() {
-    if (this.stub.length != 0) {
+    if (this.stub.length !== 0) {
       this.returnedStub.push(this.stub.pop());
     } else {
       while (this.returnedStub.length > 0) {
@@ -82,16 +81,10 @@ export class Solitaire {
   }
 
   selectCard(card) {
-    if (card.selected === false)
-      card.selected = true;
-    else
-      card.selected = false;
+    card.selected = !card.selected;
   }
 
   returnCard(card) {
-    if (card.returned === false)
-      card.returned = true;
-    else
-      card.returned = false;
+    card.returned = !card.returned;
   }
 }
