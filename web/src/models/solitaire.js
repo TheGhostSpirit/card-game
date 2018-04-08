@@ -10,6 +10,7 @@ export class Solitaire {
     this.stub = [];
     this.returnedStub = [];
     this.slots = [];
+    this.previousSlot = undefined;
     this.prepare();
   }
 
@@ -30,7 +31,7 @@ export class Solitaire {
   }
 
   fillStub() {
-    while(this.deck.cards.length > 0) {
+    while (this.deck.cards.length > 0) {
       this.stub.push(this.deck.cards.pop());
     }
   }
@@ -41,9 +42,24 @@ export class Solitaire {
     }
   }
 
-  move(previousSlot, currentSlot) {
-    if (this.check(previousSlot, currentSlot) === true) {
-      this.slots[currentSlot].push(this.slots[previousSlot].pop());
+  moveFromSlotToSlot(currentSlot) {
+    let currentLastCard = this.slots[currentSlot].length - 1;
+    //if the user already clicked on a card
+    if (typeof this.previousSlot !== 'undefined') {
+      let previousLastCard = this.slots[this.previousSlot].length - 1;
+      //if move is correct
+      if (this.check(this.previousSlot, currentSlot) === true) {
+        this.selectCard(this.slots[this.previousSlot][previousLastCard]);
+        this.slots[currentSlot].push(this.slots[this.previousSlot].pop());
+      }
+      else {
+        this.selectCard(this.slots[this.previousSlot][previousLastCard]);
+      }
+      this.previousSlot = undefined;
+      //if the user didn't click on a card
+    } else {
+      this.previousSlot = currentSlot;
+      this.selectCard(this.slots[currentSlot][currentLastCard]);
     }
   }
 
@@ -51,17 +67,31 @@ export class Solitaire {
     if (this.stub.length != 0) {
       this.returnedStub.push(this.stub.pop());
     } else {
-      while(this.returnedStub.length > 0){
+      while (this.returnedStub.length > 0) {
         this.stub.push(this.returnedStub.pop());
       }
     }
   }
 
-  check(previousSlot, currentSlot){
+  check(previousSlot, currentSlot) {
     let currentLastCard = this.slots[currentSlot].length - 1;
     let previousLastCard = this.slots[previousSlot].length - 1;
-    if (this.slots[previousSlot][previousLastCard].value + 1 === this.slots[currentSlot][currentLastCard].value){
+    if (this.slots[previousSlot][previousLastCard].value + 1 === this.slots[currentSlot][currentLastCard].value) {
       return true;
     }
+  }
+
+  selectCard(card) {
+    if (card.selected === false)
+      card.selected = true;
+    else
+      card.selected = false;
+  }
+
+  returnCard(card) {
+    if (card.returned === false)
+      card.returned = true;
+    else
+      card.returned = false;
   }
 }

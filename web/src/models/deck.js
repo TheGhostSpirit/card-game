@@ -17,8 +17,8 @@ export class Deck {
 
   shuffle() {
     for (let i = 0; i < 1000; i++) {
-      let location1 = Math.floor((Math.random() * this.cards.length));
-      let location2 = Math.floor((Math.random() * this.cards.length));
+      let location1 = Math.floor(Math.random() * this.cards.length);
+      let location2 = Math.floor(Math.random() * this.cards.length);
       let tmp = this.cards[location1];
       this.cards[location1] = this.cards[location2];
       this.cards[location2] = tmp;
