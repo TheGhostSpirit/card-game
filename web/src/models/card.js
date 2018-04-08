@@ -1,6 +1,6 @@
 import { computedFrom } from 'aurelia-framework';
 
-/** 
+/**
  * Describes a playable game card.
 */
 export class Card {
