@@ -4,6 +4,31 @@ body{
   background-color: @main-color;
 }
 
+#solitaire-game {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around; 
+}
+
+#solitaire-stub {
+  order:1;
+}
+
+#solitaire-returned-stub {
+  order:2;
+}
+
+#solitaire-king-slots {
+ order: 3;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around; 
+}
+
+#solitaire-slots {
+  order: 4;
+}
+
 .slots{
   list-style: none;
   margin-left: 30px;
@@ -17,8 +42,10 @@ body{
 
 .cardsize{
   width: 75px;
+  margin: 25px;
   height: 100px;
-  background-color: antiquewhite;
+  padding: 0;
+  border: 1px solid silver;
 }
 
 .selected-card{
