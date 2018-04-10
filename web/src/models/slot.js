@@ -6,7 +6,7 @@ export class Slot {
 
   canGetFrom(index) {
     if (this.cards.length > 0) {
-      for (let i = 0; i < this.cards.length; i++) {
+      for (var i = 0; i < this.cards.length; i++) {
         if (this.cards[i].returned === false) {
           break;
         }

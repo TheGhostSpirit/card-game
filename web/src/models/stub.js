@@ -9,6 +9,10 @@ export class Stub {
     return index === this.cards.length - 1 && this.cards.length !== 0 ? true : false;
   }
 
+  canMoveTo(src) {
+    return false;
+  }
+
   return() {
     if (this.cards.length !== 0) {
       this.returnedCards.push(this.cards.pop());

@@ -6,32 +6,32 @@
     <!-- -->
     <span id="solitaire-stub" class="cardsize">
       <ul class="deck" click.trigger="solitaire.stub.return()">
-        <li repeat.for="card of solitaire.stub.cards" class="slots" click.trigger="solitaire.moveCard($index, i, zones.stub)">
-          <compose view="../models/card.html" containerless></compose>
+        <li repeat.for="card of solitaire.stub.cards" class="slots" click.trigger="stub.return()">
+          <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
     </span>
 
     <span id="solitaire-returned-stub">
       <ul class="deck">
-        <li repeat.for="card of solitaire.stub.returnedCards" class="slots">
-          <compose view="../models/card.html" containerless></compose>
+        <li repeat.for="card of solitaire.stub.returnedCards" class="slots" click.trigger="solitaire.moveCard($index, i, 'stub')">
+          <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
     </span>
 
     <span id="solitaire-king-slots">
       <ul repeat.for="i of 4" class="cardsize">
-        <li repeat.for="card of solitaire.kingSlots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, zones.kingSlots)">
-          <compose view="../models/card.html" containerless></compose>
+        <li repeat.for="card of solitaire.kingSlots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, 'kingSlots')">
+          <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
     </span>
 
     <span id="solitaire-slots" class="slotsContainer">
       <ul repeat.for="i of 7">
-        <li repeat.for="card of solitaire.slots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, zones.slots)">
-          <compose view="../models/card.html" containerless></compose>
+        <li repeat.for="card of solitaire.slots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, 'slots')">
+          <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
     </span>

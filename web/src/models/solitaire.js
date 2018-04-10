@@ -45,22 +45,24 @@ export class Solitaire {
     }
   }
 
-  moveCardFromSlotToSlot(cardIndex, slotIndex, zone) {
+  moveCard(cardIndex, slotIndex, zone) {
     //if the user already clicked on a card
     if (typeof this.previousCardIndex !== 'undefined') {
       // Destination condition
+      let destinationSlot = this.getSlot(slotIndex, zone);
+      let src = this.getCards(cardIndex, slotIndex, zone);
       //if move is correct
-      if (this.canBeMoved(this.previousCardIndex, cardIndex, this.previousSlotIndex, slotIndex) === true) {
+      if (destinationSlot.canMoveTo(src)) {
         this.selectCards(this.previousCardIndex, this.previousSlotIndex); //desel
       } else {
-        this.selectCard(this.previousCardIndex, this.previousSlotIndex); //desel
+        this.selectCards(this.previousCardIndex, this.previousSlotIndex); //desel
       }
       this.previousCardIndex = undefined;
       //if the user didn't click on a card or wrong card
     } else {
       // Source condition
-      let sourceSlot = getSlot(slotIndex, zone);
-      if (sourceSlot.canGetFrom(cardIndex))  {
+      let sourceSlot = this.getSlot(slotIndex, zone);
+      if (sourceSlot.canGetFrom(cardIndex)) {
         this.previousCardIndex = cardIndex;
         this.previousSlotIndex = slotIndex;
         this.selectCards(cardIndex, slotIndex);
@@ -69,14 +71,24 @@ export class Solitaire {
   }
 
   getSlot(slotIndex, zone) {
-    return undefined;
+    console.log(zone);
+    return this.slots[slotIndex];
   }
 
-  selectCards(card, slot) {
+  getCards(cardIndex, slotIndex, zone) {
+    let slot = this.getSlot(slotIndex, zone);
+    let arr = [];
+    for (let i = cardIndex; i < slot.length; i++) {
+      arr.push(slot[i]);
+    }
+    return arr;
+  }
+
+  selectCards(cardIndex, slotIndex) {
     do {
-      this.selectCard(this.slots[slot][card]);
-      card++;
-    } while (card !== this.slots[slot].length - 1);
+      this.selectCard(this.slots[slotIndex][cardIndex]);
+      cardIndex++;
+    } while (cardIndex !== this.slots[slotIndex].length - 1);
   }
 
   selectCard(card) {
@@ -86,5 +98,4 @@ export class Solitaire {
   returnCard(card) {
     card.returned = !card.returned;
   }
-
 }
