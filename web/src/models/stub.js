@@ -1,9 +1,32 @@
-export class stub {
+export class Stub {
+
   constructor() {
-    this.stub = [];
+    this.cards = [];
+    this.returnedCards = [];
   }
 
   canGetFrom(index) {
-    return index === this.stub.length - 1 && this.stub.length !== 0 ? true : false;
+    return index === this.cards.length - 1 && this.cards.length !== 0 ? true : false;
   }
+
+  return() {
+    if (this.cards.length !== 0) {
+      this.returnedCards.push(this.cards.pop());
+      this.returnedCards[this.returnedCards.length - 1].returned = false;
+    } else {
+      while (this.returnedCards.length > 0) {
+        this.cards.push(this.returnedCards.pop());
+        this.cards[this.cards.length - 1].returned = true;
+      }
+    }
+  }
+
+  fill(deck) {
+    while (deck.cards.length > 0) {
+      let card = deck.cards.pop();
+      card.returned = true;
+      this.cards.push(card);
+    }
+  }
+
 }
