@@ -14,7 +14,7 @@
 
     <span id="solitaire-returned-stub">
       <ul class="deck">
-        <li repeat.for="card of solitaire.stub.returnedCards" class="slots" click.trigger="solitaire.moveCard($index, i, 'stub')">
+        <li repeat.for="card of solitaire.stub.returnedCards" class="slots" click.trigger="solitaire.moveCard($index, 0, 'stub')">
           <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>

@@ -4,7 +4,7 @@ import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
 
-const ZONES = ['slots', 'stub', 'kingSlots'];
+const ZONES = Object.freeze({slots: 0, kingSlots: 1, stub: 2});
 
 @inject(Deck)
 export class Solitaire {
