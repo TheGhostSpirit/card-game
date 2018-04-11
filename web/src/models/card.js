@@ -31,4 +31,8 @@ export class Card {
     return css;
   }
 
+  isSameColor(cardToCompare) {
+    return this.suit % 2 === cardToCompare.suit % 2;
+  }
+
 }

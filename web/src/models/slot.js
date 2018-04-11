@@ -17,8 +17,9 @@ export class Slot {
   }
 
   canMoveTo(src) {
+    let lastCard = this.cards[this.cards.length - 1];
     if (this.cards.length > 0) {
-      return src[0].value + 1 === this.cards[length - 1].value && ((this.cards[length - 1].suit % 2 === 1 && src[0].suit % 2 === 0) || (this.cards[length - 1].suit % 2 === 0 && src[0].suit % 2 === 1)) ? true : false;
+      return src[0].value + 1 === lastCard.value && !src[0].isSameColor(lastCard);
     }
     return src[0].value === 13 ? true : false;
   }

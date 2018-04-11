@@ -5,8 +5,8 @@
 
     <!-- -->
     <span id="solitaire-stub" class="cardsize">
-      <ul class="deck" click.trigger="solitaire.stub.return()">
-        <li repeat.for="card of solitaire.stub.cards" class="slots" click.trigger="stub.return()">
+      <ul class="deck" click.trigger="solitaire.stub.turn()">
+        <li repeat.for="card of solitaire.stub.cards" class="slots">
           <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
@@ -14,15 +14,15 @@
 
     <span id="solitaire-returned-stub">
       <ul class="deck">
-        <li repeat.for="card of solitaire.stub.returnedCards" class="slots" click.trigger="solitaire.moveCard($index, 0, 'stub')">
+        <li repeat.for="card of solitaire.stub.returnedCards" class="slots" click.trigger="solitaire.moveCard($index, 0, solitaire.zones.stub)">
           <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
     </span>
 
     <span id="solitaire-king-slots">
-      <ul repeat.for="i of 4" class="cardsize">
-        <li repeat.for="card of solitaire.kingSlots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, 'kingSlots')">
+      <ul repeat.for="i of 4" class="cardsize" click.trigger="solitaire.moveCard($index, i, solitaire.zones.kingSlots)">
+        <li repeat.for="card of solitaire.kingSlots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, solitaire.zones.kingSlots)">
           <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
@@ -30,7 +30,7 @@
 
     <span id="solitaire-slots" class="slotsContainer">
       <ul repeat.for="i of 7">
-        <li repeat.for="card of solitaire.slots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, 'slots')">
+        <li repeat.for="card of solitaire.slots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, solitaire.zones.slots)">
           <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>

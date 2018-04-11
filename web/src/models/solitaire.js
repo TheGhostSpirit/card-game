@@ -4,7 +4,7 @@ import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
 
-const ZONES = Object.freeze({slots: 0, kingSlots: 1, stub: 2});
+const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
 
 @inject(Deck)
 export class Solitaire {
@@ -15,9 +15,7 @@ export class Solitaire {
     this.kingSlots = [];
     this.stub = new Stub();
     this.slots = [];
-    this.previousSlotIndex = undefined;
-    this.previousCardIndex = undefined;
-    this.previousZone = undefined;
+    this.previousSelection = undefined;
     this.prepare();
   }
 
@@ -47,48 +45,45 @@ export class Solitaire {
 
   moveCard(cardIndex, slotIndex, zone) {
     //if the user already clicked on a card
-    if (typeof this.previousCardIndex !== 'undefined') {
+    if (typeof this.previousSelection !== 'undefined') {
       // Destination condition
       let destinationSlot = this.getSlot(slotIndex, zone);
-      let src = this.getCards(cardIndex, slotIndex, zone);
+      let src = this.getCards(this.previousSelection);
       //if move is correct
+      this.selectCards(this.previousSelection); //desel
       if (destinationSlot.canMoveTo(src)) {
-        this.selectCards(this.previousCardIndex, this.previousSlotIndex); //desel
-      } else {
-        this.selectCards(this.previousCardIndex, this.previousSlotIndex); //desel
+        src.forEach(c => {
+          this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
+          destinationSlot.cards.push(c);
+        });
       }
-      this.previousCardIndex = undefined;
+      this.previousSelection = undefined;
       //if the user didn't click on a card or wrong card
     } else {
       // Source condition
       let sourceSlot = this.getSlot(slotIndex, zone);
       if (sourceSlot.canGetFrom(cardIndex)) {
-        this.previousCardIndex = cardIndex;
-        this.previousSlotIndex = slotIndex;
-        this.selectCards(cardIndex, slotIndex);
+        this.previousSelection = { slot: sourceSlot, index: cardIndex };
+        this.selectCards(this.previousSelection);
       }
     }
   }
 
   getSlot(slotIndex, zone) {
-    console.log(zone);
-    return this.slots[slotIndex];
-  }
-
-  getCards(cardIndex, slotIndex, zone) {
-    let slot = this.getSlot(slotIndex, zone);
-    let arr = [];
-    for (let i = cardIndex; i < slot.length; i++) {
-      arr.push(slot[i]);
+    if (zone === ZONES.slots) {
+      return this.slots[slotIndex];
+    } else if (zone === ZONES.kingSlots) {
+      return this.kingSlots[slotIndex];
     }
-    return arr;
+    return this.stub;
   }
 
-  selectCards(cardIndex, slotIndex) {
-    do {
-      this.selectCard(this.slots[slotIndex][cardIndex]);
-      cardIndex++;
-    } while (cardIndex !== this.slots[slotIndex].length - 1);
+  getCards(cardsSelection) {
+    return cardsSelection.slot.cards.filter((c, i) => i >= cardsSelection.index);
+  }
+
+  selectCards(cardsSelection) {
+    this.getCards(cardsSelection).forEach(this.selectCard);
   }
 
   selectCard(card) {

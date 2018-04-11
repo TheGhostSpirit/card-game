@@ -13,7 +13,7 @@ export class Stub {
     return false;
   }
 
-  return() {
+  turn() {
     if (this.cards.length !== 0) {
       this.returnedCards.push(this.cards.pop());
       this.returnedCards[this.returnedCards.length - 1].returned = false;
