@@ -56,6 +56,8 @@ export class Solitaire {
           this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
           destinationSlot.cards.push(c);
         });
+        let test = this.previousSelection.slot.cards.find(c => !c.returned);
+        if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
       }
       this.previousSelection = undefined;
       //if the user didn't click on a card or wrong card
@@ -63,7 +65,7 @@ export class Solitaire {
       // Source condition
       let sourceSlot = this.getSlot(slotIndex, zone);
       if (sourceSlot.canGetFrom(cardIndex)) {
-        this.previousSelection = { slot: sourceSlot, index: cardIndex };
+        this.previousSelection = { slot: sourceSlot, index: cardIndex, zone: zone };
         this.selectCards(this.previousSelection);
       }
     }
