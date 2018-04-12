@@ -1,7 +1,5 @@
 import { Card } from 'models/card';
-
-const SUITS = ['hearts', 'spades', 'diams', 'clubs'];
-const NAMES = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+import { SUITS, NAMES } from 'models/card-const';
 
 export class Deck {
 

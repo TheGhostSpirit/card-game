@@ -6,12 +6,8 @@ export class Slot {
 
   canGetFrom(index) {
     if (this.cards.length > 0) {
-      for (var i = 0; i < this.cards.length; i++) {
-        if (this.cards[i].returned === false) {
-          break;
-        }
-      }
-      return index >= i && index <= this.cards.length - 1 ? true : false;
+      let firstReturnedCardIndex = this.cards.indexOf(this.cards.find(c => !c.returned));
+      return index >= firstReturnedCardIndex && index <= this.cards.length - 1 ? true : false;
     }
     return false;
   }

@@ -1,4 +1,5 @@
 import { computedFrom } from 'aurelia-framework';
+import { SUITS } from 'models/card-const';
 
 /**
  * Describes a playable game card.
@@ -16,6 +17,7 @@ export class Card {
     this.suit = suit;
     this.name = name;
     this.value = value;
+    this.color = SUITS.indexOf(suit);
     //css related
     this.rank = name.toLowerCase();
     this.suitCss = `&${this.suit};`;
@@ -32,7 +34,7 @@ export class Card {
   }
 
   isSameColor(cardToCompare) {
-    return this.suit % 2 === cardToCompare.suit % 2;
+    return this.color % 2 === cardToCompare.color % 2;
   }
 
 }

@@ -14,13 +14,13 @@ export class Stub {
   }
 
   turn() {
-    if (this.cards.length !== 0) {
-      this.returnedCards.push(this.cards.pop());
-      this.returnedCards[this.returnedCards.length - 1].returned = false;
+    if (this.returnedCards.length !== 0) {
+      this.cards.push(this.returnedCards.pop());
+      this.cards[this.cards.length - 1].returned = false;
     } else {
-      while (this.returnedCards.length > 0) {
-        this.cards.push(this.returnedCards.pop());
-        this.cards[this.cards.length - 1].returned = true;
+      while (this.cards.length > 0) {
+        this.returnedCards.push(this.cards.pop());
+        this.returnedCards[this.returnedCards.length - 1].returned = true;
       }
     }
   }
@@ -29,7 +29,7 @@ export class Stub {
     while (deck.cards.length > 0) {
       let card = deck.cards.pop();
       card.returned = true;
-      this.cards.push(card);
+      this.returnedCards.push(card);
     }
   }
 
