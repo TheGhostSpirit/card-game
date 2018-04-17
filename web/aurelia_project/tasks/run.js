@@ -10,7 +10,7 @@ let serve = gulp.series(
   build,
   done => {
     browserSync({
-      tunnel: true,
+      tunnel: false,
       open: 'external',
       online: true,
       browser: ['chrome'],

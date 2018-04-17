@@ -21,14 +21,14 @@
     </span>
 
     <span id="solitaire-king-slots">
-      <ul repeat.for="i of 4" class="cardsize deck" click.trigger="solitaire.moveCard($index, i, solitaire.zones.kingSlots)">
+      <ul repeat.for="i of 4" class="deck cardsize" click.trigger="solitaire.moveCard($index, i, solitaire.zones.kingSlots)">
         <li repeat.for="card of solitaire.kingSlots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, solitaire.zones.kingSlots)">
           <compose view="../templates/card.html" containerless></compose>
         </li>
       </ul>
     </span>
 
-    <span id="solitaire-slots" class="slotsContainer">
+    <span id="solitaire-slots">
       <ul repeat.for="i of 7" class="cardsize">
         <li repeat.for="card of solitaire.slots[i].cards" class="slots" click.trigger="solitaire.moveCard($index, i, solitaire.zones.slots)">
           <compose view="../templates/card.html" containerless></compose>

@@ -1,3 +1,6 @@
 <template>
     <h2>leaderboard</h2>
+    <ul>
+      <li repeat.for="rank of rankings">${rank.username} - ${rank.score}</li> <!-- affichage simple des objets JSON-->
+    </ul> <!-- à retravailler niveau HTML ET CSS (<table> <tr> <td> etc...)-->
 </template>

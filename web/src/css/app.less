@@ -1,7 +1,5 @@
-@main-color: #0F8008;
-
 body{
-  background-color: @main-color;
+  background-image: url(img/back.jpg);
 }
 
 #solitaire-game {
@@ -27,6 +25,8 @@ body{
 
 #solitaire-slots {
   order: 4;
+  display: flex;
+  flex-flow: row nowrap;
 }
 
 .slots{
@@ -35,19 +35,12 @@ body{
   flex-grow: 1;
 }
 
-.slotsContainer{
-  display: flex;
-  flex-flow: row nowrap;
-}
-
 .cardsize{
-  width: 75px;
-  margin: 25px;
-  height: 100px;
-  padding: 0;
+  width: 3.3em;
+  height: 4.6em;
   border: 1px solid silver;
 }
 
 .selected-card{
-  opacity: 0.3;
+  opacity: 0.7;
 }

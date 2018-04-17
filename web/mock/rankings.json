@@ -1,0 +1,6 @@
+[
+  {"username":"test", "score":10},
+  {"username":"toto", "score":20},
+  {"username":"titi", "score":30},
+  {"username":"tutu", "score":40}
+]
