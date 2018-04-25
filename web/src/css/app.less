@@ -1,26 +1,37 @@
-body{
+#container-background{
   background-image: url(img/back.jpg);
 }
 
 #solitaire-game {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around; 
+  flex-flow: column nowrap;
+}
+
+#solitaire-top {
+  order: 1;
+  display: flex;
+  flex-flow: row nowrap;
 }
 
 #solitaire-stub {
-  order:1;
+  flex-grow: 1;
+  order: 1;
 }
 
 #solitaire-returned-stub {
+  flex-grow: 1;
   order:2;
 }
 
 #solitaire-king-slots {
- order: 3;
+  flex-grow : 4;
+  order: 3;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-around; 
+}
+
+#solitaire-bottom {
+  order: 2;
 }
 
 #solitaire-slots {
@@ -29,9 +40,9 @@ body{
   flex-flow: row nowrap;
 }
 
-.slots{
+.cards{
+  order: 1;
   list-style: none;
-  margin-left: 30px;
   flex-grow: 1;
 }
 
@@ -39,6 +50,7 @@ body{
   width: 3.3em;
   height: 4.6em;
   border: 1px solid silver;
+  margin-left: 30px;
 }
 
 .selected-card{

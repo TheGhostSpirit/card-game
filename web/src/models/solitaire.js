@@ -16,7 +16,16 @@ export class Solitaire {
     this.stub = new Stub();
     this.slots = [];
     this.previousSelection = undefined;
-    this.prepare();
+    this.init();
+  }
+
+  init() {
+    let init = 1;
+    init === 1 ? this.prepare() : this.load();
+  }
+
+  load() {
+    //call to service
   }
 
   prepare() {
@@ -43,7 +52,12 @@ export class Solitaire {
     }
   }
 
+  setSelectedCardIndex(cardIndex) {
+    this.selectedCardIndex = cardIndex;
+  }
+
   moveCard(cardIndex, slotIndex, zone) {
+    if (cardIndex === -1) cardIndex = this.selectedCardIndex;
     //if the user already clicked on a card
     if (typeof this.previousSelection !== 'undefined') {
       // Destination condition
@@ -58,6 +72,7 @@ export class Solitaire {
         });
         let test = this.previousSelection.slot.cards.find(c => !c.returned);
         if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
+        if (zone === ZONES.kingSlots) this.isGameFinished() ? console.log("true") : console.log("false");
       }
       this.previousSelection = undefined;
       //if the user didn't click on a card or wrong card
@@ -94,5 +109,9 @@ export class Solitaire {
 
   returnCard(card) {
     card.returned = !card.returned;
+  }
+
+  isGameFinished() {
+    return this.kingSlots.forEach(s => s.length === 13);
   }
 }

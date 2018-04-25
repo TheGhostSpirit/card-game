@@ -1,6 +1,25 @@
 <template>
-    <h2>leaderboard</h2>
-    <ul>
-      <li repeat.for="rank of rankings">${rank.username} - ${rank.score}</li> <!-- affichage simple des objets JSON-->
-    </ul> <!-- à retravailler niveau HTML ET CSS (<table> <tr> <td> etc...)-->
+  <h2>leaderboard</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        <th>Points</th>
+        <th>Player Level</th>
+        <th>Games Played</th>
+        <th>Games Won</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr repeat.for="rank of rankings">
+        <td>${$index + 1}</td>
+        <td>${rank.username}</td>
+        <td>${rank.points}</td>
+        <td>${rank.player_level}</td>
+        <td>${rank.games_played}</td>
+        <td>${rank.games_won}</td>
+      </tr>
+    </tbody>
+  </table>
 </template>

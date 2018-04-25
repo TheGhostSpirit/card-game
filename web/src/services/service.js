@@ -9,8 +9,25 @@ export class Service {
   }
 
   getRankings() { //test sur un Mock --> le vrai json sera généré par le php (on changera juste l'url dans le fetch)
-    return this.httpClient.fetch('mock/rankings.json') //retourne une promise
+    //let url = 'mock/rankings.json';
+    let url = 'http://localhost/BackOffice/sendrankings.php/';
+    return this.httpClient.fetch(url) //retourne une promise
       .then(response => response.json()) //le stream est parsé en json
       .catch(error => console.error(error)); //executé en cas d'erreur
+  }
+
+  authenticateUser(email, password) {
+    let url = '';
+    return this.httpClient.fetch(url, {
+      method: "post",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        password : password
+      })
+    })
   }
 }

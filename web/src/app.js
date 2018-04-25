@@ -1,12 +1,10 @@
 export class App {
-  
-  constructor() {
-  }
 
-  configureRouter(config, router){
+  configureRouter(config, router) {
     config.map([
-      { route: ['game', ''], moduleId: 'views/game',   title: 'Game'},
-      { route: 'leaderboard',  moduleId: 'views/leaderboard', name:'Leaderboard' }
+      { route: 'game', moduleId: 'views/game', name: 'Game' },
+      { route: 'leaderboard', moduleId: 'views/leaderboard', name: 'Leaderboard' },
+      { route: ['', 'login'], moduleId: 'views/login', name: 'Login' }
     ]);
 
     this.router = router;

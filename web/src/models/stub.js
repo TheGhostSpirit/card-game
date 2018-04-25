@@ -1,3 +1,5 @@
+import { Solitaire } from "./solitaire";
+
 export class Stub {
 
   constructor() {
