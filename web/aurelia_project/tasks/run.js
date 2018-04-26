@@ -5,11 +5,21 @@ import { CLIOptions } from 'aurelia-cli';
 import project from '../aurelia.json';
 import build from './build';
 import watch from './watch';
+import  php  from 'gulp-connect-php';
+
+const bs = browserSync.create();
+const bsApi = browserSync.create();
+
+gulp.task('php', (done) => {
+  php.server({ base: 'api', port: 8010, keepalive: true});
+  done();
+});
 
 let serve = gulp.series(
   build,
+  'php',
   done => {
-    browserSync({
+    bs.init({
       tunnel: false,
       open: 'external',
       online: true,
@@ -22,11 +32,23 @@ let serve = gulp.series(
           next();
         }]
       }
-    }, (err, bs) => {
+    }, (err, cb) => {
       if (err) return done(err);
-      let urls = bs.options.get('urls').toJS();
-      log(`Application Available At: ${urls.local}`);
-      log(`BrowserSync Available At: ${urls.ui}`);
+      let urls = cb.options.get('urls').toJS();
+      log(`Application available At: ${urls.local}`);
+      log(`BrowserSync available At: ${urls.ui}`);
+      done();
+    });
+    bsApi.init({
+      proxy: '127.0.0.1:8100',
+      port: 8001,
+      open: false,
+      ui: false,
+      notify: false
+    }, (err, cb) => {
+      if (err) return done(err);
+      let urls = cb.options.get('urls').toJS();
+      log(`API available At: ${urls.local}`);
       done();
     });
   }
@@ -38,7 +60,8 @@ function log(message) {
 
 function reload() {
   log('Refreshing the browser');
-  browserSync.reload();
+  bs.reload();
+  bsApi.reload();
 }
 
 let run;
