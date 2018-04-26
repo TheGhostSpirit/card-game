@@ -4,6 +4,13 @@ import { SUITS, NAMES } from 'models/card-const';
 export class Deck {
 
   constructor() {
+    this.initialize();
+  }
+
+  /**
+   * Initializes the internal structures of the deck.
+   */
+  initialize() {
     this.cards = [];
 
     for (let s = 0; s < SUITS.length; s++) {

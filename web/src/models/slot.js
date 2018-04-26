@@ -16,6 +16,17 @@ export class Slot {
     this.cards = cards.map(c => Card.fromObject(c));
   }
 
+  /**
+   * Creates a dump of the slot.
+   */
+  dump() {
+    return this.cards.map(c => ({
+      suit: c.suit,
+      name: c.name,
+      returned: c.returned
+    }));
+  }
+
   canGetFrom(index) {
     if (this.cards.length > 0) {
       let firstReturnedCardIndex = this.cards.indexOf(this.cards.find(c => !c.returned));

@@ -23,6 +23,23 @@ export class Stub {
     }
   }
 
+  /**
+ * Creates a dump of the stub.
+ */
+  dump() {
+    return {
+      cards: this.cards.map(c => ({
+        suit: c.suit,
+        name: c.name
+      })),
+      returnedCards: this.returnedCards.map(c => ({
+        suit: c.suit,
+        name: c.name,
+        returned: true
+      }))
+    };
+  }
+
   canGetFrom(index) {
     return index === this.cards.length - 1 && this.cards.length !== 0 ? true : false;
   }

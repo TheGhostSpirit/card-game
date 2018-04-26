@@ -16,6 +16,16 @@ export class KingSlot {
     this.cards = cards.map(c => Card.fromObject(c));
   }
 
+  /**
+   * Creates a dump of the king slot.
+   */
+  dump() {
+    return this.cards.map(c => ({
+      suit: c.suit,
+      name: c.name
+    }));
+  }
+
   canGetFrom(index) {
     return index === this.cards.length - 1 && typeof this.cards[index] !== 'undefined' ? true : false;
   }
