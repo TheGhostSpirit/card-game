@@ -1,3 +1,8 @@
+@cardWidth : 4.6em;
+@cardHeight : 6.2em;
+@cardMargin: 1em;
+
+
 #container-background{
   background-image: url(img/back.jpg);
 }
@@ -14,17 +19,18 @@
 }
 
 #solitaire-stub {
-  flex-grow: 1;
+  flex-grow: 0;
   order: 1;
 }
 
 #solitaire-returned-stub {
-  flex-grow: 1;
+  flex-grow: 0;
   order:2;
 }
 
 #solitaire-king-slots {
   flex-grow : 4;
+  margin-left: @cardWidth + 2*@cardMargin;
   order: 3;
   display: flex;
   flex-flow: row nowrap;
@@ -46,13 +52,24 @@
   flex-grow: 1;
 }
 
-.cardsize{
-  width: 3.3em;
-  height: 4.6em;
+.deck-clickable, .cards-column {
   border: 1px solid silver;
-  margin-left: 30px;
+  box-sizing: content-box;
+  border-radius: 0.3em;
+  min-width: @cardWidth;
+  max-width: @cardWidth;
+  min-height: @cardHeight;
+  max-height: @cardHeight;
+  margin-left: @cardMargin !important;
+  margin-right: @cardMargin !important;
+  padding: 0 !important;
+  background-image: url('img/hatchedbrush.png');
+}
+
+ul.deck-clickable div.card {
+  margin-bottom: 0;
 }
 
 .selected-card{
-  opacity: 0.7;
+   box-shadow: .2em .2em .5em #333;
 }
