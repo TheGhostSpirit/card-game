@@ -8,7 +8,7 @@
 }
 
 #buttons-zone {
-  margin: 2em;
+  margin: 1em 2em 2.5em 2em;
 }
 
 #solitaire-game {
@@ -50,10 +50,8 @@
   flex-flow: row nowrap;
 }
 
-.cards{
-  order: 1;
+.card-slot{
   list-style: none;
-  flex-grow: 1;
 }
 
 .deck-clickable, .cards-column {
@@ -72,6 +70,10 @@
 
 ul.deck-clickable div.card {
   margin-bottom: 0;
+}
+
+ul.cards-column li.card-slot {
+  height: @cardHeight/2;
 }
 
 .selected-card{
