@@ -33,7 +33,9 @@ export class Card {
   get cardCss() {
     let css = 'card ';
     css += ((this.returned) ? 'back' : `rank-${this.rank} ${this.suit}`);
-    if (this.selected) css += ' selected-card';
+    if (this.selected) {
+      css += ' selected-card';
+    }
     return css;
   }
 

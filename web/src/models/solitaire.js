@@ -23,7 +23,7 @@ export class Solitaire {
     this.isNotFinished = true;
     this.previousSelection = undefined;
     this.kingSlots = [];
-    this.stub = new Stub();
+    this.stub = new Stub(this);
     this.slots = [];
     for (let i = 0; i < 7; i++) {
       this.slots.push(new Slot());
@@ -43,6 +43,10 @@ export class Solitaire {
       this.slots[i].fill(deck, i);
     }
     this.stub.fill(deck);
+  }
+
+  removeSelection() {
+    this.previousSelection = undefined;
   }
 
   /**
