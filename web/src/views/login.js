@@ -8,6 +8,6 @@ export class Login {
   }
 
   authenticate(email, password) {
-    this.service.authenticateUser(email, password);
+    this.service.authenticateUser(email, password).then(result => console.log(result));
   }
 }

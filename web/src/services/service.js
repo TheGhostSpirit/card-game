@@ -17,7 +17,7 @@ export class Service {
   }
 
   authenticateUser(email, password) {
-    let url = '';
+    let url = 'http://localhost/BackOffice/getcredentials.php/';
     return this.httpClient.fetch(url, {
       method: "post",
       headers: {
@@ -29,5 +29,6 @@ export class Service {
         password : password
       })
     })
+    .then(response => response.json());
   }
 }
