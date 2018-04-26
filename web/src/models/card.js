@@ -1,5 +1,5 @@
 import { computedFrom } from 'aurelia-framework';
-import { SUITS } from 'models/card-const';
+import { SUITS, NAMES } from 'models/card-const';
 
 /**
  * Describes a playable game card.
@@ -10,19 +10,23 @@ export class Card {
    * Creates an instance of the Card class.
    * @param {String} suit - the suit of the card
    * @param {String} name - the name of the card
-   * @param {Number} value - the value of the card
    */
-
-  constructor(suit, name, value) {
+  constructor(suit, name) {
     this.suit = suit;
     this.name = name;
-    this.value = value;
+    this.value = NAMES.indexOf(name) + 1;
     this.color = SUITS.indexOf(suit);
     //css related
-    this.rank = name.toLowerCase();
+    this.rank = this.name.toLowerCase();
     this.suitCss = `&${this.suit};`;
     this.selected = false;
     this.returned = false;
+  }
+
+  static fromObject(jsonCard) {
+    let card = new Card(jsonCard.suit, jsonCard.name);
+    card.returned = jsonCard.returned || false;
+    return card;
   }
 
   @computedFrom('returned', 'selected')

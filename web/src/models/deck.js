@@ -8,7 +8,7 @@ export class Deck {
 
     for (let s = 0; s < SUITS.length; s++) {
       for (let n = 0; n < NAMES.length; n++) {
-        this.cards.push(new Card(SUITS[s], NAMES[n], n + 1));
+        this.cards.push(new Card(SUITS[s], NAMES[n]));
       }
     }
   }

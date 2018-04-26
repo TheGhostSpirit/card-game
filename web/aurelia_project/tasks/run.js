@@ -5,19 +5,13 @@ import { CLIOptions } from 'aurelia-cli';
 import project from '../aurelia.json';
 import build from './build';
 import watch from './watch';
-import  php  from 'gulp-connect-php';
 
 const bs = browserSync.create();
 const bsApi = browserSync.create();
 
-gulp.task('php', (done) => {
-  php.server({ base: 'api', port: 8010, keepalive: true});
-  done();
-});
 
 let serve = gulp.series(
   build,
-  'php',
   done => {
     bs.init({
       tunnel: false,

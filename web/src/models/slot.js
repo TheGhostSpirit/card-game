@@ -1,7 +1,19 @@
+import { Card } from 'models/card';
+
 export class Slot {
 
   constructor() {
     this.cards = [];
+  }
+
+  /**
+    * Loads the slot with the specified cards array.
+    * @param {Array<Card>} cards - the array of cards used to load the slot.
+    */
+  load(cards) {
+    this.cards = [];
+    if (typeof cards === 'undefined' || cards.length === 0) return;
+    this.cards = cards.map(c => Card.fromObject(c));
   }
 
   canGetFrom(index) {

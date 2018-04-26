@@ -1,7 +1,19 @@
+import { Card } from 'models/card';
+
 export class KingSlot {
 
   constructor() {
     this.cards = [];
+  }
+
+  /**
+    * Loads the king slot with the specified cards array.
+    * @param {Array<Card>} cards - the array of cards used to load the king slot.
+    */
+  load(cards) {
+    this.cards = [];
+    if (typeof cards === 'undefined' || cards.length === 0) return;
+    this.cards = cards.map(c => Card.fromObject(c));
   }
 
   canGetFrom(index) {
@@ -13,5 +25,9 @@ export class KingSlot {
       return this.cards.length === 0 && src[0].value === 1 || this.cards.length > 0 && src[0].suit === this.cards[this.cards.length - 1].suit && src[0].value === this.cards[this.cards.length - 1].value + 1 ? true : false;
     }
     return false;
+  }
+
+  isFull() {
+    return this.cards.length === 13;
   }
 }

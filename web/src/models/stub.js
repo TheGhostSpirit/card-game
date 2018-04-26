@@ -1,10 +1,26 @@
-import { Solitaire } from "./solitaire";
+import { Card } from 'models/card';
 
 export class Stub {
 
   constructor() {
     this.cards = [];
     this.returnedCards = [];
+  }
+
+  /**
+   * Loads the stub with the specified saved stub.
+   * @param {Stub} stub - the saved stub of cards used to load the cards stub.
+   */
+  load(stub) {
+    this.cards = [];
+    this.returnedCards = [];
+    if (typeof stub === 'undefined') return;
+    if (stub.cards && stub.cards.length >= 0) {
+      this.cards = stub.cards.map(c => Card.fromObject(c));
+    }
+    if (stub.returnedCards && stub.returnedCards.length >= 0) {
+      this.returnedCards = stub.returnedCards.map(c => Card.fromObject(c));
+    }
   }
 
   canGetFrom(index) {

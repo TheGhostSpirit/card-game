@@ -1,6 +1,6 @@
 <template>
 
-  <div id="solitaire-game" class="playingCards container-background">
+  <div id="solitaire-game" class="playingCards container-background" show.bind="solitaire.isNotFinished">
     <div id="solitaire-top">
       <!-- -->
       <span id="solitaire-stub">
@@ -37,4 +37,5 @@
       </span>
     </div>
   </div>
+  <h2 show.bind="!solitaire.isNotFinished">FINISHED !<h2>
 </template>
