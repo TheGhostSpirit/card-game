@@ -31,4 +31,20 @@ export class Service {
     })
     .then(response => response.json());
   }
+
+  saveGame(email, savedGame) {
+    let url = 'http://localhost/BackOffice/getsave.php/';
+    return this.httpClient.fetch(url, {
+      method: "post",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        savedGame: savedGame
+      })
+    })
+    .then(response => response.json());
+  }
 }

@@ -9,7 +9,7 @@
     <div id="solitaire-top">
       <!-- -->
       <span id="solitaire-stub">
-        <ul class="deck deck-clickable" click.trigger="solitaire.stub.turn()">
+        <ul class="deck deck-clickable" click.trigger="solitaire.turnStub()">
           <li repeat.for="card of solitaire.stub.returnedCards" class="card-slot">
             <compose view="../templates/card.html" containerless></compose>
           </li>

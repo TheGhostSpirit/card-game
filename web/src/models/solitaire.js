@@ -3,13 +3,15 @@ import { Deck } from 'models/deck';
 import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
+import { Service } from 'services/service';
 
 const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
 
-@inject(Deck)
+@inject(Deck, Service)
 export class Solitaire {
 
-  constructor(deck) {
+  constructor(deck, service) {
+    this.service = service;
     this.deck = deck;
     this.zones = ZONES;
     this.initialize();
@@ -23,7 +25,7 @@ export class Solitaire {
     this.isNotFinished = true;
     this.previousSelection = undefined;
     this.kingSlots = [];
-    this.stub = new Stub(this);
+    this.stub = new Stub();
     this.slots = [];
     for (let i = 0; i < 7; i++) {
       this.slots.push(new Slot());
@@ -72,7 +74,8 @@ export class Solitaire {
    * Saves the currently played game.
    */
   save() {
-    console.log(JSON.stringify(this.dump()));
+    let email = 'root@root.com';
+    this.service.saveGame(email, this.dump());
   }
 
   /**
@@ -126,6 +129,17 @@ export class Solitaire {
         this.selectCards(this.previousSelection);
       }
     }
+  }
+
+  turnStub() {
+
+    if (this.stub.cards.length > 0) {
+      //unselect at a graphical level
+      this.stub.cards[this.stub.cards.length - 1].selected = false;
+      // remove stub selection if applicable
+      this.removeSelection();
+    }
+    this.stub.turn();
   }
 
   getSlot(slotIndex, zone) {

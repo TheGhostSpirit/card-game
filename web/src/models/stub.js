@@ -2,10 +2,9 @@ import { Card } from 'models/card';
 
 export class Stub {
 
-  constructor(solitaire) {
+  constructor() {
     this.cards = [];
     this.returnedCards = [];
-    this.solitaire = solitaire;
   }
 
   /**
@@ -15,7 +14,6 @@ export class Stub {
   load(stub) {
     this.cards = [];
     this.returnedCards = [];
-    if (typeof stub === 'undefined') return;
     if (stub.cards && stub.cards.length >= 0) {
       this.cards = stub.cards.map(c => Card.fromObject(c));
     }
@@ -50,17 +48,12 @@ export class Stub {
   }
 
   turn() {
-    // remove stub selection if applicable
-    this.solitaire.removeSelection();
-    if (this.cards.length > 0) {
-      this.cards[this.cards.length - 1].selected = false;
-    }
     if (this.returnedCards.length !== 0) {
       // push a card from the stub
       this.cards.push(this.returnedCards.pop());
       this.cards[this.cards.length - 1].returned = false;
     } else {
-      // return the all stub
+      // return the whole stub
       while (this.cards.length > 0) {
         let cardToReturn = this.cards.pop();
         cardToReturn.returned = true;

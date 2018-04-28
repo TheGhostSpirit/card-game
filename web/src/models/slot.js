@@ -12,7 +12,6 @@ export class Slot {
     */
   load(cards) {
     this.cards = [];
-    if (typeof cards === 'undefined' || cards.length === 0) return;
     this.cards = cards.map(c => Card.fromObject(c));
   }
 
