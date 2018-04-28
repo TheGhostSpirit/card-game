@@ -10,32 +10,32 @@ export class Service {
 
   getRankings() { //test sur un Mock --> le vrai json sera généré par le php (on changera juste l'url dans le fetch)
     //let url = 'mock/rankings.json';
-    let url = 'http://localhost/BackOffice/sendrankings.php/';
+    let url = 'http://localhost/BackOffice/services/sendrankings.php';
     return this.httpClient.fetch(url) //retourne une promise
       .then(response => response.json()) //le stream est parsé en json
       .catch(error => console.error(error)); //executé en cas d'erreur
   }
 
   authenticateUser(email, password) {
-    let url = 'http://localhost/BackOffice/getcredentials.php/';
+    let url = 'http://localhost/BackOffice/services/getcredentials.php';
     return this.httpClient.fetch(url, {
-      method: "post",
+      method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         email: email,
-        password : password
+        password: password
       })
     })
-    .then(response => response.json());
+      .then(response => response.json());
   }
 
   saveGame(email, savedGame) {
-    let url = 'http://localhost/BackOffice/getsave.php/';
+    let url = 'http://localhost/BackOffice/services/savegame.php';
     return this.httpClient.fetch(url, {
-      method: "post",
+      method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -45,6 +45,25 @@ export class Service {
         savedGame: savedGame
       })
     })
-    .then(response => response.json());
+      .then(response => response.json());
+  }
+
+  restoreGame() {
+
+  }
+
+  updatePlayerStats(email) {
+    let url = 'http://localhost/BackOffice/services/newgame.php';
+    return this.httpClient.fetch(url, {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email
+      })
+    })
+      .then(response => response.json());
   }
 }

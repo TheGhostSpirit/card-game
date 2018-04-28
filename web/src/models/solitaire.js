@@ -14,13 +14,18 @@ export class Solitaire {
     this.service = service;
     this.deck = deck;
     this.zones = ZONES;
-    this.initialize();
-    this.distributeFromDeck(this.deck);
   }
 
   /**
    * Initializes the internal structures of the game.
    */
+
+  newGame() {
+    this.initialize();
+    this.deck.initialize();
+    this.distributeFromDeck(this.deck);
+  }
+
   initialize() {
     this.isNotFinished = true;
     this.previousSelection = undefined;
@@ -132,13 +137,12 @@ export class Solitaire {
   }
 
   turnStub() {
-
-    if (this.stub.cards.length > 0) {
-      //unselect at a graphical level
-      this.stub.cards[this.stub.cards.length - 1].selected = false;
-      // remove stub selection if applicable
-      this.removeSelection();
-    }
+    //unselect at a graphical level
+    this.slots.forEach(slot => slot.unselect());
+    this.kingSlots.forEach(kingSlot => kingSlot.unselect());
+    this.stub.unselect();
+    // remove stub selection if applicable
+    this.removeSelection();
     this.stub.turn();
   }
 

@@ -70,4 +70,7 @@ export class Stub {
     }
   }
 
+  unselect(stub) {
+    this.cards.forEach(card => card.selected = false);
+  }
 }

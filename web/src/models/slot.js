@@ -49,4 +49,8 @@ export class Slot {
       this.cards.push(card);
     }
   }
+
+  unselect() {
+    this.cards.forEach(card => card.selected = false);
+  }
 }

@@ -39,4 +39,8 @@ export class KingSlot {
   isFull() {
     return this.cards.length === 13;
   }
+
+  unselect(kingSlot) {
+    this.cards.forEach(card => card.selected = false);
+  }
 }
