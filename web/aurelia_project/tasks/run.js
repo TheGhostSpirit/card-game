@@ -5,17 +5,25 @@ import { CLIOptions } from 'aurelia-cli';
 import project from '../aurelia.json';
 import build from './build';
 import watch from './watch';
+import php from 'gulp-connect-php';
 
 const bs = browserSync.create();
 const bsApi = browserSync.create();
 
+gulp.task('php', (done) => {
+  php.server({ base: '../../api', port: 8100, keepalive: true });
+  done();
+});
 
 let serve = gulp.series(
   build,
+  'php',
   done => {
     bs.init({
+      ghostMode: false,
       tunnel: false,
-      open: 'external',
+      open: 'local',
+      port: 8000,
       online: true,
       browser: ['chrome'],
       logLevel: 'silent',
@@ -34,9 +42,11 @@ let serve = gulp.series(
       done();
     });
     bsApi.init({
+      ghostMode: false,
       proxy: '127.0.0.1:8100',
-      port: 8001,
       open: false,
+      port: 8001,
+      online: true,
       ui: false,
       notify: false
     }, (err, cb) => {

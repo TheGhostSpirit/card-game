@@ -15,12 +15,12 @@ export class Menu {
   }
 
   newGame() {
-    this.router.navigate('game');
     this.solitaire.newGame();
-    this.service.updatePlayerStats(this.user.email);
+    this.service.updatePlayerStats(this.user.email)
+      .then(() => this.router.navigate('game'));
   }
 
   restoreGame() {
-    alert('no game found');
+    console.log('no game found');
   }
 }

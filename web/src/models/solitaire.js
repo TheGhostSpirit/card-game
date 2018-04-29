@@ -4,16 +4,18 @@ import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
 import { Service } from 'services/service';
+import { User } from 'models/user';
 
 const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
 
-@inject(Deck, Service)
+@inject(Deck, Service, User)
 export class Solitaire {
 
-  constructor(deck, service) {
+  constructor(deck, service, user) {
     this.service = service;
     this.deck = deck;
     this.zones = ZONES;
+    this.user = user;
   }
 
   /**
@@ -79,7 +81,7 @@ export class Solitaire {
    * Saves the currently played game.
    */
   save() {
-    let email = 'root@root.com';
+    let email = this.user.email;
     this.service.saveGame(email, this.dump());
   }
 
