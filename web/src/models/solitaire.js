@@ -18,16 +18,21 @@ export class Solitaire {
     this.user = user;
   }
 
-  /**
-   * Initializes the internal structures of the game.
-   */
-
   newGame() {
     this.initialize();
     this.deck.initialize();
     this.distributeFromDeck(this.deck);
   }
 
+  restoreGame() {
+    this.initialize();
+    let savedGame = null; // get from service
+    this.restore(savedGame);
+  }
+
+  /**
+   * Initializes the internal structures of the game.
+   */
   initialize() {
     this.isNotFinished = true;
     this.previousSelection = undefined;

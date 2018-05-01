@@ -7,4 +7,13 @@ export class Game {
   constructor(solitaire) {
     this.solitaire = solitaire;
   }
+
+  activate(param) {
+    if (param.new) {
+      this.solitaire.newGame();
+    } else {
+      this.solitaire.restoreGame();
+    }
+  }
+
 }
