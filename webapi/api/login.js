@@ -10,7 +10,7 @@ const REQUESTS = {
 
 let router = express.Router();
 
-// /api/login
+// POST /api/login/
 router.post('/', (req, res, next) => {
     let user = req.body;
     let hash = sha256(user.password);

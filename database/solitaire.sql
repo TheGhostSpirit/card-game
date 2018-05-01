@@ -23,3 +23,10 @@ CREATE TABLE Game(
     email varchar(25) REFERENCES Player(email),
     PRIMARY KEY(session_id)
 );
+
+CREATE PROCEDURE newGame(IN email VARCHAR(25))
+ BEGIN
+ UPDATE player SET games_played=games_played+1 WHERE email=email;
+ UPDATE game SET game_status=0 WHERE email=email AND game_status=1;
+ INSERT INTO game (game_id,game_status,game_date,email) VALUES (0,1,NOW(),email);
+ END;

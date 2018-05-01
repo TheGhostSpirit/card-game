@@ -10,8 +10,10 @@ export class Service {
 
   getRankings() { //test sur un Mock --> le vrai json sera généré par le php (on changera juste l'url dans le fetch)
     //let url = 'mock/rankings.json';
-    let url = 'http://localhost/BackOffice/services/sendrankings.php';
-    return this.httpClient.fetch(url) //retourne une promise
+    let url = 'http://localhost:3000/api/leaderboard';
+    return this.httpClient.fetch(url, {
+      method: 'get'
+    })
       .then(response => response.json()) //le stream est parsé en json
       .catch(error => console.error(error)); //executé en cas d'erreur
   }
