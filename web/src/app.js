@@ -1,5 +1,6 @@
 import { inject } from 'aurelia-framework';
 import { User } from 'models/user';
+import { Redirect } from 'aurelia-router';
 
 @inject(User)
 export class App {
@@ -10,7 +11,7 @@ export class App {
 
   configureRouter(config, router) {
     const autorizeStep = {
-      run(navigationInstruction, next) {
+      run: (navigationInstruction, next) => {
         if (navigationInstruction.getAllInstructions().some(i => i.config.settings.auth)) {
           let isLoggedIn = this.user.status;
           if (!isLoggedIn) {
