@@ -18,7 +18,11 @@ router.post('/', (req, res, next) => {
         if (err) {
             res.json(err);
         } else {
-            res.json(rows); //or return count for 1 & 0
+            if (rows.length == 0) {
+                res.json({ status: false })
+            } else {
+                res.json(Object.assign(rows[0], {status: true})); //or return count for 1 & 0
+            }
         }
     });
 });

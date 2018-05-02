@@ -12,10 +12,10 @@ const REQUESTS = {
         return db.query("SELECT game_id FROM game WHERE email=? AND game_status=1", email, cb);
     },
     endGame: (email, cb) => {
-        return [
+        /*return [
             db.query("UPDATE player SET games_won=games_won+1 WHERE email =?", email, cb),
             db.query("UPDATE game SET game_status=2 WHERE email=? AND game_status=1", email, cb)
-        ];
+        ]; --> change this to a storedproc.*/
     }
 };
 

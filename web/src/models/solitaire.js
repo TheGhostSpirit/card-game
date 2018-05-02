@@ -26,7 +26,8 @@ export class Solitaire {
 
   restoreGame() {
     this.initialize();
-    let savedGame = null; // get from service
+    let savedGame;
+    this.service.restoreGame(this.user.email).then(result => savedGame = result.savedGame);
     this.restore(savedGame);
   }
 

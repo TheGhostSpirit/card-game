@@ -19,7 +19,7 @@ export class Service {
   }
 
   authenticateUser(email, password) {
-    let url = 'http://localhost/BackOffice/services/getcredentials.php';
+    let url = 'http://localhost:3000/api/login';
     return this.httpClient.fetch(url, {
       method: 'post',
       headers: {
@@ -35,7 +35,7 @@ export class Service {
   }
 
   saveGame(email, savedGame) {
-    let url = 'http://localhost/BackOffice/services/savegame.php';
+    let url = 'http://localhost:3000/api/game/save';
     return this.httpClient.fetch(url, {
       method: 'post',
       headers: {
@@ -50,8 +50,19 @@ export class Service {
       .then(response => response.json());
   }
 
-  restoreGame() {
-
+  restoreGame(email) {
+    let url = 'http://localhost:3000/api/game/restore';
+    return this.httpClient.fetch(url, {
+      method: 'get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email
+      })
+    })
+      .then(response => response.json());
   }
 
   updatePlayerStats(email) {
