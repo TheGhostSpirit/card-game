@@ -1,5 +1,5 @@
 CREATE TABLE Player(
-	email Varchar(25),
+	email Varchar(80),
 	username Varchar(25),
 	password Varchar(200),
 	country Varchar(30),
@@ -20,7 +20,7 @@ CREATE TABLE Game(
 	game_id TEXT,
 	game_status Int,
     game_date Date,
-    email varchar(25) REFERENCES Player(email),
+    email varchar(80) REFERENCES Player(email),
     PRIMARY KEY(session_id)
 );
 

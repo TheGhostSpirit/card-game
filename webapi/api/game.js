@@ -25,7 +25,7 @@ let router = express.Router();
 // PUT /api/games/save
 router.put('/save', (req, res, next) => {
     let save = req.body;
-    REQUESTS.saveGame(save.email, save.savedGame, (err, rows) => {
+    REQUESTS.saveGame(save.email, JSON.stringify(save.savedGame), (err, rows) => {
         if (err) {
             res.json(err);
         } else {
@@ -39,7 +39,7 @@ router.post('/new', (req, res, next) => {
         if (err) {
             res.json(err);
         } else {
-            res.json({ status: true }); 
+            res.json({ status: true });
         }
     });
 });

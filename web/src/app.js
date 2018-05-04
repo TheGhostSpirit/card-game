@@ -1,5 +1,6 @@
 import { inject } from 'aurelia-framework';
 import { User } from 'models/user';
+import { Redirect } from 'aurelia-router';
 
 @inject(User)
 export class App {
@@ -14,13 +15,14 @@ export class App {
         if (navigationInstruction.getAllInstructions().some(i => i.config.settings.auth)) {
           let isLoggedIn = this.user.status;
           if (!isLoggedIn) {
-            return next.cancel(new Redirect('login'));
+            return next.cancel(new Redirect('/login'));
           }
         }
         return next();
       }
     };
 
+    config.options.pushState = true;
     config.addAuthorizeStep(step);
     config.map([
       { route: 'game', moduleId: 'views/game', name: 'Game', title: 'Game', settings: { auth: true } },

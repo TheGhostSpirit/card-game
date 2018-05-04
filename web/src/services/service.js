@@ -37,7 +37,7 @@ export class Service {
   saveGame(email, savedGame) {
     let url = 'http://localhost:3000/api/game/save';
     return this.httpClient.fetch(url, {
-      method: 'post',
+      method: 'put',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ export class Service {
   }
 
   updatePlayerStats(email) {
-    let url = 'http://localhost/BackOffice/services/newgame.php';
+    let url = 'http://localhost:3000/api/game/new';
     return this.httpClient.fetch(url, {
       method: 'post',
       headers: {
