@@ -25,6 +25,7 @@ export class Solitaire {
   }
 
   newGame() {
+    this.user.games_played++;
     this.initialize();
     this.initScore();
     this.deck.initialize();
@@ -40,11 +41,13 @@ export class Solitaire {
     if (result.status) {
       this.restore(result);
     } else {
+      this.service.updatePlayerStats(this.user.email);
       this.newGame();
     }
   }
 
   endGame() {
+    this.user.games_won++;
     this.service.endGame(this.user.email, this.user.score);
     this.user.points += this.user.score;
     this.user.pointsToLevel();

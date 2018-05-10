@@ -10,6 +10,8 @@ export class User {
     this.progression;
     this.amountToNext;
     this.percentage;
+    this.games_won;
+    this.games_played;
   }
 
   pointsToLevel() {

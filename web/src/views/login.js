@@ -18,6 +18,8 @@ export class Login {
         this.user.email = result.email;
         this.user.username = result.username;
         this.user.points = result.points;
+        this.user.games_won = result.games_won;
+        this.user.games_played = result.games_played;
         this.user.pointsToLevel();
         this.router.navigate('menu');
       }

@@ -20,4 +20,13 @@ export class Menu {
   restoreGame() {
     this.router.navigateToRoute('Game');
   }
+
+  goToRankings() {
+    this.router.navigateToRoute('Leaderboard');
+  }
+
+  goToLogin() {
+    this.user.status = false;
+    this.router.navigateToRoute('Login');
+  }
 }
