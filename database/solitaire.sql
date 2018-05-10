@@ -7,7 +7,6 @@ CREATE TABLE Player(
 	gender Int,
 	creation_date Date,
 	points Int,
-	player_level Int,
 	games_played Int,
 	games_won Int,
 	user_rank Int,
@@ -17,16 +16,23 @@ CREATE TABLE Player(
 
 CREATE TABLE Game(
 	session_id  Int,
-	game_id TEXT,
+	game_id JSON,
 	game_status Int,
     game_date Date,
+	game_score Int,
     email varchar(80) REFERENCES Player(email),
     PRIMARY KEY(session_id)
 );
 
-CREATE PROCEDURE newGame(IN email VARCHAR(25))
+CREATE PROCEDURE newGame(IN email VARCHAR(80))
  BEGIN
  UPDATE player SET games_played=games_played+1 WHERE email=email;
  UPDATE game SET game_status=0 WHERE email=email AND game_status=1;
- INSERT INTO game (game_id,game_status,game_date,email) VALUES (0,1,NOW(),email);
+ INSERT INTO game (game_id,game_status,game_date,game_score,email) VALUES ('{}',1,NOW(),1500,email);
+ END;
+
+CREATE PROCEDURE endGame(IN email VARCHAR(80), score INT)
+ BEGIN
+ UPDATE player SET games_won=games_won+1,points=points+score WHERE email=email;
+ UPDATE game SET game_status=2,game_score=score WHERE email=email AND game_status=1;
  END;

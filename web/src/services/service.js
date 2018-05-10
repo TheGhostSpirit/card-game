@@ -14,8 +14,7 @@ export class Service {
     return this.httpClient.fetch(url, {
       method: 'get'
     })
-      .then(response => response.json()) //le stream est parsé en json
-      .catch(error => console.error(error)); //executé en cas d'erreur
+      .then(response => response.json()); //le stream est parsé en json
   }
 
   authenticateUser(email, password) {
@@ -34,7 +33,7 @@ export class Service {
       .then(response => response.json());
   }
 
-  saveGame(email, savedGame) {
+  saveGame(email, savedGame, score) {
     let url = 'http://localhost:3000/api/game/save';
     return this.httpClient.fetch(url, {
       method: 'put',
@@ -44,23 +43,21 @@ export class Service {
       },
       body: JSON.stringify({
         email: email,
-        savedGame: savedGame
+        savedGame: savedGame,
+        score: score
       })
     })
       .then(response => response.json());
   }
 
   restoreGame(email) {
-    let url = 'http://localhost:3000/api/game/restore';
+    let url = `http://localhost:3000/api/game/restore/${email}`;
     return this.httpClient.fetch(url, {
       method: 'get',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email
-      })
+      }
     })
       .then(response => response.json());
   }
@@ -79,4 +76,21 @@ export class Service {
     })
       .then(response => response.json());
   }
+
+  endGame(email, score) {
+    let url = 'http://localhost:3000/api/game/end';
+    return this.httpClient.fetch(url, {
+      method: 'put',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        score: score
+      })
+    })
+      .then(response => response.json());
+  }
+
 }

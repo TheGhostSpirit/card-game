@@ -5,30 +5,49 @@ import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
 import { Service } from 'services/service';
 import { User } from 'models/user';
+import { Router } from 'aurelia-router';
 
 const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
 
-@inject(Deck, Service, User)
+@inject(Deck, Service, User, Router)
 export class Solitaire {
 
-  constructor(deck, service, user) {
+  constructor(deck, service, user, router) {
     this.service = service;
     this.deck = deck;
     this.zones = ZONES;
     this.user = user;
+    this.router = router;
+  }
+
+  quit() {
+    this.router.navigateToRoute('Menu');
   }
 
   newGame() {
     this.initialize();
+    this.initScore();
     this.deck.initialize();
     this.distributeFromDeck(this.deck);
   }
 
   restoreGame() {
     this.initialize();
-    let savedGame;
-    this.service.restoreGame(this.user.email).then(result => savedGame = result.savedGame);
-    this.restore(savedGame);
+    this.service.restoreGame(this.user.email).then(result => this.restoreOrNew(result));
+  }
+
+  restoreOrNew(result) {
+    if (result.status) {
+      this.restore(result);
+    } else {
+      this.newGame();
+    }
+  }
+
+  endGame() {
+    this.service.endGame(this.user.email, this.user.score);
+    this.user.points += this.user.score;
+    this.user.pointsToLevel();
   }
 
   /**
@@ -45,6 +64,16 @@ export class Solitaire {
     }
     for (let i = 0; i < 4; i++) {
       this.kingSlots.push(new KingSlot());
+    }
+  }
+
+  initScore() {
+    this.user.score = 1500;
+  }
+
+  updateScore() {
+    if (this.user.score > 0) {
+      this.user.score -= 10;
     }
   }
 
@@ -68,9 +97,11 @@ export class Solitaire {
    * Restores the cards from a saved game on the table.
    */
   restore(savedGame) {
-    this.kingSlots.forEach((s, index) => s.load(savedGame.kingSlots[index]));
-    this.slots.forEach((s, index) => s.load(savedGame.slots[index]));
-    this.stub.load(savedGame.stub);
+    let game = savedGame.game;
+    this.kingSlots.forEach((s, index) => s.load(game.kingSlots[index]));
+    this.slots.forEach((s, index) => s.load(game.slots[index]));
+    this.stub.load(game.stub);
+    this.user.score = savedGame.score;
   }
 
   /**
@@ -78,9 +109,8 @@ export class Solitaire {
    */
   reset() {
     // TODO: warn user before reseting !!
-    this.initialize();
-    this.deck.initialize();
-    this.distributeFromDeck(this.deck);
+    this.service.updatePlayerStats(this.user.email);
+    this.newGame();
   }
 
   /**
@@ -88,7 +118,7 @@ export class Solitaire {
    */
   save() {
     let email = this.user.email;
-    this.service.saveGame(email, this.dump());
+    this.service.saveGame(email, this.dump(), this.user.score);
   }
 
   /**
@@ -131,6 +161,7 @@ export class Solitaire {
           this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
         }
         this.isNotFinished = this.kingSlots.some(s => !s.isFull());
+        if (!this.isNotFinished) { this.endGame(); }
       }
       this.previousSelection = undefined;
       //if the user didn't click on a card or wrong card
@@ -152,6 +183,7 @@ export class Solitaire {
     // remove stub selection if applicable
     this.removeSelection();
     this.stub.turn();
+    this.updateScore();
   }
 
   getSlot(slotIndex, zone) {

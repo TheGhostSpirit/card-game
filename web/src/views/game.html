@@ -1,10 +1,11 @@
 <template>
 
   <div id="buttons-zone" class="btn-group">
-    <button type="button" class="btn btn-outline-primary btn-sm" click.trigger="solitaire.save()">Save</button>
+    <button type="button" class="btn btn-outline-primary btn-sm" click.trigger="solitaire.save()" show.bind="solitaire.isNotFinished">Save</button>
     <button type="button" class="btn btn-outline-primary btn-sm" click.trigger="solitaire.reset()">Reset</button>
-    <button type="button" class="btn btn-outline-secondary btn-sm" click.trigger="solitaire.cheat()">Cheat !!</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" click.trigger="solitaire.quit()">Quit</button>
   </div>
+  <h4>${solitaire.user.score}</h4>
   <div id="solitaire-game" class="playingCards container-background" show.bind="solitaire.isNotFinished">
     <div id="solitaire-top">
       <!-- -->

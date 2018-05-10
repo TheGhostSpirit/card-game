@@ -3,7 +3,7 @@ let db = require('../dbconnection');
 
 const REQUESTS = {
     getRankings: (cb) => {
-        return db.query("SELECT username,points,player_level,games_played,games_won FROM player ORDER BY points DESC LIMIT 25", cb);
+        return db.query("SELECT username,points,games_played,games_won FROM player ORDER BY points DESC LIMIT 25", cb);
     }
 };
 

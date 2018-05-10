@@ -4,7 +4,7 @@ let sha256 = require('js-sha256');
 
 const REQUESTS = {
     checkCredentials: (email, password, cb) => {
-        return db.query("SELECT username, email, player_level FROM player WHERE email=? AND password=?", [email, password], cb);
+        return db.query("SELECT username, email, points FROM player WHERE email=? AND password=?", [email, password], cb);
     }
 };
 

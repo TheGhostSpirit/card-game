@@ -17,7 +17,8 @@ export class Login {
         this.user.status = result.status;
         this.user.email = result.email;
         this.user.username = result.username;
-        this.user.level = result.level;
+        this.user.points = result.points;
+        this.user.pointsToLevel();
         this.router.navigate('menu');
       }
     });

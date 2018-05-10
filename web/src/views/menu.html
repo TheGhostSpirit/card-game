@@ -1,5 +1,13 @@
 <template>
-  <h1>${user.username}</h1>
+  <h1 class="title">Welcome ${user.username} !</h1>
   <button type="button" class="btn btn-outline-primary btn-sm" click.trigger="newGame()">New Game</button>
   <button type="button" class="btn btn-outline-primary btn-sm" click.trigger="restoreGame()">Restore Game</button>
+  <div class="conteneur">
+    <h2>Profile</h2>
+    <h3>Level ${user.level}</h3>
+    <div class="progress-bar">
+      <div style="height:100%;width:${user.percentage}%;background-color:green;"></div>
+    </div>
+    <h4>${user.progression} XP / ${user.amountToNext} required for Level ${user.level+1}</h4>
+  </div>
 </template>
