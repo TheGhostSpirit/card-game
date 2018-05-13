@@ -22,7 +22,6 @@ export class App {
       }
     };
 
-    config.options.pushState = true;
     config.addAuthorizeStep(step);
     config.map([
       { route: 'game', moduleId: 'views/game', name: 'Game', title: 'Game', settings: { auth: true } },

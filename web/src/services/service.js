@@ -10,7 +10,7 @@ export class Service {
 
   getRankings() { //test sur un Mock --> le vrai json sera généré par le php (on changera juste l'url dans le fetch)
     //let url = 'mock/rankings.json';
-    let url = 'http://localhost:3000/api/leaderboard';
+    let url = '/webapi/api/leaderboard';
     return this.httpClient.fetch(url, {
       method: 'get'
     })
@@ -18,7 +18,7 @@ export class Service {
   }
 
   authenticateUser(email, password) {
-    let url = 'http://localhost:3000/api/login';
+    let url = '/webapi/api/login';
     return this.httpClient.fetch(url, {
       method: 'post',
       headers: {
@@ -34,7 +34,7 @@ export class Service {
   }
 
   saveGame(email, savedGame, score) {
-    let url = 'http://localhost:3000/api/game/save';
+    let url = '/webapi/api/game/save';
     return this.httpClient.fetch(url, {
       method: 'put',
       headers: {
@@ -51,7 +51,7 @@ export class Service {
   }
 
   restoreGame(email) {
-    let url = `http://localhost:3000/api/game/restore/${email}`;
+    let url = `/webapi/api/game/restore/${email}`;
     return this.httpClient.fetch(url, {
       method: 'get',
       headers: {
@@ -63,7 +63,7 @@ export class Service {
   }
 
   updatePlayerStats(email) {
-    let url = 'http://localhost:3000/api/game/new';
+    let url = '/webapi/api/game/new';
     return this.httpClient.fetch(url, {
       method: 'post',
       headers: {
@@ -78,7 +78,7 @@ export class Service {
   }
 
   endGame(email, score) {
-    let url = 'http://localhost:3000/api/game/end';
+    let url = '/webapi/api/game/end';
     return this.httpClient.fetch(url, {
       method: 'put',
       headers: {
