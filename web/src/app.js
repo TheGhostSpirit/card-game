@@ -25,6 +25,7 @@ export class App {
     config.addAuthorizeStep(step);
     config.map([
       { route: 'game', moduleId: 'views/game', name: 'Game', title: 'Game', settings: { auth: true } },
+      { route: 'challengeboard', moduleId: 'views/challengeboard', name: 'Challengeboard', title: 'Challengeboard', settings: { auth: true } },
       { route: 'leaderboard', moduleId: 'views/leaderboard', name: 'Leaderboard', title: 'Leaderboard', settings: { auth: true } },
       { route: ['', 'login'], moduleId: 'views/login', name: 'Login', title: 'Login' },
       { route: 'menu', moduleId: 'views/menu', name: 'Menu', title: 'Menu', settings: { auth: true } }

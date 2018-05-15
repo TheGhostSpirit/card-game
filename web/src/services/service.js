@@ -6,11 +6,13 @@ export class Service {
 
   constructor(httpClient) { //instance créée qu'on passe en paramètre dans le constructeur
     this.httpClient = httpClient; //permet d'accéder à cet objet hors du constructeur (un champ est disponible dans la classe)
+    this.url = 'http://localhost:3000';
+    //this.url = '/webapi';
   }
 
   getRankings() { //test sur un Mock --> le vrai json sera généré par le php (on changera juste l'url dans le fetch)
     //let url = 'mock/rankings.json';
-    let url = '/webapi/api/leaderboard';
+    let url = this.url + '/api/leaderboard/global';
     return this.httpClient.fetch(url, {
       method: 'get'
     })
@@ -18,7 +20,7 @@ export class Service {
   }
 
   authenticateUser(email, password) {
-    let url = '/webapi/api/login';
+    let url = this.url + '/api/login';
     return this.httpClient.fetch(url, {
       method: 'post',
       headers: {
@@ -34,7 +36,7 @@ export class Service {
   }
 
   saveGame(email, savedGame, score) {
-    let url = '/webapi/api/game/save';
+    let url = this.url + '/api/game/save';
     return this.httpClient.fetch(url, {
       method: 'put',
       headers: {
@@ -51,7 +53,7 @@ export class Service {
   }
 
   restoreGame(email) {
-    let url = `/webapi/api/game/restore/${email}`;
+    let url = this.url + `/api/game/restore/${email}`;
     return this.httpClient.fetch(url, {
       method: 'get',
       headers: {
@@ -63,7 +65,7 @@ export class Service {
   }
 
   updatePlayerStats(email) {
-    let url = '/webapi/api/game/new';
+    let url = this.url + '/api/game/new';
     return this.httpClient.fetch(url, {
       method: 'post',
       headers: {
@@ -78,7 +80,7 @@ export class Service {
   }
 
   endGame(email, score) {
-    let url = '/webapi/api/game/end';
+    let url = this.url + '/api/game/end';
     return this.httpClient.fetch(url, {
       method: 'put',
       headers: {
@@ -89,6 +91,57 @@ export class Service {
         email: email,
         score: score
       })
+    })
+      .then(response => response.json());
+  }
+
+  initChallenge(email) {
+    let url = this.url + '/api/game/newChallenge';
+    return this.httpClient.fetch(url, {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email
+      })
+    })
+      .then(response => response.json());
+  }
+
+  endChallenge(email, score) {
+    let url = this.url + '/api/game/endChallenge';
+    return this.httpClient.fetch(url, {
+      method: 'put',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        score: score
+      })
+    })
+      .then(response => response.json());
+  }
+
+  getChallenge() {
+    let url = this.url + '/api/game/getChallenge';
+    return this.httpClient.fetch(url, {
+      method: 'get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json());
+  }
+
+  getChallengers() {
+    let url = this.url + '/api/leaderboard/challenge';
+    return this.httpClient.fetch(url, {
+      method: 'get'
     })
       .then(response => response.json());
   }

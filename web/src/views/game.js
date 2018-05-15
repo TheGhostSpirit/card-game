@@ -11,6 +11,10 @@ export class Game {
   activate(param) {
     if (param.new) {
       this.solitaire.newGame();
+    } else if (param.cheat) {
+      this.solitaire.cheat();
+    } else if (param.challenge) {
+      this.solitaire.newChallenge();
     } else {
       this.solitaire.restoreGame();
     }

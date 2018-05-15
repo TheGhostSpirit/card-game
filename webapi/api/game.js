@@ -13,6 +13,15 @@ const REQUESTS = {
     },
     endGame: (email, score, cb) => {
         return db.query("CALL endGame(?,?)", [email, score], cb);
+    },
+    initChallenge: (email, cb) => {
+        return db.query("CALL newChallenge(?)", email, cb);
+    },
+    endChallenge: (email, score, cb) => {
+        return db.query("CALL endChallenge(?,?)", [email, score], cb);
+    },
+    getChallenge: (cb) => {
+        return db.query("SELECT game FROM challenge HAVING MAX(id_challenge)", cb);
     }
 };
 
@@ -66,6 +75,39 @@ router.put('/end', (req, res, next) => {
             res.json(err);
         } else {
             res.json({ status: true });
+        }
+    });
+});
+
+router.post('/newChallenge', (req, res, next) => {
+    REQUESTS.initChallenge(req.body.email, (err, rows) => {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json({ status: true });
+        }
+    });
+});
+
+router.put('/endChallenge', (req, res, next) => {
+    REQUESTS.endChallenge(req.body.email, req.body.score, (err, rows) => {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json({ status: true });
+        }
+    });
+});
+
+router.get('/getChallenge', (req, res, next) => {
+    REQUESTS.getChallenge((err, rows) => {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json({
+                score: 3000,
+                game: JSON.parse(rows[0].game)
+            })
         }
     });
 });

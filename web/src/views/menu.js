@@ -21,6 +21,15 @@ export class Menu {
     this.router.navigateToRoute('Game');
   }
 
+  cheatGame() {
+    this.service.updatePlayerStats(this.user.email)
+      .then(() => this.router.navigateToRoute('Game', { cheat: true }));
+  }
+
+  challengeGame() {
+    this.router.navigateToRoute('Game', { challenge: true });
+  }
+
   goToRankings() {
     this.router.navigateToRoute('Leaderboard');
   }
@@ -28,5 +37,9 @@ export class Menu {
   goToLogin() {
     this.user.status = false;
     this.router.navigateToRoute('Login');
+  }
+
+  goToChallengeBoard() {
+    this.router.navigateToRoute('Challengeboard');
   }
 }
