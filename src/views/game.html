@@ -1,5 +1,6 @@
 <template>
   <div id="buttons-zone" class="btn-group">
+    <button type="button" class="btn btn-outline-secondary btn-sm" click.trigger="solitaire.undoMove()" show.bind="solitaire.isNotFinished">Undo</button>
     <button type="button" class="btn btn-outline-primary btn-sm" click.trigger="solitaire.reset()">New Game</button>
     <button type="button" class="btn btn-outline-secondary btn-sm" click.trigger="solitaire.quit()">Quit</button>
   </div>
@@ -37,5 +38,6 @@
       </span>
     </div>
   </div>
-  <h2 class="finished" show.bind="!solitaire.isNotFinished">FINISHED !<h2>
+  <h2 class="finished" show.bind="!solitaire.isNotFinished">FINISHED !
+    <h2>
 </template>

@@ -4,6 +4,7 @@ import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
 import { Router } from 'aurelia-router';
+import { Move } from './move';
 
 const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
 
@@ -32,6 +33,7 @@ export class Solitaire {
     this.isNotFinished = true;
     this.previousSelection = undefined;
     this.kingSlots = [];
+    this.moves = [];
     this.stub = new Stub();
     this.slots = [];
     for (let i = 0; i < 7; i++) {
@@ -105,14 +107,17 @@ export class Solitaire {
       //if move is correct
       this.selectCards(this.previousSelection); //desel
       if (destinationSlot.canMoveTo(src)) {
+        this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
         src.forEach(c => {
-          this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
           destinationSlot.cards.push(c);
         });
         //let test = this.previousSelection.slot.cards.find(c => !c.returned);
+        this.cardWasTurned = false;
         if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') {
           this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
+          this.cardWasTurned = true;
         }
+        this.moves.push(new Move(this.previousSelection.slot.cards, destinationSlot.cards, src, this.cardWasTurned));
         this.isNotFinished = this.kingSlots.some(s => !s.isFull());
       }
       this.previousSelection = undefined;
@@ -124,6 +129,20 @@ export class Solitaire {
         this.previousSelection = { slot: sourceSlot, index: cardIndex, zone: zone };
         this.selectCards(this.previousSelection);
       }
+    }
+  }
+
+  undoMove() {
+    if (this.moves.length > 0) {
+      let lastMove = this.moves[this.moves.length - 1];
+      if(lastMove.cardWasTurned) {
+        this.returnCard(lastMove.source[lastMove.source.length-1]);
+      }
+      let cards = lastMove.destination.splice(-lastMove.selection.length, lastMove.selection.length);
+      cards.forEach(c => lastMove.source.push(c));
+      this.moves.pop();
+    } else {
+      alert('Nothing left to undo!');
     }
   }
 
