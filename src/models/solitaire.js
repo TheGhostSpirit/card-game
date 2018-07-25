@@ -98,48 +98,52 @@ export class Solitaire {
   }
 
   moveCard(cardIndex, slotIndex, zone) {
-    if (cardIndex === -1) cardIndex = this.selectedCardIndex;
-    //if the user already clicked on a card
-    if (typeof this.previousSelection !== 'undefined') {
-      // Destination condition
-      let destinationSlot = this.getSlot(slotIndex, zone);
-      let src = this.getCards(this.previousSelection);
-      //if move is correct
-      this.selectCards(this.previousSelection); //desel
-      if (destinationSlot.canMoveTo(src)) {
+    if (cardIndex === -1) cardIndex = this.selectedCardIndex; //getting the index of the clicked card in the slot
+    if (typeof this.previousSelection !== 'undefined') { //if the user already clicked on a card
+      let destinationSlot = this.getSlot(slotIndex, zone); //gets the target slot from index and zone
+      let src = this.getCards(this.previousSelection); //gets the selected cards
+      this.selectCards(this.previousSelection); //deselect cards
+      if (destinationSlot.canMoveTo(src)) { //move cards(s) from one array to another
         this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
         src.forEach(c => {
           destinationSlot.cards.push(c);
         });
-        //let test = this.previousSelection.slot.cards.find(c => !c.returned);
         this.cardWasTurned = false;
-        if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') {
-          this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
-          this.cardWasTurned = true;
-        }
-        this.moves.push(new Move(this.previousSelection.slot.cards, destinationSlot.cards, src, this.cardWasTurned));
-        this.isNotFinished = this.kingSlots.some(s => !s.isFull());
+        this.returnsNextCardInSlot(); //returns next card in slot if move was made from slot with returned cards
+        this.moves.push(new Move(this.previousSelection.slot.cards, destinationSlot.cards, src, this.cardWasTurned)); //keeps a track of the moves to undo them later
+        this.isNotFinished = this.kingSlots.some(s => !s.isFull());//checks if game is over
       }
       this.previousSelection = undefined;
-      //if the user didn't click on a card or wrong card
-    } else {
-      // Source condition
-      let sourceSlot = this.getSlot(slotIndex, zone);
-      if (sourceSlot.canGetFrom(cardIndex)) {
-        this.previousSelection = { slot: sourceSlot, index: cardIndex, zone: zone };
-        this.selectCards(this.previousSelection);
+    } else { //if the user didn't click on a card or wrong card
+
+      let sourceSlot = this.getSlot(slotIndex, zone); //gets the target slot from the its index and zone
+      if (sourceSlot.canGetFrom(cardIndex)) {  //checks if the cards can be moved from here
+        this.previousSelection = { slot: sourceSlot, index: cardIndex, zone: zone }; //keeps a track of the selection for the upcoming move
+        this.selectCards(this.previousSelection); //sets selected property to true for the CSS to render selection properly
       }
+    }
+  }
+
+  returnsNextCardInSlot() {
+    if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') {
+      this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
+      this.cardWasTurned = true;
     }
   }
 
   undoMove() {
     if (this.moves.length > 0) {
       let lastMove = this.moves[this.moves.length - 1];
-      if(lastMove.cardWasTurned) {
-        this.returnCard(lastMove.source[lastMove.source.length-1]);
+      if (!lastMove.stub) {
+        if (lastMove.cardWasTurned) {
+          this.returnCard(lastMove.source[lastMove.source.length - 1]);
+        }
+        let cards = lastMove.destination.splice(-lastMove.selection.length, lastMove.selection.length);
+        cards.forEach(c => lastMove.source.push(c));
+      } else {
+        this.stub.undoMove();
+        
       }
-      let cards = lastMove.destination.splice(-lastMove.selection.length, lastMove.selection.length);
-      cards.forEach(c => lastMove.source.push(c));
       this.moves.pop();
     } else {
       alert('Nothing left to undo!');
@@ -154,6 +158,7 @@ export class Solitaire {
     // remove stub selection if applicable
     this.removeSelection();
     this.stub.turn();
+    this.moves.push({ stub: true });
   }
 
   getSlot(slotIndex, zone) {

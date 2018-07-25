@@ -3,7 +3,9 @@ import { Card } from 'models/card';
 export class Stub {
 
   constructor() {
+    //visible cards
     this.cards = [];
+    //hidden cards
     this.returnedCards = [];
   }
 
@@ -60,6 +62,12 @@ export class Stub {
         this.returnedCards.push(cardToReturn);
       }
     }
+  }
+
+  undoMove() {
+    let cardToUndo = this.cards.pop();
+    cardToUndo.returned = true;
+    this.returnedCards.push(cardToUndo);
   }
 
   fill(deck) {
