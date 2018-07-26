@@ -221,8 +221,6 @@ export class Solitaire {
       stubToKingSlot.push(this.stub.returnedCards.filter(c => this.kingSlots[i].canMoveTo([c])));
     }
     stubToKingSlot = stubToKingSlot.map((slot, index) => slot.map(c => new Move(this.stub.returnedCards, this.kingSlots[index].cards, [c], false)));
-    console.log(stubToSlot);
-    console.log(stubToKingSlot);
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 7; j++) {
         let c = this.slots[j].cards[this.slots[j].cards.length - 1];
@@ -231,12 +229,21 @@ export class Solitaire {
         }
       }
     }
-    console.log(slotToKingSlot);
     for (let i = 0; i < 7; i++) {
-      console.log(this.slots[i].find(c => !c.returned));
-      for (let j = 0; j < 7; j++) {
-
+      let p = this.slots[i].cards.length - this.slots[i].cards.findIndex(c => !c.returned);
+      for (let j = 1; j <= p; j++) {
+        let src = this.slots[i].cards.filter((c, ind) => ind >= this.slots[i].cards.length - p);
+        for (let k = 0; k < 7; k++) {
+          if (this.slots[k].canMoveTo(src) && i !== k) {
+            slotToSlot.push(new Move(this.slots[i].cards, this.slots[k].cards, src, this.cardWasTurned));
+          }
+        }
       }
     }
+    stubToSlot.forEach(slot => slot.forEach(m => this.solutions.push(m)));
+    stubToKingSlot.forEach(slot => slot.forEach(m => this.solutions.push(m)));
+    slotToKingSlot.forEach(m => this.solutions.push(m));
+    slotToSlot.forEach(m => this.solutions.push(m));
+    console.log(this.solutions);
   }
 }
