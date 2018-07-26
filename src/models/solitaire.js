@@ -26,6 +26,11 @@ export class Solitaire {
     this.deck.initialize();
     this.distributeFromDeck(this.deck);
   }
+
+  auto() {
+    this.newGame();
+    this.findSolutions();
+  }
   /**
    * Initializes the internal structures of the game.
    */
@@ -35,6 +40,7 @@ export class Solitaire {
     this.previousSelection = undefined;
     this.kingSlots = [];
     this.moves = [];
+    this.solutions = [];
     this.stub = new Stub();
     this.slots = [];
     for (let i = 0; i < 7; i++) {
@@ -149,7 +155,6 @@ export class Solitaire {
         cards.forEach(c => lastMove.source.push(c));
       } else {
         this.stub.undoMove();
-
       }
       this.moves.pop();
     } else {
@@ -204,7 +209,13 @@ export class Solitaire {
   }
 
   findSolutions() {
-
+    let stubToSlot = [];
+    let stubToKingCell = [];
+    for (let i = 0; i < 7; i++) {
+      stubToSlot.push(this.stub.returnedCards.filter(c => this.slots[i].canMoveTo([c])));
+    }
+    for (let i = 0; i < 4; i++) {
+      stubToKingCell.push(this.stub.returnedCards.filter(c => this.kingSlots[i].canMoveTo([c])));
+    }
   }
-
 }

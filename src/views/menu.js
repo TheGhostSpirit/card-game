@@ -15,4 +15,8 @@ export class Menu {
   cheatGame() {
     this.router.navigateToRoute('Game', { cheat: true });
   }
+
+  autoGame() {
+    this.router.navigateToRoute('Game', { auto: true });
+  }
 }

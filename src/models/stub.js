@@ -24,9 +24,9 @@ export class Stub {
     }
   }
 
-/**
- * Creates a dump of the stub.
- */
+  /**
+   * Creates a dump of the stub.
+   */
   dump() {
     return {
       cards: this.cards.map(c => ({
@@ -65,9 +65,17 @@ export class Stub {
   }
 
   undoMove() {
-    let cardToUndo = this.cards.pop();
-    cardToUndo.returned = true;
-    this.returnedCards.push(cardToUndo);
+    if (this.cards.length > 0) {
+      let cardToUndo = this.cards.pop();
+      cardToUndo.returned = true;
+      this.returnedCards.push(cardToUndo);
+    } else {
+      while (this.returnedCards.length > 0) {
+        let cardToUndo = this.returnedCards.pop();
+        cardToUndo.returned = false;
+        this.cards.push(cardToUndo);
+      }
+    }
   }
 
   fill(deck) {

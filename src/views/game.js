@@ -11,6 +11,8 @@ export class Game {
   activate(param) {
     if (param.cheat) {
       this.solitaire.cheat();
+    } else if (param.auto) {
+      this.solitaire.auto();
     } else {
       this.solitaire.newGame();
     }
