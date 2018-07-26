@@ -210,12 +210,33 @@ export class Solitaire {
 
   findSolutions() {
     let stubToSlot = [];
-    let stubToKingCell = [];
+    let stubToKingSlot = [];
+    let slotToSlot = [];
+    let slotToKingSlot = [];
     for (let i = 0; i < 7; i++) {
       stubToSlot.push(this.stub.returnedCards.filter(c => this.slots[i].canMoveTo([c])));
     }
+    stubToSlot = stubToSlot.map((slot, index) => slot.map(c => new Move(this.stub.returnedCards, this.slots[index].cards, [c], false)));
     for (let i = 0; i < 4; i++) {
-      stubToKingCell.push(this.stub.returnedCards.filter(c => this.kingSlots[i].canMoveTo([c])));
+      stubToKingSlot.push(this.stub.returnedCards.filter(c => this.kingSlots[i].canMoveTo([c])));
+    }
+    stubToKingSlot = stubToKingSlot.map((slot, index) => slot.map(c => new Move(this.stub.returnedCards, this.kingSlots[index].cards, [c], false)));
+    console.log(stubToSlot);
+    console.log(stubToKingSlot);
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 7; j++) {
+        let c = this.slots[j].cards[this.slots[j].cards.length - 1];
+        if (this.kingSlots[i].canMoveTo([c])) {
+          slotToKingSlot.push(new Move(this.slots[j].cards, this.kingSlots[i].cards, [c], this.cardWasTurned));
+        }
+      }
+    }
+    console.log(slotToKingSlot);
+    for (let i = 0; i < 7; i++) {
+      console.log(this.slots[i].find(c => !c.returned));
+      for (let j = 0; j < 7; j++) {
+
+      }
     }
   }
 }
