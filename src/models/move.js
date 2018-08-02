@@ -6,5 +6,4 @@ export class Move {
         this.selection = selection;
         this.cardWasTurned = cardWasTurned;
     }
-
 }
