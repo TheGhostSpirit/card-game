@@ -1,6 +1,7 @@
 <template>
   <div id="buttons-zone" class="btn-group">
     <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.undoMove()" if.bind="solitaire.isNotFinished">Undo</button>
+    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.cheat()">Cheat !</button>
     <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.reset()">New Game</button>
     <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.autoSolveGame()" if.bind="solitaire.autoSolve && solitaire.isNotFinished">Solve</button>
     <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.quit()">Quit</button>

@@ -112,13 +112,14 @@ export class Solitaire {
       let src = this.getCards(this.previousSelection); //gets the selected cards
       this.selectCards(this.previousSelection); //deselect cards
       if (destinationSlot.canMoveTo(src)) { //move cards(s) from one array to another if canMoveTo is valid
+        let beforeState = this.dump();
         this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
         src.forEach(c => {
           destinationSlot.cards.push(c);
         });
         this.cardWasTurned = false;
         this.returnsNextCardInSlot(); //returns next card in slot if move was made from slot with returned cards
-        this.moves.push(new Move(this.previousSelection.slot.cards, destinationSlot.cards, src, this.cardWasTurned)); //keeps a track of the moves to undo them later
+        this.moves.push(beforeState); //keeps a track of the moves to undo them later
         this.canAutoSolve();
         this.isNotFinished = this.kingSlots.some(s => !s.isFull());//checks if game is over
       }
@@ -141,28 +142,29 @@ export class Solitaire {
 
   undoMove() {
     /* Fix: removes any selection to avoid selection duplication bug */
-    if (!this.auto) {
-      this.slots.forEach(slot => slot.unselect());
-      this.kingSlots.forEach(kingSlot => kingSlot.unselect());
-      this.stub.unselect();
-      this.previousSelection = undefined;
-    }
+    // if (!this.auto) {
+    //   this.slots.forEach(slot => slot.unselect());
+    //   this.kingSlots.forEach(kingSlot => kingSlot.unselect());
+    //   this.stub.unselect();
+    //   this.previousSelection = undefined;
+    // }
     /* End  of fix */
     if (this.moves.length > 0) {
-      let lastMove = this.moves[this.moves.length - 1];
-      if (!lastMove.stub) {
-        if (lastMove.cardWasTurned) {
-          this.returnCard(lastMove.source[lastMove.source.length - 1]);
-        }
-        let cards = lastMove.destination.splice(-lastMove.selection.length, lastMove.selection.length);
-        cards.forEach(c => lastMove.source.push(c));
-      } else {
-        this.stub.undoMove();
-      }
-      /* Fix: checks for auto solvability even on undo */
-      if (!this.auto)
-        this.canAutoSolve();
-      this.moves.pop();
+      this.restore({game: this.moves.pop()});
+      // let lastMove = this.moves[this.moves.length - 1];
+      // if (!lastMove.stub) {
+      //   if (lastMove.cardWasTurned) {
+      //     this.returnCard(lastMove.source[lastMove.source.length - 1]);
+      //   }
+      //   let cards = lastMove.destination.splice(-lastMove.selection.length, lastMove.selection.length);
+      //   cards.forEach(c => lastMove.source.push(c));
+      // } else {
+      //   this.stub.undoMove();
+      // }
+      // /* Fix: checks for auto solvability even on undo */
+      // if (!this.auto)
+      //   this.canAutoSolve();
+      // this.moves.pop();
     } else {
       alert('Nothing left to undo!');
     }
@@ -188,7 +190,7 @@ export class Solitaire {
     // remove stub selection if applicable
     this.removeSelection();
     this.stub.turn();
-    this.moves.push({ stub: true });
+//    this.moves.push({ stub: true });
   }
 
   getSlot(slotIndex, zone) {
@@ -216,7 +218,8 @@ export class Solitaire {
     card.returned = !card.returned;
   }
 
-  findSolutions(array) {
+  findSolutions() {
+    let array = [];
     let stubToSlot = [];
     let stubToKingSlot = [];
     let slotToSlot = [];
@@ -254,35 +257,35 @@ export class Solitaire {
     stubToKingSlot.forEach(slot => slot.forEach(m => array.push(m)));
     slotToKingSlot.forEach(m => array.push(m));
     slotToSlot.forEach(m => array.push(m));
+    return array;
   }
 
-  autoGame(value) {
-    console.log(this.solutions);
-    let n = value;
-    if (n === this.solutions.length) {
-      this.solutions.push([]);
-    }
-    this.findSolutions(this.solutions[n]);
-    if (this.solutions[n].length > 0) {
-      for (let i = 0; i < this.solutions[n].length; i++) {
-        let move = this.solutions[n][i];
-        this.doMove(move.source, move.destination, move.selection, move.cardWasTurned);
-        this.autoGame(n + 1);
-      }
-    } else {
-      this.undoMove();
-    }
-  }
+  // autoGame(value) {
+  //   let n = value;
+  //   if (n === this.solutions.length) {
+  //     this.solutions.push([]);
+  //   }
+  //   this.solutions[n] = this.findSolutions();
+  //   if (this.solutions[n].length > 0) {
+  //     for (let i = 0; i < this.solutions[n].length; i++) {
+  //       let move = this.solutions[n][i];
+  //       this.doMove(move.source, move.destination, move.selection, move.cardWasTurned);
+  //       this.autoGame(n + 1);
+  //     }
+  //   } else {
+  //     this.undoMove();
+  //   }
+  // }
 
-  doMove(source, destination, selection, cardWasTurned) { //move called from the engine
-    source.splice(-selection.length, selection.length);
-    selection.forEach(c => {
-      destination.push(c);
-    });
-    if (cardWasTurned) {
-      this.returnCard(source[source.length - 1]);
-    }
-    this.moves.push(new Move(source, destination, selection, cardWasTurned)); //keeps a track of the moves to undo them later
-    this.isNotFinished = this.kingSlots.some(s => !s.isFull());//checks if game is over
-  }
+  // doMove(source, destination, selection, cardWasTurned) { //move called from the engine
+  //   source.splice(-selection.length, selection.length);
+  //   selection.forEach(c => {
+  //     destination.push(c);
+  //   });
+  //   if (cardWasTurned) {
+  //     this.returnCard(source[source.length - 1]);
+  //   }
+  //   this.moves.push(new Move(source, destination, selection, cardWasTurned)); //keeps a track of the moves to undo them later
+  //   this.isNotFinished = this.kingSlots.some(s => !s.isFull());//checks if game is over
+  // }
 }
