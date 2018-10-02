@@ -4,7 +4,6 @@ import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
 import { Router } from 'aurelia-router';
-import { Move } from './move';
 
 const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
 
@@ -141,30 +140,8 @@ export class Solitaire {
   }
 
   undoMove() {
-    /* Fix: removes any selection to avoid selection duplication bug */
-    // if (!this.auto) {
-    //   this.slots.forEach(slot => slot.unselect());
-    //   this.kingSlots.forEach(kingSlot => kingSlot.unselect());
-    //   this.stub.unselect();
-    //   this.previousSelection = undefined;
-    // }
-    /* End  of fix */
     if (this.moves.length > 0) {
-      this.restore({game: this.moves.pop()});
-      // let lastMove = this.moves[this.moves.length - 1];
-      // if (!lastMove.stub) {
-      //   if (lastMove.cardWasTurned) {
-      //     this.returnCard(lastMove.source[lastMove.source.length - 1]);
-      //   }
-      //   let cards = lastMove.destination.splice(-lastMove.selection.length, lastMove.selection.length);
-      //   cards.forEach(c => lastMove.source.push(c));
-      // } else {
-      //   this.stub.undoMove();
-      // }
-      // /* Fix: checks for auto solvability even on undo */
-      // if (!this.auto)
-      //   this.canAutoSolve();
-      // this.moves.pop();
+      this.restore({ game: this.moves.pop() });
     } else {
       alert('Nothing left to undo!');
     }
@@ -189,8 +166,9 @@ export class Solitaire {
     this.stub.unselect();
     // remove stub selection if applicable
     this.removeSelection();
+    let beforeState = this.dump();
+    this.moves.push(beforeState);
     this.stub.turn();
-//    this.moves.push({ stub: true });
   }
 
   getSlot(slotIndex, zone) {
@@ -218,47 +196,47 @@ export class Solitaire {
     card.returned = !card.returned;
   }
 
-  findSolutions() {
-    let array = [];
-    let stubToSlot = [];
-    let stubToKingSlot = [];
-    let slotToSlot = [];
-    let slotToKingSlot = [];
-    for (let i = 0; i < 7; i++) {
-      stubToSlot.push(this.stub.returnedCards.filter(c => this.slots[i].canMoveTo([c])));
-    }
-    stubToSlot = stubToSlot.map((slot, index) => slot.map(c => new Move(this.stub.returnedCards, this.slots[index].cards, [c], false)));
-    for (let i = 0; i < 4; i++) {
-      stubToKingSlot.push(this.stub.returnedCards.filter(c => this.kingSlots[i].canMoveTo([c])));
-    }
-    stubToKingSlot = stubToKingSlot.map((slot, index) => slot.map(c => new Move(this.stub.returnedCards, this.kingSlots[index].cards, [c], false)));
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 7; j++) {
-        let c = this.slots[j].cards[this.slots[j].cards.length - 1];
-        if (this.kingSlots[i].canMoveTo([c])) {
-          this.cardWasTurned = this.slots[j].cards.length > 1 && this.slots[j].cards[this.slots[j].cards.length - 2].returned === true;
-          slotToKingSlot.push(new Move(this.slots[j].cards, this.kingSlots[i].cards, [c], this.cardWasTurned));
-        }
-      }
-    }
-    for (let i = 0; i < 7; i++) {
-      let p = this.slots[i].cards.length - this.slots[i].cards.findIndex(c => !c.returned);
-      for (let j = 1; j <= p; j++) {
-        let src = this.slots[i].cards.filter((c, ind) => ind >= this.slots[i].cards.length - p);
-        for (let k = 0; k < 7; k++) {
-          if (this.slots[k].canMoveTo(src) && i !== k) {
-            this.cardWasTurned = this.slots[j].cards.length > src.length && this.slots[j].cards[this.slots[j].cards.length - (src.length + 1)].returned === true;
-            slotToSlot.push(new Move(this.slots[i].cards, this.slots[k].cards, src, this.cardWasTurned));
-          }
-        }
-      }
-    }
-    stubToSlot.forEach(slot => slot.forEach(m => array.push(m)));
-    stubToKingSlot.forEach(slot => slot.forEach(m => array.push(m)));
-    slotToKingSlot.forEach(m => array.push(m));
-    slotToSlot.forEach(m => array.push(m));
-    return array;
-  }
+  // findSolutions() {
+  //   let array = [];
+  //   let stubToSlot = [];
+  //   let stubToKingSlot = [];
+  //   let slotToSlot = [];
+  //   let slotToKingSlot = [];
+  //   for (let i = 0; i < 7; i++) {
+  //     stubToSlot.push(this.stub.returnedCards.filter(c => this.slots[i].canMoveTo([c])));
+  //   }
+  //   stubToSlot = stubToSlot.map((slot, index) => slot.map(c => new Move(this.stub.returnedCards, this.slots[index].cards, [c], false)));
+  //   for (let i = 0; i < 4; i++) {
+  //     stubToKingSlot.push(this.stub.returnedCards.filter(c => this.kingSlots[i].canMoveTo([c])));
+  //   }
+  //   stubToKingSlot = stubToKingSlot.map((slot, index) => slot.map(c => new Move(this.stub.returnedCards, this.kingSlots[index].cards, [c], false)));
+  //   for (let i = 0; i < 4; i++) {
+  //     for (let j = 0; j < 7; j++) {
+  //       let c = this.slots[j].cards[this.slots[j].cards.length - 1];
+  //       if (this.kingSlots[i].canMoveTo([c])) {
+  //         this.cardWasTurned = this.slots[j].cards.length > 1 && this.slots[j].cards[this.slots[j].cards.length - 2].returned === true;
+  //         slotToKingSlot.push(new Move(this.slots[j].cards, this.kingSlots[i].cards, [c], this.cardWasTurned));
+  //       }
+  //     }
+  //   }
+  //   for (let i = 0; i < 7; i++) {
+  //     let p = this.slots[i].cards.length - this.slots[i].cards.findIndex(c => !c.returned);
+  //     for (let j = 1; j <= p; j++) {
+  //       let src = this.slots[i].cards.filter((c, ind) => ind >= this.slots[i].cards.length - p);
+  //       for (let k = 0; k < 7; k++) {
+  //         if (this.slots[k].canMoveTo(src) && i !== k) {
+  //           this.cardWasTurned = this.slots[j].cards.length > src.length && this.slots[j].cards[this.slots[j].cards.length - (src.length + 1)].returned === true;
+  //           slotToSlot.push(new Move(this.slots[i].cards, this.slots[k].cards, src, this.cardWasTurned));
+  //         }
+  //       }
+  //     }
+  //   }
+  //   stubToSlot.forEach(slot => slot.forEach(m => array.push(m)));
+  //   stubToKingSlot.forEach(slot => slot.forEach(m => array.push(m)));
+  //   slotToKingSlot.forEach(m => array.push(m));
+  //   slotToSlot.forEach(m => array.push(m));
+  //   return array;
+  // }
 
   // autoGame(value) {
   //   let n = value;
