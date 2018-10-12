@@ -17,6 +17,6 @@ export class Menu {
   }
 
   autoGame() {
-    this.router.navigateToRoute('Game', { auto: true });
+    this.router.navigateToRoute('Auto');
   }
 }

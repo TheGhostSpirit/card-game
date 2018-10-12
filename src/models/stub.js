@@ -42,7 +42,7 @@ export class Stub {
   }
 
   canGetFrom(index) {
-    return index === this.cards.length - 1 && this.cards.length !== 0 ? true : false;
+    return index === this.cards.length - 1 && this.cards.length !== 0;
   }
 
   canMoveTo(src) {
