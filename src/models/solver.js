@@ -6,6 +6,8 @@ export class Solver {
 
   constructor(solitaire) {
     this._solitaire = solitaire;
+    this.solutions = [];
+    this.sourceWasSlot = false;
   }
 
   findSolutions() {
@@ -21,6 +23,7 @@ export class Solver {
         let c = this._solitaire.slots[j].cards[this._solitaire.slots[j].cards.length - 1];
         if (this._solitaire.kingSlots[i].canMoveTo([c])) {
           solutions.push({ source: this._solitaire.slots[j].cards, destination: this._solitaire.kingSlots[i].cards, selection: [c] });
+          this.sourceWasSlot = true;
         }
       }
     }
@@ -33,6 +36,7 @@ export class Solver {
             solutions.push({
               source: this._solitaire.slots[i].cards, destination: this._solitaire.slots[k].cards, selection: sel
             });
+            this.sourceWasSlot = true;
           }
         }
       }
@@ -40,32 +44,40 @@ export class Solver {
     return solutions;
   }
 
-  autoGame(value) {
-    let n = value;
-    if (n === this.solutions.length) {
-      this.solutions.push([]);
-    }
-    this.solutions[n] = this.findSolutions();
-    if (this.solutions[n].length > 0) {
-      for (let i = 0; i < this.solutions[n].length; i++) {
-        let move = this.solutions[n][i];
-        this.doMove(move.source, move.destination, move.selection, move.cardWasTurned);
-        this.autoGame(n + 1);
+  autoGame(n) {
+    if (this._solitaire.isGameNotFinished()) {
+      if (n === this.solutions.length) {
+        this.solutions.push([]);
       }
-    } else {
-      this.undoMove();
+      this.solutions[n] = this.findSolutions();
+      console.log(this.solutions);
+      if (this.solutions[n].length > 0) {
+        for (let i = 0; i < this.solutions[n].length; i++) {
+          let move = this.solutions[n][i];
+          this.doMove(move.source, move.destination, move.selection);
+          // if (this._solitaire.isGameNotFinished()) break;
+          this.autoGame(n + 1);
+        }
+      } else {
+        this._solitaire.undoMove();
+      }
     }
   }
 
-  doMove(source, destination, selection, cardWasTurned) { //move called from the engine
+  doMove(source, destination, selection) { //move called from the engine
+    let beforeState = this._solitaire.dump();
     source.splice(-selection.length, selection.length);
     selection.forEach(c => {
       destination.push(c);
     });
-    if (cardWasTurned) {
-      this.returnCard(source[source.length - 1]);
+    this.returnsNextCardInSlot(source);
+    this._solitaire.moves.push(beforeState); //keeps a track of the moves to undo them later
+  }
+
+  returnsNextCardInSlot(source) {
+    if (this.sourceWasSlot && source.length > 0 && !source.find(c => !c.returned)) {
+      this._solitaire.returnCard(source[source.length - 1]);
+      this.sourceWasSlot = false;
     }
-    this.moves.push(new Move(source, destination, selection, cardWasTurned)); //keeps a track of the moves to undo them later
-    this.isNotFinished = this.kingSlots.some(s => !s.isFull());//checks if game is over
   }
 }

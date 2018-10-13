@@ -112,7 +112,7 @@ export class Solitaire {
         this.returnsNextCardInSlot(); //returns next card in slot if move was made from slot with returned cards
         this.moves.push(beforeState); //keeps a track of the moves to undo them later
         this.canAutoSolve();
-        this.isNotFinished = this.kingSlots.some(s => !s.isFull());//checks if game is over
+        this.isNotFinished = this.isGameNotFinished();//checks if game is over
       }
       this.previousSelection = undefined;
     } else { //if the user didn't click on a card or wrong card
@@ -185,5 +185,9 @@ export class Solitaire {
 
   returnCard(card) {
     card.returned = !card.returned;
+  }
+
+  isGameNotFinished() {
+    return this.kingSlots.some(s => !s.isFull());
   }
 }

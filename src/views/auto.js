@@ -11,8 +11,7 @@ export class Auto {
 
   activate() {
     this.solitaire.newGame();
-    console.log(this.solver.findSolutions());
-    // this.solver.autoGame(0);
+    this.solver.autoGame(0);
   }
 
 }
