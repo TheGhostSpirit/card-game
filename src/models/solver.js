@@ -4,6 +4,7 @@ import {
 import {
   Solitaire
 } from 'models/solitaire';
+import { ZONES } from 'models/card-const';
 
 const MAXROUNDS = 5000;
 
@@ -23,16 +24,14 @@ export class Solver {
       this._solitaire.stub.returnedCards.filter(c => this._solitaire.slots[i].canMoveTo([c])).forEach(c => solutions.push({
         source: this._solitaire.stub.returnedCards,
         destination: this._solitaire.slots[i].cards,
-        selection: [c],
-        zone: 'stub'
+        selection: [c]
       }));
     }
     for (let i = 0; i < 4; i++) {
       this._solitaire.stub.returnedCards.filter(c => this._solitaire.kingSlots[i].canMoveTo([c])).forEach(c => solutions.push({
         source: this._solitaire.stub.returnedCards,
         destination: this._solitaire.kingSlots[i].cards,
-        selection: [c],
-        zone: 'stub'
+        selection: [c]
       }));
     }
     for (let i = 0; i < 4; i++) {
@@ -43,7 +42,7 @@ export class Solver {
             source: this._solitaire.slots[j].cards,
             destination: this._solitaire.kingSlots[i].cards,
             selection: [c],
-            zone: 'slot'
+            zone: ZONES.slots
           });
         }
       }
@@ -58,7 +57,7 @@ export class Solver {
               source: this._solitaire.slots[i].cards,
               destination: this._solitaire.slots[k].cards,
               selection: sel,
-              zone: 'slot'
+              zone: ZONES.slots
             });
           }
         }
@@ -79,12 +78,8 @@ export class Solver {
     this.round++;
     if (this.solutions[n].length > 0) {
       for (let i = 0; i < this.solutions[n].length; i++) {
-        // setTimeout(() => {
-        //   this.status = `Etape ${n} : Mouvement ${i}`;
-        // }, 10);
         let move = this.solutions[n][i];
-        this.doMove(move.source, move.destination, move.selection, move.zone);
-        console.log(`moveA${n}m${i}`);
+        this._solitaire.doMove(move.source, move.destination, move.selection, move.zone);
         if (!this._solitaire.isGameNotFinished()) {
           return true;
         }
@@ -93,25 +88,6 @@ export class Solver {
       }
     } else {
       this._solitaire.undoMove();
-    }
-  }
-
-  doMove(source, destination, selection, zone) { //move called from the engine
-    let beforeState = this._solitaire.dump();
-    source.splice(-selection.length, selection.length);
-    selection.forEach(c => {
-      destination.push(c);
-    });
-    this.returnCard(source, destination, zone);
-    this._solitaire.moves.push(beforeState); //keeps a track of the moves to undo them later
-  }
-
-  returnCard(source, destination, zone) {
-    if (zone === 'slot' && source.length > 0 && typeof source.find(c => !c.returned) === 'undefined') {
-      this._solitaire.returnCard(source[source.length - 1]);
-    }
-    if (zone === 'stub') {
-      this._solitaire.returnCard(destination[destination.length - 1]);
     }
   }
 }

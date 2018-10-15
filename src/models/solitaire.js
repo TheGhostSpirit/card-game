@@ -3,22 +3,14 @@ import { Deck } from 'models/deck';
 import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
-import { Router } from 'aurelia-router';
-import { SUITS } from 'models/card-const';
+import { SUITS, ZONES } from 'models/card-const';
 
-const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
-
-@inject(Deck, Router)
+@inject(Deck)
 export class Solitaire {
 
-  constructor(deck, router) {
+  constructor(deck) {
     this.deck = deck;
     this.zones = ZONES;
-    this.router = router;
-  }
-
-  quit() {
-    this.router.navigateToRoute('Menu');
   }
 
   newGame() {
@@ -105,13 +97,15 @@ export class Solitaire {
       let src = this.getCards(this.previousSelection); //gets the selected cards
       this.selectCards(this.previousSelection); //deselect cards
       if (destinationSlot.canMoveTo(src)) { //move cards(s) from one array to another if canMoveTo is valid
-        let beforeState = this.dump();
-        this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
-        src.forEach(c => {
-          destinationSlot.cards.push(c);
-        });
-        this.returnsNextCardInSlot(); //returns next card in slot if move was made from slot with returned cards
-        this.moves.push(beforeState); //keeps a track of the moves to undo them later
+        // let beforeState = this.dump();
+        // this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
+        // src.forEach(c => {
+        //   destinationSlot.cards.push(c);
+        // });
+        // this.returnsNextCardInSlot();
+        // this.moves.push(beforeState);
+        // -> this.doMove()
+        this.doMove(this.previousSelection.slot.cards, destinationSlot.cards, src, this.previousSelection.zone);
         this.canAutoSolve();
         this.isNotFinished = this.isGameNotFinished();//checks if game is over
       }
@@ -125,17 +119,31 @@ export class Solitaire {
     }
   }
 
-  returnsNextCardInSlot() {
-    if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') {
-      this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
+  doMove(source, destination, selection, zone) { //move called from the engine
+    let beforeState = this.dump();
+    source.splice(-selection.length, selection.length);
+    selection.forEach(c => {
+      destination.push(c);
+    });
+    this.returnNextCardInSlot(source, zone);
+    this.moves.push(beforeState); //keeps a track of the moves to undo them later
+  }
+
+  returnNextCardInSlot(source, zone) {
+    if (zone === ZONES.slots && source.length > 0 && typeof source.find(c => !c.returned) === 'undefined') {
+      this.returnCard(source[source.length - 1]);
     }
   }
+
+  // returnsNextCardInSlot() {
+  //   if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') {
+  //     this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
+  //   }
+  // }
 
   undoMove() {
     if (this.moves.length > 0) {
       this.restore({ game: this.moves.pop() });
-    } else {
-      alert('Nothing left to undo!');
     }
   }
 
@@ -161,6 +169,10 @@ export class Solitaire {
     let beforeState = this.dump();
     this.moves.push(beforeState);
     this.stub.turn();
+  }
+
+  fullyTurnStub() {
+    this.stub.returnedCards.forEach(c => this.returnCard(c));
   }
 
   getSlot(slotIndex, zone) {

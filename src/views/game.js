@@ -1,11 +1,13 @@
 import { Solitaire } from 'models/solitaire';
 import { inject } from 'aurelia-framework';
+import { Router } from 'aurelia-router';
 
-@inject(Solitaire)
+@inject(Solitaire, Router)
 export class Game {
 
-  constructor(solitaire) {
+  constructor(solitaire, router) {
     this.solitaire = solitaire;
+    this.router = router;
   }
 
   activate(param) {
@@ -14,5 +16,9 @@ export class Game {
     } else {
       this.solitaire.newGame();
     }
+  }
+
+  quit() {
+    this.router.navigateToRoute('Menu');
   }
 }
