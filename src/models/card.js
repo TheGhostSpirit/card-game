@@ -43,4 +43,8 @@ export class Card {
     return this.color % 2 === cardToCompare.color % 2;
   }
 
+  isEqual(cardToCompare) {
+    return this.suit === card.suit && this.name === cardToCompare.name;
+  }
+
 }

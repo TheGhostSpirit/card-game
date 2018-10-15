@@ -82,8 +82,8 @@ export class Solitaire {
    */
   dump() {
     return {
-      slots: this.slots.map(s => s.dump()),
       kingSlots: this.kingSlots.map(s => s.dump()),
+      slots: this.slots.map(s => s.dump()),
       stub: this.stub.dump()
     };
   }

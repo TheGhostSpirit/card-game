@@ -19,22 +19,22 @@ export class Solver {
 
   findSolutions() {
     let solutions = [];
-    // for (let i = 0; i < 7; i++) {
-    //   this._solitaire.stub.returnedCards.filter(c => this._solitaire.slots[i].canMoveTo([c])).forEach(c => solutions.push({
-    //     source: this._solitaire.stub.returnedCards,
-    //     destination: this._solitaire.slots[i].cards,
-    //     selection: [c],
-    //     zone: 'stub'
-    //   }));
-    // }
-    // for (let i = 0; i < 4; i++) {
-    //   this._solitaire.stub.returnedCards.filter(c => this._solitaire.kingSlots[i].canMoveTo([c])).forEach(c => solutions.push({
-    //     source: this._solitaire.stub.returnedCards,
-    //     destination: this._solitaire.kingSlots[i].cards,
-    //     selection: [c],
-    //     zone: 'stub'
-    //   }));
-    // }
+    for (let i = 0; i < 7; i++) {
+      this._solitaire.stub.returnedCards.filter(c => this._solitaire.slots[i].canMoveTo([c])).forEach(c => solutions.push({
+        source: this._solitaire.stub.returnedCards,
+        destination: this._solitaire.slots[i].cards,
+        selection: [c],
+        zone: 'stub'
+      }));
+    }
+    for (let i = 0; i < 4; i++) {
+      this._solitaire.stub.returnedCards.filter(c => this._solitaire.kingSlots[i].canMoveTo([c])).forEach(c => solutions.push({
+        source: this._solitaire.stub.returnedCards,
+        destination: this._solitaire.kingSlots[i].cards,
+        selection: [c],
+        zone: 'stub'
+      }));
+    }
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 7; j++) {
         let c = this._solitaire.slots[j].cards[this._solitaire.slots[j].cards.length - 1];
@@ -69,9 +69,7 @@ export class Solver {
 
   autoGame(n) {
     if (this.round > MAXROUNDS) {
-      setTimeout(() => {
-        this.status = 'max depth !';
-      }, 10);
+      this.status = 'max depth !';
       return false;
     }
     if (n === this.solutions.length) {
@@ -81,27 +79,20 @@ export class Solver {
     this.round++;
     if (this.solutions[n].length > 0) {
       for (let i = 0; i < this.solutions[n].length; i++) {
+        // setTimeout(() => {
+        //   this.status = `Etape ${n} : Mouvement ${i}`;
+        // }, 10);
         let move = this.solutions[n][i];
-        setTimeout(() => {
-          this.status = 'solution found !';
-        }, 10);
         this.doMove(move.source, move.destination, move.selection, move.zone);
+        console.log(`moveA${n}m${i}`);
         if (!this._solitaire.isGameNotFinished()) {
-          setTimeout(() => {
-            this.status = 'solution found !';
-          }, 10);
           return true;
         }
-        setTimeout(() => {
-          this.status = 'next move !';
-        }, 10);
-        return this.autoGame(n + 1);
+        let res = this.autoGame(n + 1);
+        if (res) return true;
       }
     } else {
       this._solitaire.undoMove();
-      setTimeout(() => {
-        this.status = 'next solution findings !';
-      }, 10);
     }
   }
 
