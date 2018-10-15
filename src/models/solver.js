@@ -13,27 +13,28 @@ export class Solver {
   constructor(solitaire) {
     this._solitaire = solitaire;
     this.solutions = [];
-    this.sourceWasSlot = false;
     this.status = 'running';
     this.round = 0;
   }
 
   findSolutions() {
     let solutions = [];
-    for (let i = 0; i < 7; i++) {
-      this._solitaire.stub.returnedCards.filter(c => this._solitaire.slots[i].canMoveTo([c])).forEach(c => solutions.push({
-        source: this._solitaire.stub.returnedCards,
-        destination: this._solitaire.slots[i].cards,
-        selection: [c]
-      }));
-    }
-    for (let i = 0; i < 4; i++) {
-      this._solitaire.stub.returnedCards.filter(c => this._solitaire.kingSlots[i].canMoveTo([c])).forEach(c => solutions.push({
-        source: this._solitaire.stub.returnedCards,
-        destination: this._solitaire.kingSlots[i].cards,
-        selection: [c]
-      }));
-    }
+    // for (let i = 0; i < 7; i++) {
+    //   this._solitaire.stub.returnedCards.filter(c => this._solitaire.slots[i].canMoveTo([c])).forEach(c => solutions.push({
+    //     source: this._solitaire.stub.returnedCards,
+    //     destination: this._solitaire.slots[i].cards,
+    //     selection: [c],
+    //     zone: 'stub'
+    //   }));
+    // }
+    // for (let i = 0; i < 4; i++) {
+    //   this._solitaire.stub.returnedCards.filter(c => this._solitaire.kingSlots[i].canMoveTo([c])).forEach(c => solutions.push({
+    //     source: this._solitaire.stub.returnedCards,
+    //     destination: this._solitaire.kingSlots[i].cards,
+    //     selection: [c],
+    //     zone: 'stub'
+    //   }));
+    // }
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 7; j++) {
         let c = this._solitaire.slots[j].cards[this._solitaire.slots[j].cards.length - 1];
@@ -41,9 +42,9 @@ export class Solver {
           solutions.push({
             source: this._solitaire.slots[j].cards,
             destination: this._solitaire.kingSlots[i].cards,
-            selection: [c]
+            selection: [c],
+            zone: 'slot'
           });
-          this.sourceWasSlot = true;
         }
       }
     }
@@ -56,9 +57,9 @@ export class Solver {
             solutions.push({
               source: this._solitaire.slots[i].cards,
               destination: this._solitaire.slots[k].cards,
-              selection: sel
+              selection: sel,
+              zone: 'slot'
             });
-            this.sourceWasSlot = true;
           }
         }
       }
@@ -81,7 +82,10 @@ export class Solver {
     if (this.solutions[n].length > 0) {
       for (let i = 0; i < this.solutions[n].length; i++) {
         let move = this.solutions[n][i];
-        this.doMove(move.source, move.destination, move.selection);
+        setTimeout(() => {
+          this.status = 'solution found !';
+        }, 10);
+        this.doMove(move.source, move.destination, move.selection, move.zone);
         if (!this._solitaire.isGameNotFinished()) {
           setTimeout(() => {
             this.status = 'solution found !';
@@ -101,20 +105,22 @@ export class Solver {
     }
   }
 
-  doMove(source, destination, selection) { //move called from the engine
+  doMove(source, destination, selection, zone) { //move called from the engine
     let beforeState = this._solitaire.dump();
     source.splice(-selection.length, selection.length);
     selection.forEach(c => {
       destination.push(c);
     });
-    this.returnsNextCardInSlot(source);
+    this.returnCard(source, destination, zone);
     this._solitaire.moves.push(beforeState); //keeps a track of the moves to undo them later
   }
 
-  returnsNextCardInSlot(source) {
-    if (this.sourceWasSlot && source.length > 0 && typeof source.find(c => !c.returned) === 'undefined') {
-      source[source.length - 1].returned = true;
-      this.sourceWasSlot = false;
+  returnCard(source, destination, zone) {
+    if (zone === 'slot' && source.length > 0 && typeof source.find(c => !c.returned) === 'undefined') {
+      this._solitaire.returnCard(source[source.length - 1]);
+    }
+    if (zone === 'stub') {
+      this._solitaire.returnCard(destination[destination.length - 1]);
     }
   }
 }
