@@ -2,8 +2,9 @@ import { Card } from 'models/card';
 
 export class KingSlot {
 
-  constructor() {
+  constructor(suit) {
     this.cards = [];
+    this.suit = suit;
   }
 
   /**
@@ -26,12 +27,12 @@ export class KingSlot {
   }
 
   canGetFrom(index) {
-    return index === this.cards.length - 1 && typeof this.cards[index] !== 'undefined' ? true : false;
+    return index === this.cards.length - 1 && typeof this.cards[index] !== 'undefined';
   }
 
   canMoveTo(src) {
     if (src.length === 1) {
-      return this.cards.length === 0 && src[0].value === 1 || this.cards.length > 0 && src[0].suit === this.cards[this.cards.length - 1].suit && src[0].value === this.cards[this.cards.length - 1].value + 1 ? true : false;
+      return this.cards.length === 0 && src[0].value === 1 && src[0].suit === this.suit || this.cards.length > 0 && src[0].suit === this.cards[this.cards.length - 1].suit && src[0].value === this.cards[this.cards.length - 1].value + 1;
     }
     return false;
   }

@@ -1,4 +1,38 @@
 <template>
   <div>BLEBLE</div>
-  <div if.bind="_solitaire.isGameNotFinished()">Solved</div>
+  <div>${solver.status}</div>
+  <div id="solitaire-game" class="playingCards container-background">
+    <div id="solitaire-top">
+      <span id="solitaire-stub">
+        <ul class="deck deck-clickable">
+          <li repeat.for="card of solitaire.stub.returnedCards" class="card-slot">
+            <compose view="../templates/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+      <span id="solitaire-returned-stub">
+        <ul class="deck deck-clickable">
+          <li repeat.for="card of solitaire.stub.cards" class="card-slot">
+            <compose view="../templates/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+      <span id="solitaire-king-slots">
+        <ul repeat.for="i of 4" class="deck deck-clickable">
+          <li repeat.for="card of solitaire.kingSlots[i].cards" class="card-slot">
+            <compose view="../templates/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+    </div>
+    <div id="solitaire-bottom">
+      <span id="solitaire-slots">
+        <ul repeat.for="i of 7" class="cards-column">
+          <li repeat.for="card of solitaire.slots[i].cards" class="card-slot">
+            <compose view="../templates/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+    </div>
+  </div>
 </template>

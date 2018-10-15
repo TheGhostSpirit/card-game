@@ -4,6 +4,7 @@ import { Stub } from 'models/stub';
 import { KingSlot } from 'models/king-slot';
 import { Slot } from 'models/slot';
 import { Router } from 'aurelia-router';
+import { SUITS } from 'models/card-const';
 
 const ZONES = Object.freeze({ slots: 0, kingSlots: 1, stub: 2 });
 
@@ -40,7 +41,7 @@ export class Solitaire {
       this.slots.push(new Slot());
     }
     for (let i = 0; i < 4; i++) {
-      this.kingSlots.push(new KingSlot());
+      this.kingSlots.push(new KingSlot(SUITS[i]));
     }
   }
   /**
