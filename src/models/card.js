@@ -44,7 +44,7 @@ export class Card {
   }
 
   isEqual(cardToCompare) {
-    return this.suit === card.suit && this.name === cardToCompare.name;
+    return this.suit === cardToCompare.suit && this.name === cardToCompare.name;
   }
 
 }

@@ -11,6 +11,7 @@ export class Solitaire {
   constructor(deck) {
     this.deck = deck;
     this.zones = ZONES;
+    this.logger = console;
   }
 
   newGame() {
@@ -56,7 +57,7 @@ export class Solitaire {
    * Restores the cards from a saved game on the table.
    */
   restore(savedGame) {
-    let game = savedGame.game;
+    let game = savedGame;
     this.kingSlots.forEach((s, index) => s.load(game.kingSlots[index]));
     this.slots.forEach((s, index) => s.load(game.slots[index]));
     this.stub.load(game.stub);
@@ -80,10 +81,16 @@ export class Solitaire {
     };
   }
 
+  logJson() {
+    this.logger.log(JSON.stringify(this.dump()));
+  }
+
   cheat() {
     this.initialize();
-    let cheatedGame = JSON.parse('{"game":{"kingSlots":[[{"suit":"hearts","name":"A"},{"suit":"hearts","name":"2"},{"suit":"hearts","name":"3"},{"suit":"hearts","name":"4"},{"suit":"hearts","name":"5"},{"suit":"hearts","name":"6"},{"suit":"hearts","name":"7"},{"suit":"hearts","name":"8"},{"suit":"hearts","name":"9"},{"suit":"hearts","name":"10"},{"suit":"hearts","name":"J"},{"suit":"hearts","name":"Q"},{"suit":"hearts","name":"K"}],[{"suit":"spades","name":"A"},{"suit":"spades","name":"2"},{"suit":"spades","name":"3"},{"suit":"spades","name":"4"},{"suit":"spades","name":"5"},{"suit":"spades","name":"6"},{"suit":"spades","name":"7"},{"suit":"spades","name":"8"},{"suit":"spades","name":"9"},{"suit":"spades","name":"10"},{"suit":"spades","name":"J"},{"suit":"spades","name":"Q"},{"suit":"spades","name":"K"}],[{"suit":"clubs","name":"A"},{"suit":"clubs","name":"2"},{"suit":"clubs","name":"3"},{"suit":"clubs","name":"4"},{"suit":"clubs","name":"5"},{"suit":"clubs","name":"6"},{"suit":"clubs","name":"7"},{"suit":"clubs","name":"8"},{"suit":"clubs","name":"9"},{"suit":"clubs","name":"10"},{"suit":"clubs","name":"J"},{"suit":"clubs","name":"Q"},{"suit":"clubs","name":"K"}],[{"suit":"diams","name":"A"},{"suit":"diams","name":"2"},{"suit":"diams","name":"3"},{"suit":"diams","name":"4"},{"suit":"diams","name":"5"},{"suit":"diams","name":"6"},{"suit":"diams","name":"7"},{"suit":"diams","name":"8"},{"suit":"diams","name":"9"},{"suit":"diams","name":"10"}]],"stub":{"cards":[{"suit":"diams","name":"J"}],"returnedCards":[{"suit":"diams","name":"Q","returned":true}]},"slots":[[{"suit":"diams","name":"K"}],[],[],[],[],[],[]]}}');
-    this.restore(cheatedGame);
+    let testGame2 = JSON.parse('{"kingSlots":[[],[],[],[]],"slots":[[{"suit":"hearts","name":"2","returned":false}],[{"suit":"diams","name":"8","returned":true},{"suit":"clubs","name":"5","returned":false}],[{"suit":"spades","name":"8","returned":true},{"suit":"hearts","name":"5","returned":true},{"suit":"spades","name":"3","returned":false}],[{"suit":"hearts","name":"K","returned":true},{"suit":"spades","name":"5","returned":true},{"suit":"diams","name":"K","returned":true},{"suit":"diams","name":"4","returned":false}],[{"suit":"clubs","name":"4","returned":true},{"suit":"diams","name":"J","returned":true},{"suit":"clubs","name":"2","returned":true},{"suit":"clubs","name":"7","returned":true},{"suit":"diams","name":"9","returned":false}],[{"suit":"spades","name":"J","returned":true},{"suit":"clubs","name":"9","returned":true},{"suit":"clubs","name":"3","returned":true},{"suit":"hearts","name":"7","returned":true},{"suit":"hearts","name":"J","returned":true},{"suit":"hearts","name":"6","returned":false}],[{"suit":"diams","name":"5","returned":true},{"suit":"spades","name":"Q","returned":true},{"suit":"diams","name":"A","returned":true},{"suit":"hearts","name":"4","returned":true},{"suit":"diams","name":"Q","returned":true},{"suit":"diams","name":"10","returned":true},{"suit":"spades","name":"9","returned":false}]],"stub":{"cards":[],"returnedCards":[{"suit":"spades","name":"2","returned":true},{"suit":"spades","name":"K","returned":true},{"suit":"clubs","name":"Q","returned":true},{"suit":"hearts","name":"A","returned":true},{"suit":"hearts","name":"8","returned":true},{"suit":"spades","name":"7","returned":true},{"suit":"clubs","name":"6","returned":true},{"suit":"hearts","name":"9","returned":true},{"suit":"spades","name":"A","returned":true},{"suit":"clubs","name":"10","returned":true},{"suit":"hearts","name":"Q","returned":true},{"suit":"spades","name":"4","returned":true},{"suit":"hearts","name":"3","returned":true},{"suit":"diams","name":"2","returned":true},{"suit":"spades","name":"10","returned":true},{"suit":"clubs","name":"A","returned":true},{"suit":"clubs","name":"J","returned":true},{"suit":"diams","name":"3","returned":true},{"suit":"hearts","name":"10","returned":true},{"suit":"diams","name":"6","returned":true},{"suit":"clubs","name":"K","returned":true},{"suit":"diams","name":"7","returned":true},{"suit":"clubs","name":"8","returned":true},{"suit":"spades","name":"6","returned":true}]}}');
+    // let testGame1 = JSON.parse('{"kingSlots":[[],[],[],[]],"slots":[[{"suit":"spades","name":"K","returned":false},{"suit":"diams","name":"Q","returned":false}],[{"suit":"hearts","name":"A","returned":true},{"suit":"clubs","name":"5","returned":false}],[{"suit":"hearts","name":"K","returned":true},{"suit":"spades","name":"Q","returned":false}],[{"suit":"diams","name":"9","returned":true},{"suit":"hearts","name":"6","returned":true},{"suit":"clubs","name":"K","returned":true},{"suit":"hearts","name":"3","returned":false},{"suit":"spades","name":"2","returned":false}],[{"suit":"diams","name":"6","returned":true},{"suit":"clubs","name":"A","returned":true},{"suit":"diams","name":"8","returned":true},{"suit":"spades","name":"3","returned":false},{"suit":"diams","name":"2","returned":false}],[{"suit":"diams","name":"A","returned":true},{"suit":"spades","name":"7","returned":true},{"suit":"hearts","name":"10","returned":true},{"suit":"clubs","name":"7","returned":true},{"suit":"diams","name":"5","returned":true},{"suit":"diams","name":"10","returned":false}],[{"suit":"diams","name":"3","returned":true},{"suit":"hearts","name":"7","returned":true},{"suit":"hearts","name":"Q","returned":true},{"suit":"clubs","name":"9","returned":true},{"suit":"spades","name":"4","returned":true},{"suit":"spades","name":"10","returned":false}]],"stub":{"cards":[{"suit":"clubs","name":"3"},{"suit":"spades","name":"6"},{"suit":"clubs","name":"10"},{"suit":"spades","name":"9"},{"suit":"diams","name":"7"},{"suit":"clubs","name":"J"},{"suit":"clubs","name":"2"},{"suit":"diams","name":"4"},{"suit":"hearts","name":"9"},{"suit":"clubs","name":"6"},{"suit":"clubs","name":"Q"},{"suit":"hearts","name":"5"},{"suit":"spades","name":"5"},{"suit":"spades","name":"J"},{"suit":"spades","name":"A"},{"suit":"hearts","name":"8"},{"suit":"clubs","name":"8"},{"suit":"spades","name":"8"},{"suit":"clubs","name":"4"},{"suit":"hearts","name":"J"},{"suit":"diams","name":"J"},{"suit":"hearts","name":"2"},{"suit":"diams","name":"K"},{"suit":"hearts","name":"4"}],"returnedCards":[]}}');
+    // let cheatedGame = JSON.parse('{"kingSlots":[[{"suit":"hearts","name":"A"},{"suit":"hearts","name":"2"},{"suit":"hearts","name":"3"},{"suit":"hearts","name":"4"},{"suit":"hearts","name":"5"},{"suit":"hearts","name":"6"},{"suit":"hearts","name":"7"},{"suit":"hearts","name":"8"},{"suit":"hearts","name":"9"},{"suit":"hearts","name":"10"},{"suit":"hearts","name":"J"},{"suit":"hearts","name":"Q"},{"suit":"hearts","name":"K"}],[{"suit":"spades","name":"A"},{"suit":"spades","name":"2"},{"suit":"spades","name":"3"},{"suit":"spades","name":"4"},{"suit":"spades","name":"5"},{"suit":"spades","name":"6"},{"suit":"spades","name":"7"},{"suit":"spades","name":"8"},{"suit":"spades","name":"9"},{"suit":"spades","name":"10"},{"suit":"spades","name":"J"},{"suit":"spades","name":"Q"},{"suit":"spades","name":"K"}],[{"suit":"diams","name":"A"},{"suit":"diams","name":"2"},{"suit":"diams","name":"3"},{"suit":"diams","name":"4"},{"suit":"diams","name":"5"},{"suit":"diams","name":"6"},{"suit":"diams","name":"7"},{"suit":"diams","name":"8"},{"suit":"diams","name":"9"},{"suit":"diams","name":"10"}],[{"suit":"clubs","name":"A"},{"suit":"clubs","name":"2"},{"suit":"clubs","name":"3"},{"suit":"clubs","name":"4"},{"suit":"clubs","name":"5"},{"suit":"clubs","name":"6"},{"suit":"clubs","name":"7"},{"suit":"clubs","name":"8"},{"suit":"clubs","name":"9"},{"suit":"clubs","name":"10"},{"suit":"clubs","name":"J"},{"suit":"clubs","name":"Q"},{"suit":"clubs","name":"K"}]],"slots":[[{"suit":"diams","name":"K","returned":false}],[],[],[],[],[],[],[]],"stub":{"cards":[{"suit":"diams","name":"J"}],"returnedCards":[{"suit":"diams","name":"Q","returned":true}]}}');
+    this.restore(testGame2);
   }
 
   setSelectedCardIndex(cardIndex) {
@@ -97,14 +104,6 @@ export class Solitaire {
       let src = this.getCards(this.previousSelection); //gets the selected cards
       this.selectCards(this.previousSelection); //deselect cards
       if (destinationSlot.canMoveTo(src)) { //move cards(s) from one array to another if canMoveTo is valid
-        // let beforeState = this.dump();
-        // this.previousSelection.slot.cards.splice(this.previousSelection.index, src.length);
-        // src.forEach(c => {
-        //   destinationSlot.cards.push(c);
-        // });
-        // this.returnsNextCardInSlot();
-        // this.moves.push(beforeState);
-        // -> this.doMove()
         this.doMove(this.previousSelection.slot.cards, destinationSlot.cards, src, this.previousSelection.zone);
         this.canAutoSolve();
         this.isNotFinished = this.isGameNotFinished();//checks if game is over
@@ -121,8 +120,8 @@ export class Solitaire {
 
   doMove(source, destination, selection, zone) { //move called from the engine
     let beforeState = this.dump();
-    source.splice(-selection.length, selection.length);
     selection.forEach(c => {
+      source.splice(source.findIndex(sc => sc.isEqual(c)), 1);
       destination.push(c);
     });
     this.returnNextCardInSlot(source, zone);
@@ -135,15 +134,9 @@ export class Solitaire {
     }
   }
 
-  // returnsNextCardInSlot() {
-  //   if (this.previousSelection.zone === ZONES.slots && this.previousSelection.slot.cards.length > 0 && typeof this.previousSelection.slot.cards.find(c => !c.returned) === 'undefined') {
-  //     this.returnCard(this.previousSelection.slot.cards[this.previousSelection.slot.cards.length - 1]);
-  //   }
-  // }
-
   undoMove() {
     if (this.moves.length > 0) {
-      this.restore({ game: this.moves.pop() });
+      this.restore(this.moves.pop());
     }
   }
 
