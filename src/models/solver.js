@@ -24,6 +24,7 @@ export class Solver {
     this.status = '';
     this.round = 0;
     this.steps = [];
+    this.set = new Set();
   }
 
   initialize() {
@@ -105,6 +106,13 @@ export class Solver {
     if (this.interval) clearInterval(this.interval);
   }
 
+  pushState(message) {
+    this.steps.push({
+      game: this.solitaire.dump(),
+      status: message
+    });   
+  }
+
   resolveStep(n) {
     if (this.round > MAXROUNDS) {
       this.status = 'max depth !';
@@ -119,10 +127,15 @@ export class Solver {
       for (let i = 0; i < this.possibleMoves[n].length; i++) {
         let move = this.possibleMoves[n][i];
         this.solitaire.doMove(move.source, move.destination, move.selection, move.zone);
-        this.steps.push({
-          game: this.solitaire.dump(),
-          status: `E${n}-m${i}/${this.possibleMoves[n].length}`
-        });
+        this.pushState(`E${n}-m${i}/${this.possibleMoves[n].length}`);
+        let state = JSON.stringify(this.solitaire.dump());
+        if (this.set.has(state)) {
+          this.solitaire.undoMove();
+          this.pushState(`E${n}-UNDO(cycle)`);
+          continue;
+        } else {
+          this.set.add(state);
+        }
         if (!this.solitaire.isGameNotFinished()) {
           return true;
         }
@@ -130,16 +143,10 @@ export class Solver {
         if (res) return true;
       }
       this.solitaire.undoMove();
-      this.steps.push({
-        game: this.solitaire.dump(),
-        status: `E${n}-ALLDONE`
-      });
+      this.pushState(`E${n}-UNDO(all-done)`);
     } else {
       this.solitaire.undoMove();
-      this.steps.push({
-        game: this.solitaire.dump(),
-        status: `E${n}-NOSOL`
-      });
+      this.pushState(`E${n}-UNDO(no-sol)`);
     }
   }
 }
