@@ -35,6 +35,79 @@ export class Solver {
     this.shadowSolitaire.restore(this.solitaire.dump());
   }
 
+  resolve() {
+    this.steps = [];
+    this.stepIndex = -1;
+    this.set.clear();
+    this.resolutionDone = false;
+    this.status = 'running...';
+    let result = this.resolveStep(0);
+    this.resolutionDone = true;
+    this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
+  }
+
+  playOrPause() {
+    if (this.interval) {
+      this.pause();
+    } else {
+      this.playLabel = 'Pause';
+      this.interval = setInterval(() => {
+        this.stepByStep(true, true);
+      }, this.delay);
+    }
+  }
+
+  stepByStep(forward, dealWithPause) {
+    this.stepIndex = (forward) ? ++this.stepIndex : --this.stepIndex;
+    if (this.stepIndex === -1) {
+      return;
+    }
+    if (this.stepIndex >= this.steps.length) {
+      this.pause();
+    } else {
+      let stepInfo = this.steps[this.stepIndex];
+      this.stepStatus = stepInfo.status;
+      this.state = stepInfo.state;
+      this.possibleMoves = stepInfo.possibleMoves;
+      this.shadowSolitaire.restore(stepInfo.game);
+      if (dealWithPause && stepInfo.pause) this.pause();
+    }
+  }
+
+  pause() {
+    if (this.interval) {
+      this.playLabel = 'Play';
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+  }
+
+  @computedFrom('steps.length', 'resolutionDone')
+  get cannotPlayback() {
+    return this.steps.length === 0 || !this.resolutionDone;
+  }
+
+  @computedFrom('stepIndex', 'resolutionDone')
+  get cannotGoBack() {
+    return this.stepIndex === -1 || !this.resolutionDone;
+  }
+
+  @computedFrom('stepIndex', 'resolutionDone')
+  get cannotGoNext() {
+    return this.stepIndex === this.steps.length || !this.resolutionDone;
+  }
+
+  pushState(message, possibleMoves, pause) {
+    let dump = this.solitaire.dump();
+    this.steps.push({
+      game: dump,
+      status: message,
+      possibleMoves: possibleMoves.map(m => m.description).join(', '),
+      state: JSON.stringify(dump),
+      pause: pause
+    });
+  }
+
   findMoves() {
     let moves = [];
     let kingSlotNumber = 4;
@@ -111,76 +184,6 @@ export class Solver {
     return Array.from(map.values());
   }
 
-  resolve() {
-    this.steps = [];
-    this.stepIndex = -1;
-    this.set.clear();
-    this.resolutionDone = false;
-    this.status = 'running...';
-    let result = this.resolveStep(0);
-    this.resolutionDone = true;
-    this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
-  }
-
-  playOrPause() {
-    if (this.interval) {
-      this.pause();
-    } else {
-      this.playLabel = 'Pause';
-      this.interval = setInterval(() => {
-        this.stepByStep(true, true);
-      }, this.delay);
-    }
-  }
-
-  stepByStep(forward, dealWithPause) {
-    this.stepIndex = (forward) ? ++this.stepIndex : --this.stepIndex;
-    if (this.stepIndex === -1) {
-      return;
-    }
-    if (this.stepIndex >= this.steps.length) this.pause();
-    let stepInfo = this.steps[this.stepIndex];
-    this.stepStatus = stepInfo.status;
-    this.state = stepInfo.state;
-    this.possibleMoves = stepInfo.possibleMoves;
-    this.shadowSolitaire.restore(stepInfo.game);
-    if (dealWithPause && stepInfo.pause) this.pause();
-  }
-
-  pause() {
-    if (this.interval) {
-      this.playLabel = 'Play';
-      clearInterval(this.interval);
-      this.interval = null;
-    }
-  }
-
-  @computedFrom('steps.length', 'resolutionDone')
-  get cannotPlayback() {
-    return this.steps.length === 0 || !this.resolutionDone;
-  }
-
-  @computedFrom('stepIndex', 'resolutionDone')
-  get cannotGoBack() {
-    return this.stepIndex === -1 || !this.resolutionDone;
-  }
-
-  @computedFrom('stepIndex', 'resolutionDone')
-  get cannotGoNext() {
-    return this.stepIndex === this.steps.length || !this.resolutionDone;
-  }
-
-  pushState(message, possibleMoves, pause) {
-    let dump = this.solitaire.dump();
-    this.steps.push({
-      game: dump,
-      status: message,
-      possibleMoves: possibleMoves.map(m => m.description).join(', '),
-      state: JSON.stringify(dump),
-      pause: pause
-    });
-  }
-
   resolveStep(n) {
     if (this.steps.length > MAXMOVES) {
       return false;
@@ -190,11 +193,11 @@ export class Solver {
     if (movesCount > 0) {
       for (let i = 0; i < movesCount; i++) {
         let move = possibleMoves[i];
-        this.pushState(`E${n}-m${i}/${movesCount}=${move.description}`, possibleMoves);
+        this.pushState(`E${n}-m${i + 1}/${movesCount}=${move.description}`, possibleMoves);
         this.solitaire.doMove(move.source, move.destination, move.selection, move.zone);
         let state = JSON.stringify(this.solitaire.dump());
         if (this.set.has(state)) {
-          this.pushState(`E${n}-m${i}/${movesCount}=${move.description}:CYCLE:UNDONE`, possibleMoves, true);
+          this.pushState(`E${n}-m${i + 1}/${movesCount}=${move.description}:CYCLE:UNDONE`, possibleMoves, true);
           this.solitaire.undoMove();
           continue;
         } else {
