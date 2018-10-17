@@ -6,33 +6,26 @@ import {
   Solitaire
 } from 'models/solitaire/solitaire';
 import {
-  SSolitaire
-} from 'models/simple/ssolitaire';
-// import {
-//   Deck
-// } from 'models/solitaire/deck';
-import {
-  SDeck
-} from 'models/simple/sdeck';
+  Deck
+} from 'models/solitaire/deck';
 import {
   ZONES
 } from 'models/card/card-const';
 
-const MAXROUNDS = 100;
+const MAXMOVES = 1500;
+const DEFAULTDELAY = 50;
 
 @inject(Solitaire)
 export class Solver {
 
   constructor(solitaire) {
-    // this.solitaire = solitaire;
-    // this.shadowSolitaire = new Solitaire(new Deck());
-    this.solitaire = new SSolitaire(new SDeck());
-    this.shadowSolitaire = new SSolitaire(new SDeck());
-    this.possibleMoves = [];
+    this.solitaire = solitaire;
+    this.shadowSolitaire = new Solitaire(new Deck());
     this.status = '';
-    this.round = 0;
-    this.steps = [];
     this.set = new Set();
+    this.delay = DEFAULTDELAY;
+    this.playLabel = 'Play';
+    this.steps = [];
   }
 
   initialize() {
@@ -42,28 +35,20 @@ export class Solver {
     this.shadowSolitaire.restore(this.solitaire.dump());
   }
 
-  findSolutions() {
-    let solutions = [];
-    let kingSlotNumber = 1;
-    let slotNumber = 3;
-    // let kingSlotNumber = 4;
-    // let slotNumber = 7;
-    for (let i = 0; i < kingSlotNumber; i++) {
-      this.solitaire.stub.returnedCards.filter(c => this.solitaire.kingSlots[i].canMoveTo([c])).forEach(c => solutions.push({
-        source: this.solitaire.stub.returnedCards,
-        destination: this.solitaire.kingSlots[i].cards,
-        selection: [c]
-      }));
-    }
+  findMoves() {
+    let moves = [];
+    let kingSlotNumber = 4;
+    let slotNumber = 7;
     for (let i = 0; i < kingSlotNumber; i++) {
       for (let j = 0; j < slotNumber; j++) {
         let c = this.solitaire.slots[j].cards[this.solitaire.slots[j].cards.length - 1];
         if (c && this.solitaire.kingSlots[i].canMoveTo([c])) {
-          solutions.push({
+          moves.push({
             source: this.solitaire.slots[j].cards,
             destination: this.solitaire.kingSlots[i].cards,
             selection: [c],
-            zone: ZONES.slots
+            zone: ZONES.slots,
+            description: `${c.symbol}:slot${j + 1}->kingslot`
           });
         }
       }
@@ -71,82 +56,146 @@ export class Solver {
     for (let i = 0; i < slotNumber; i++) {
       let p = this.solitaire.slots[i].cards.length - this.solitaire.slots[i].cards.findIndex(c => !c.returned);
       for (let j = 1; j <= p; j++) {
-        let sel = this.solitaire.slots[i].cards.filter((c, ind) => ind >= this.solitaire.slots[i].cards.length - p);
+        let selection = this.solitaire.slots[i].cards.filter((c, ind) => ind >= this.solitaire.slots[i].cards.length - p);
+        if (selection.length === 0) continue; // empty selection
+        let symbols = `(${selection.map(c => c.symbol).join('-')})`;
         for (let k = 0; k < slotNumber; k++) {
-          if (sel[0] && this.solitaire.slots[k].canMoveTo(sel) && i !== k) {
-            solutions.push({
+          let emptyDestinationSlot = this.solitaire.slots[k].cards.length === 0;
+          let kingSelection = selection[0].value === 13 && selection[0] === this.solitaire.slots[i].cards[0];
+          if (this.solitaire.slots[k].canMoveTo(selection) && i !== k && !(emptyDestinationSlot && kingSelection)) {
+            moves.push({
               source: this.solitaire.slots[i].cards,
               destination: this.solitaire.slots[k].cards,
-              selection: sel,
-              zone: ZONES.slots
+              selection: selection,
+              zone: ZONES.slots,
+              description: `${symbols}:slot${i + 1}->slot${k + 1}`
             });
           }
         }
       }
     }
-    for (let i = 0; i < slotNumber; i++) {
-      this.solitaire.stub.returnedCards.filter(c => this.solitaire.slots[i].canMoveTo([c])).forEach(c => solutions.push({
+    for (let i = 0; i < kingSlotNumber; i++) {
+      this.solitaire.stub.returnedCards.filter(c => this.solitaire.kingSlots[i].canMoveTo([c])).forEach(c => moves.push({
         source: this.solitaire.stub.returnedCards,
-        destination: this.solitaire.slots[i].cards,
-        selection: [c]
+        destination: this.solitaire.kingSlots[i].cards,
+        selection: [c],
+        description: `${c.symbol}:stub->kingslot`
       }));
     }
-    return solutions;
+    for (let i = 0; i < slotNumber; i++) {
+      this.solitaire.stub.returnedCards.filter(c => this.solitaire.slots[i].canMoveTo([c])).forEach(c => moves.push({
+        source: this.solitaire.stub.returnedCards,
+        destination: this.solitaire.slots[i].cards,
+        selection: [c],
+        description: `${c.symbol}:stub->slot${i + 1}`
+      }));
+    }
+    for (let i = 0; i < kingSlotNumber; i++) {
+      for (let j = 0; j < slotNumber; j++) {
+        let emptyDestinationSlot = this.solitaire.slots[j].cards.length === 0;
+        if (emptyDestinationSlot) continue;
+        let c = this.solitaire.kingSlots[i].cards[this.solitaire.kingSlots[i].cards.length - 1];
+        if (c && this.solitaire.slots[j].canMoveTo([c])) {
+          moves.push({
+            source: this.solitaire.kingSlots[i].cards,
+            destination: this.solitaire.slots[j].cards,
+            selection: [c],
+            zone: ZONES.kingSlots,
+            description: `${c.symbol}:kingslot->slot${j + 1}`
+          });
+        }
+      }
+    }
+    let map = new Map();
+    moves.forEach(m => map.set(m.description, m));
+    return Array.from(map.values());
   }
 
   resolve() {
+    this.steps = [];
+    this.stepIndex = -1;
+    this.set.clear();
+    this.resolutionDone = false;
     this.status = 'running...';
-    this.resolveStep(0);
-    this.status = 'interrupted.';
+    let result = this.resolveStep(0);
+    this.resolutionDone = true;
+    this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
   }
 
-  playback() {
-    this.interval = setInterval(() => {
-      if (this.steps.length === 0) {
-        this.pause();
-      } else {
-        let stepInfo = this.steps.shift();
-        this.shadowSolitaire.restore(stepInfo.game);
-        this.stepStatus = stepInfo.status;
-      }
-    }, 1000);
+  playOrPause() {
+    if (this.interval) {
+      this.pause();
+    } else {
+      this.playLabel = 'Pause';
+      this.interval = setInterval(() => {
+        this.stepByStep(true, true);
+      }, this.delay);
+    }
   }
 
-  @computedFrom('steps.length')
-  get cannotPlayback() {
-    return this.steps.length === 0;
+  stepByStep(forward, dealWithPause) {
+    this.stepIndex = (forward) ? ++this.stepIndex : --this.stepIndex;
+    if (this.stepIndex === -1) {
+      return;
+    }
+    if (this.stepIndex >= this.steps.length) this.pause();
+    let stepInfo = this.steps[this.stepIndex];
+    this.stepStatus = stepInfo.status;
+    this.state = stepInfo.state;
+    this.possibleMoves = stepInfo.possibleMoves;
+    this.shadowSolitaire.restore(stepInfo.game);
+    if (dealWithPause && stepInfo.pause) this.pause();
   }
 
   pause() {
-    if (this.interval) clearInterval(this.interval);
+    if (this.interval) {
+      this.playLabel = 'Play';
+      clearInterval(this.interval);
+      this.interval = null;
+    }
   }
 
-  pushState(message) {
+  @computedFrom('steps.length', 'resolutionDone')
+  get cannotPlayback() {
+    return this.steps.length === 0 || !this.resolutionDone;
+  }
+
+  @computedFrom('stepIndex', 'resolutionDone')
+  get cannotGoBack() {
+    return this.stepIndex === -1 || !this.resolutionDone;
+  }
+
+  @computedFrom('stepIndex', 'resolutionDone')
+  get cannotGoNext() {
+    return this.stepIndex === this.steps.length || !this.resolutionDone;
+  }
+
+  pushState(message, possibleMoves, pause) {
+    let dump = this.solitaire.dump();
     this.steps.push({
-      game: this.solitaire.dump(),
-      status: message
+      game: dump,
+      status: message,
+      possibleMoves: possibleMoves.map(m => m.description).join(', '),
+      state: JSON.stringify(dump),
+      pause: pause
     });
   }
 
   resolveStep(n) {
-    if (this.round > MAXROUNDS) {
-      this.status = 'max depth !';
+    if (this.steps.length > MAXMOVES) {
       return false;
     }
-    if (n === this.possibleMoves.length) {
-      this.possibleMoves.push([]);
-    }
-    this.possibleMoves[n] = this.findSolutions();
-    this.round++;
-    if (this.possibleMoves[n].length > 0) {
-      for (let i = 0; i < this.possibleMoves[n].length; i++) {
-        let move = this.possibleMoves[n][i];
+    let possibleMoves = this.findMoves();
+    let movesCount = possibleMoves.length;
+    if (movesCount > 0) {
+      for (let i = 0; i < movesCount; i++) {
+        let move = possibleMoves[i];
+        this.pushState(`E${n}-m${i}/${movesCount}=${move.description}`, possibleMoves);
         this.solitaire.doMove(move.source, move.destination, move.selection, move.zone);
-        this.pushState(`E${n}-m${i}/${this.possibleMoves[n].length}`);
         let state = JSON.stringify(this.solitaire.dump());
         if (this.set.has(state)) {
+          this.pushState(`E${n}-m${i}/${movesCount}=${move.description}:CYCLE:UNDONE`, possibleMoves, true);
           this.solitaire.undoMove();
-          this.pushState(`E${n}-UNDO(cycle)`);
           continue;
         } else {
           this.set.add(state);
@@ -157,11 +206,11 @@ export class Solver {
         let res = this.resolveStep(n + 1);
         if (res) return true;
       }
+      this.pushState(`E${n}:ENDLOOP:UNDONE`, possibleMoves);
       this.solitaire.undoMove();
-      this.pushState(`E${n}-UNDO(all-done)`);
     } else {
+      this.pushState(`E${n}:NOSOLUTION:UNDONE`, possibleMoves);
       this.solitaire.undoMove();
-      this.pushState(`E${n}-UNDO(no-sol)`);
     }
   }
 }

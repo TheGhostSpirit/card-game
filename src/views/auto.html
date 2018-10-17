@@ -1,9 +1,11 @@
 <template>
   <div>${solver.status}</div>
   <div>${solver.stepStatus}</div>
+  <div>${solver.possibleMoves}</div>
   <button class="btn btn-outline-primary" click.delegate="solver.resolve()">Resolve</button>
-  <button class="btn btn-outline-primary" click.delegate="solver.playback()" disabled.bind="solver.cannotPlayback">Playback</button>
-  <button class="btn btn-outline-primary" click.delegate="solver.pause()">Pause</button>
+  <button class="btn btn-outline-primary" click.delegate="solver.playOrPause()" disabled.bind="solver.cannotPlayback">${solver.playLabel}</button>
+  <button class="btn btn-outline-primary" click.delegate="solver.stepByStep(false)" disabled.bind="solver.cannotGoBack"><|</button>
+  <button class="btn btn-outline-primary" click.delegate="solver.stepByStep(true)" disabled.bind="solver.cannotGoNext">>|</button>
   <br>
   <br>
   <div id="solitaire-game" class="playingCards container-background">
@@ -40,4 +42,5 @@
       </span>
     </div>
   </div>
+  <!-- <div class="pull-right">${solver.state}</div> -->
 </template>

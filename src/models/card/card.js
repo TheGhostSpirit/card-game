@@ -1,5 +1,5 @@
 import { computedFrom } from 'aurelia-framework';
-import { SUITS, NAMES } from './card-const';
+import { SUITS, SUITSYMBOLS, NAMES } from './card-const';
 
 /**
  * Describes a playable game card.
@@ -16,11 +16,13 @@ export class Card {
     this.name = name;
     this.value = NAMES.indexOf(name) + 1;
     this.color = SUITS.indexOf(suit);
+    this.suitSymbol = SUITSYMBOLS[this.color];
     //css related
     this.rank = this.name.toLowerCase();
     this.suitCss = `&${this.suit};`;
     this.selected = false;
     this.returned = false;
+    this.symbol = `${this.name}${this.suitSymbol}`;
   }
 
   static fromObject(jsonCard) {
