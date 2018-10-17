@@ -12,7 +12,7 @@ export class Auto {
   activate() {
     this.solitaire.newGame();
     this.solitaire.fullyTurnStub();
-    this.solver.autoGame(0);
+    this.solver.resolve();
   }
 
 }

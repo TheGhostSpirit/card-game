@@ -4,7 +4,9 @@ import {
 import {
   Solitaire
 } from 'models/solitaire';
-import { ZONES } from 'models/card-const';
+import {
+  ZONES
+} from 'models/card-const';
 
 const MAXROUNDS = 5000;
 
@@ -16,6 +18,7 @@ export class Solver {
     this.solutions = [];
     this.status = 'running';
     this.round = 0;
+    this.steps = [];
   }
 
   findSolutions() {
@@ -66,6 +69,13 @@ export class Solver {
     return solutions;
   }
 
+  resolve() {
+    this.autoGame(0);
+    setInterval(() => {
+      state = this.operations.unshift();
+    }, 1000);
+  }
+
   autoGame(n) {
     if (this.round > MAXROUNDS) {
       this.status = 'max depth !';
@@ -80,14 +90,24 @@ export class Solver {
       for (let i = 0; i < this.solutions[n].length; i++) {
         let move = this.solutions[n][i];
         this._solitaire.doMove(move.source, move.destination, move.selection, move.zone);
+        this.steps.push(() => {
+          this._solitaire.dump();
+        });
         if (!this._solitaire.isGameNotFinished()) {
           return true;
         }
         let res = this.autoGame(n + 1);
         if (res) return true;
       }
+      this._solitaire.undoMove();
+      this.steps.push(() => {
+        this._solitaire.dump();
+      });
     } else {
       this._solitaire.undoMove();
+      this.steps.push(() => {
+        this._solitaire.dump();
+      });
     }
   }
 }
