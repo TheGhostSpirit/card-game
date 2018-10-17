@@ -1,8 +1,8 @@
-import { Solitaire } from '../models/solitaire/solitaire';
+import { SSolitaire } from '../models/simple/ssolitaire';
 import { inject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 
-@inject(Solitaire, Router)
+@inject(SSolitaire, Router)
 export class Game {
 
   constructor(solitaire, router) {
@@ -10,12 +10,8 @@ export class Game {
     this.router = router;
   }
 
-  activate(param) {
-    if (param.cheat) {
-      this.solitaire.cheat();
-    } else {
-      this.solitaire.newGame();
-    }
+  activate() {
+    this.solitaire.newGame();
   }
 
   quit() {

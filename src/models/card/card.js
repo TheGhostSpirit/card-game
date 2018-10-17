@@ -1,5 +1,5 @@
 import { computedFrom } from 'aurelia-framework';
-import { SUITS, NAMES } from 'models/card-const';
+import { SUITS, NAMES } from './card-const';
 
 /**
  * Describes a playable game card.

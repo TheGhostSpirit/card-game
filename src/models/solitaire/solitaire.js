@@ -1,9 +1,9 @@
 import { inject } from 'aurelia-framework';
-import { Deck } from 'models/deck';
-import { Stub } from 'models/stub';
-import { KingSlot } from 'models/king-slot';
-import { Slot } from 'models/slot';
-import { SUITS, ZONES } from 'models/card-const';
+import { Deck } from './deck';
+import { Stub } from './stub';
+import { KingSlot } from './king-slot';
+import { Slot } from './slot';
+import { SUITS, ZONES } from '../card/card-const';
 
 @inject(Deck)
 export class Solitaire {

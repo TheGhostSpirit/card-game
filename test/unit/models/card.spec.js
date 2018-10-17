@@ -1,4 +1,4 @@
-import { Card } from '../../../src/models/card';
+import { Card } from '../../../src/models/card/card';
 
 describe('card', () => {
   it('should be equal', () => {
