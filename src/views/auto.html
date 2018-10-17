@@ -1,6 +1,8 @@
 <template>
-  <div>BLEBLE</div>
+  <div>${solver.status}</div>
+  <div>${solver.stepStatus}</div>
   <button class="btn btn-outline-primary" click.delegate="solver.resolve()">Resolve</button>
+  <button class="btn btn-outline-primary" click.delegate="solver.playback()" disabled.bind="solver.cannotPlayback">Playback</button>
   <button class="btn btn-outline-primary" click.delegate="solver.pause()">Pause</button>
   <br>
   <br>
