@@ -1,6 +1,7 @@
 <template>
   <div>BLEBLE</div>
-  <div>${solver.status}</div>
+  <button class="btn btn-outline-primary" click.delegate="solver.resolve()">Resolve</button>
+  <button class="btn btn-outline-primary" click.delegate="solver.pause()">Pause</button>
   <br>
   <br>
   <div id="solitaire-game" class="playingCards container-background">

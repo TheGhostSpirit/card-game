@@ -6,13 +6,16 @@ export class Auto {
 
   constructor(solver) {
     this.solver = solver;
-    this.solitaire = solver._solitaire;
+    this.solitaire = solver.solitaire;
+    this._solitaire = solver._solitaire;
   }
 
   activate() {
-    this.solitaire.newGame();
-    this.solitaire.fullyTurnStub();
-    this.solver.resolve();
+    this._solitaire.newGame();
+    this._solitaire.fullyTurnStub();
+    this.solitaire.initialize();
+    this.solitaire.restore(this._solitaire.dump());
+    this.solver.autoGame(0);
   }
 
 }

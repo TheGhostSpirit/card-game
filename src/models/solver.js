@@ -5,16 +5,20 @@ import {
   Solitaire
 } from 'models/solitaire';
 import {
+  Deck
+} from 'models/deck';
+import {
   ZONES
 } from 'models/card-const';
 
-const MAXROUNDS = 5000;
+const MAXROUNDS = 100;
 
 @inject(Solitaire)
 export class Solver {
 
   constructor(solitaire) {
     this._solitaire = solitaire;
+    this.solitaire = new Solitaire(new Deck());
     this.solutions = [];
     this.status = 'running';
     this.round = 0;
@@ -70,10 +74,13 @@ export class Solver {
   }
 
   resolve() {
-    this.autoGame(0);
-    setInterval(() => {
-      state = this.operations.unshift();
+    this.interval = setInterval(() => {
+      this.solitaire.restore(this.steps.shift());
     }, 1000);
+  }
+
+  pause() {
+    if (this.interval) clearInterval(this.interval);
   }
 
   autoGame(n) {
@@ -90,9 +97,7 @@ export class Solver {
       for (let i = 0; i < this.solutions[n].length; i++) {
         let move = this.solutions[n][i];
         this._solitaire.doMove(move.source, move.destination, move.selection, move.zone);
-        this.steps.push(() => {
-          this._solitaire.dump();
-        });
+        this.steps.push(this._solitaire.dump());
         if (!this._solitaire.isGameNotFinished()) {
           return true;
         }
@@ -100,14 +105,10 @@ export class Solver {
         if (res) return true;
       }
       this._solitaire.undoMove();
-      this.steps.push(() => {
-        this._solitaire.dump();
-      });
+      this.steps.push(this._solitaire.dump());
     } else {
       this._solitaire.undoMove();
-      this.steps.push(() => {
-        this._solitaire.dump();
-      });
+      this.steps.push(this._solitaire.dump());
     }
   }
 }
