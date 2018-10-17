@@ -1,20 +1,12 @@
-import { SSolitaire } from '../models/simple/ssolitaire';
 import { inject } from 'aurelia-framework';
-import { Router } from 'aurelia-router';
+import { Solver } from 'models/solver';
 
-@inject(SSolitaire, Router)
-export class Game {
+@inject(Solver)
+export class Simple {
 
-  constructor(solitaire, router) {
-    this.solitaire = solitaire;
-    this.router = router;
-  }
-
-  activate() {
-    this.solitaire.newGame();
-  }
-
-  quit() {
-    this.router.navigateToRoute('Menu');
+  constructor(solver) {
+    this.solver = solver;
+    this.solver.initialize();
+    this.solitaire = solver.shadowSolitaire;
   }
 }

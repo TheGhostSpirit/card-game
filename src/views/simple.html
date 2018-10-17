@@ -1,15 +1,15 @@
 <template>
-  <div id="buttons-zone" class="btn-group">
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.undoMove()" if.bind="solitaire.isNotFinished" disabled.bind="solitaire.moves.length === 0">Undo</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.logJson()" if.bind="solitaire.isNotFinished">Log JSON</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.reset()">New Game</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.autoSolveGame()" if.bind="solitaire.autoSolve && solitaire.isNotFinished">Solve</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="quit()">Quit</button>
-  </div>
-  <div id="solitaire-game" class="playingCards container-background" show.bind="solitaire.isNotFinished">
+  <div>${solver.status}</div>
+  <div>${solver.stepStatus}</div>
+  <button class="btn btn-outline-primary" click.delegate="solver.resolve()">Resolve</button>
+  <button class="btn btn-outline-primary" click.delegate="solver.playback()" disabled.bind="solver.cannotPlayback">Playback</button>
+  <button class="btn btn-outline-primary" click.delegate="solver.pause()">Pause</button>
+  <br>
+  <br>
+  <div id="solitaire-game" class="playingCards container-background">
     <div id="solitaire-top">
       <span id="solitaire-stub">
-        <ul class="deck deck-clickable" click.trigger="solitaire.turnStub()">
+        <ul class="deck deck-clickable">
           <li repeat.for="card of solitaire.stub.returnedCards" class="card-slot">
             <compose view="../templates/card.html" containerless></compose>
           </li>
@@ -17,14 +17,14 @@
       </span>
       <span id="solitaire-returned-stub">
         <ul class="deck deck-clickable">
-          <li repeat.for="card of solitaire.stub.cards" class="card-slot" click.trigger="solitaire.moveCard($index, 0, solitaire.zones.stub)">
+          <li repeat.for="card of solitaire.stub.cards" class="card-slot">
             <compose view="../templates/card.html" containerless></compose>
           </li>
         </ul>
       </span>
       <span id="solitaire-king-slots">
-        <ul class="deck deck-clickable" click.trigger="solitaire.moveCard(-1, i, solitaire.zones.kingSlots)">
-          <li repeat.for="card of solitaire.kingSlots[0].cards" class="card-slot" click.trigger="solitaire.setSelectedCardIndex($index)">
+        <ul class="deck deck-clickable">
+          <li repeat.for="card of solitaire.kingSlots[0].cards" class="card-slot">
             <compose view="../templates/card.html" containerless></compose>
           </li>
         </ul>
@@ -32,14 +32,12 @@
     </div>
     <div id="solitaire-bottom">
       <span id="solitaire-slots">
-        <ul repeat.for="i of 3" class="cards-column" click.trigger="solitaire.moveCard(-1, i, solitaire.zones.slots)">
-          <li repeat.for="card of solitaire.slots[i].cards" class="card-slot" click.trigger="solitaire.setSelectedCardIndex($index)">
+        <ul repeat.for="i of 3" class="cards-column">
+          <li repeat.for="card of solitaire.slots[i].cards" class="card-slot">
             <compose view="../templates/card.html" containerless></compose>
           </li>
         </ul>
       </span>
     </div>
   </div>
-  <h2 class="finished" show.bind="!solitaire.isNotFinished">FINISHED !
-    <h2>
 </template>

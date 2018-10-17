@@ -9,9 +9,4 @@ export class Auto {
     this.solver.initialize();
     this.solitaire = solver.shadowSolitaire;
   }
-
-  resolve() {
-    this.solver.resolve();
-  }
-
 }
