@@ -1,4 +1,4 @@
-import { Deck } from '../../../src/models/deck';
+import { Deck } from '../../../src/models/solitaire/deck';
 
 describe('deck', () => {
   let systemUnderTest;

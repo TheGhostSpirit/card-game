@@ -19,4 +19,8 @@ export class Menu {
   autoGame() {
     this.router.navigateToRoute('Auto');
   }
+
+  simpleGame() {
+    this.router.navigateToRoute('Simple');
+  }
 }

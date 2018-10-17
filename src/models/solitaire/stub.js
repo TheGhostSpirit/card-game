@@ -1,4 +1,4 @@
-import { Card } from 'models/card';
+import { Card } from '../card/card';
 
 export class Stub {
 
@@ -36,7 +36,7 @@ export class Stub {
       returnedCards: this.returnedCards.map(c => ({
         suit: c.suit,
         name: c.name,
-        returned: true
+        returned: c.returned
       }))
     };
   }
@@ -64,19 +64,19 @@ export class Stub {
     }
   }
 
-  undoMove() {
-    if (this.cards.length > 0) {
-      let cardToUndo = this.cards.pop();
-      cardToUndo.returned = true;
-      this.returnedCards.push(cardToUndo);
-    } else {
-      while (this.returnedCards.length > 0) {
-        let cardToUndo = this.returnedCards.pop();
-        cardToUndo.returned = false;
-        this.cards.push(cardToUndo);
-      }
-    }
-  }
+  // undoMove() {
+  //   if (this.cards.length > 0) {
+  //     let cardToUndo = this.cards.pop();
+  //     cardToUndo.returned = true;
+  //     this.returnedCards.push(cardToUndo);
+  //   } else {
+  //     while (this.returnedCards.length > 0) {
+  //       let cardToUndo = this.returnedCards.pop();
+  //       cardToUndo.returned = false;
+  //       this.cards.push(cardToUndo);
+  //     }
+  //   }
+  // }
 
   fill(deck) {
     while (deck.cards.length > 0) {
@@ -86,7 +86,7 @@ export class Stub {
     }
   }
 
-  unselect(stub) {
+  unselect() {
     this.cards.forEach(card => card.selected = false);
   }
 }

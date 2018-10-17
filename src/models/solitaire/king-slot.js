@@ -1,4 +1,4 @@
-import { Card } from 'models/card';
+import { Card } from '../card/card';
 
 export class KingSlot {
 

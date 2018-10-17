@@ -1,5 +1,5 @@
-import { Card } from 'models/card';
-import { SUITS, NAMES } from 'models/card-const';
+import { Card } from '../card/card';
+import { SUITS, NAMES } from '../card/card-const';
 
 export class Deck {
 
