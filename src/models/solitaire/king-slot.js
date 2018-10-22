@@ -1,10 +1,12 @@
 import { Card } from '../card/card';
+import { SUITS, SUITSYMBOLS } from '../card/card-const';
 
 export class KingSlot {
 
   constructor(suit) {
     this.cards = [];
     this.suit = suit;
+    this.id = `K${SUITSYMBOLS[SUITS.indexOf(suit)]}`;
   }
 
   /**

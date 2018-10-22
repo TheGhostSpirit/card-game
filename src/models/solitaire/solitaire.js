@@ -31,7 +31,7 @@ export class Solitaire {
     this.stub = new Stub();
     this.slots = [];
     for (let i = 0; i < 7; i++) {
-      this.slots.push(new Slot());
+      this.slots.push(new Slot(i));
     }
     for (let i = 0; i < 4; i++) {
       this.kingSlots.push(new KingSlot(SUITS[i]));
@@ -163,10 +163,6 @@ export class Solitaire {
     let beforeState = this.dump();
     this.moves.push(beforeState);
     this.stub.turn();
-  }
-
-  fullyTurnStub() {
-    this.stub.returnedCards.forEach(c => this.returnCard(c));
   }
 
   getSlot(slotIndex, zone) {

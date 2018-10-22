@@ -7,6 +7,7 @@ export class Stub {
     this.cards = [];
     //hidden cards
     this.returnedCards = [];
+    this.id = 'Stub';
   }
 
   /**
@@ -61,6 +62,12 @@ export class Stub {
         cardToReturn.returned = true;
         this.returnedCards.push(cardToReturn);
       }
+    }
+  }
+
+  fullTurn() {
+    while (this.returnedCards.length !== 0) {
+      this.turn();
     }
   }
 

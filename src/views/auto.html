@@ -1,46 +1,53 @@
 <template>
-  <div>${solver.status}</div>
-  <div>${solver.stepStatus}</div>
-  <div>${solver.possibleMoves}</div>
-  <button class="btn btn-outline-primary" click.delegate="solver.resolve()">Resolve</button>
-  <button class="btn btn-outline-primary" click.delegate="solver.playOrPause()" disabled.bind="solver.cannotPlayback">${solver.playLabel}</button>
-  <button class="btn btn-outline-primary" click.delegate="solver.stepByStep(false)" disabled.bind="solver.cannotGoBack"><|</button>
-  <button class="btn btn-outline-primary" click.delegate="solver.stepByStep(true)" disabled.bind="solver.cannotGoNext">>|</button>
-  <br>
-  <br>
-  <div id="solitaire-game" class="playingCards container-background">
-    <div id="solitaire-top">
-      <span id="solitaire-stub">
-        <ul class="deck deck-clickable">
-          <li repeat.for="card of solitaire.stub.returnedCards" class="card-slot">
-            <compose view="../templates/card.html" containerless></compose>
-          </li>
-        </ul>
-      </span>
-      <span id="solitaire-returned-stub">
-        <ul class="deck deck-clickable">
-          <li repeat.for="card of solitaire.stub.cards" class="card-slot">
-            <compose view="../templates/card.html" containerless></compose>
-          </li>
-        </ul>
-      </span>
-      <span id="solitaire-king-slots">
-        <ul repeat.for="i of 4" class="deck deck-clickable">
-          <li repeat.for="card of solitaire.kingSlots[i].cards" class="card-slot">
-            <compose view="../templates/card.html" containerless></compose>
-          </li>
-        </ul>
-      </span>
+  <div if.bind="!finished">
+    <div>${solver.status}</div>
+    <div>${solver.stepStatus}</div>
+    <div>${solver.possibleMoves}</div>
+    <button class="btn btn-outline-primary" click.delegate="solver.resolve()">Resolve</button>
+    <button class="btn btn-outline-primary" click.delegate="solver.playOrPause()" disabled.bind="solver.cannotPlayback">${solver.playLabel}</button>
+    <button class="btn btn-outline-primary" click.delegate="solver.stepByStep(false)" disabled.bind="solver.cannotGoBack">
+      <|</button> <button class="btn btn-outline-primary" click.delegate="solver.stepByStep(true)" disabled.bind="solver.cannotGoNext">>|
+    </button>
+    <br>
+    <br>
+    <div id="solitaire-game" class="playingCards container-background">
+      <div id="solitaire-top">
+        <span id="solitaire-stub">
+          <ul class="deck deck-clickable">
+            <li repeat.for="card of solitaire.stub.returnedCards" class="card-slot">
+              <compose view="../templates/card.html" containerless></compose>
+            </li>
+          </ul>
+        </span>
+        <span id="solitaire-returned-stub">
+          <ul class="deck deck-clickable">
+            <li repeat.for="card of solitaire.stub.cards" class="card-slot">
+              <compose view="../templates/card.html" containerless></compose>
+            </li>
+          </ul>
+        </span>
+        <span id="solitaire-king-slots">
+          <ul repeat.for="i of 4" class="deck deck-clickable">
+            <li repeat.for="card of solitaire.kingSlots[i].cards" class="card-slot">
+              <compose view="../templates/card.html" containerless></compose>
+            </li>
+          </ul>
+        </span>
+      </div>
+      <div id="solitaire-bottom">
+        <span id="solitaire-slots">
+          <ul repeat.for="i of 7" class="cards-column">
+            <li repeat.for="card of solitaire.slots[i].cards" class="card-slot">
+              <compose view="../templates/card.html" containerless></compose>
+            </li>
+          </ul>
+        </span>
+      </div>
     </div>
-    <div id="solitaire-bottom">
-      <span id="solitaire-slots">
-        <ul repeat.for="i of 7" class="cards-column">
-          <li repeat.for="card of solitaire.slots[i].cards" class="card-slot">
-            <compose view="../templates/card.html" containerless></compose>
-          </li>
-        </ul>
-      </span>
-    </div>
+  </div>
+  <div if.bind="finished">
+    <h2>Wins: ${wins}</h2>
+    <h2>Win Rate: ${percentage}%</h2>
   </div>
   <!-- <div class="pull-right">${solver.state}</div> -->
 </template>

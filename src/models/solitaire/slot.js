@@ -2,8 +2,9 @@ import { Card } from '../card/card';
 
 export class Slot {
 
-  constructor() {
+  constructor(index) {
     this.cards = [];
+    this.id = 'S' + index;
   }
 
   /**
