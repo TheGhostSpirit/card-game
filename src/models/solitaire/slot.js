@@ -1,16 +1,18 @@
-import { Card } from '../card/card';
+import {
+  Card
+} from '../card/card';
 
 export class Slot {
 
   constructor(index) {
     this.cards = [];
-    this.id = 'S' + index;
+    this.id = 'S' + index + 1;
   }
 
   /**
-    * Loads the slot with the specified cards array.
-    * @param {Array<Card>} cards - the array of cards used to load the slot.
-    */
+   * Loads the slot with the specified cards array.
+   * @param {Array<Card>} cards - the array of cards used to load the slot.
+   */
   load(cards) {
     this.cards = [];
     this.cards = cards.map(c => Card.fromObject(c));
