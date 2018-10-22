@@ -23,4 +23,8 @@ export class Menu {
   simpleGame() {
     this.router.navigateToRoute('Simple');
   }
+
+  autoGame100() {
+    this.router.navigateToRoute('AutoX100');
+  }
 }
