@@ -11,7 +11,9 @@ import {
 import {
   ZONES
 } from 'models/card/card-const';
-import { Move } from './move';
+import {
+  Move
+} from './move';
 
 const MAXMOVES = 1500;
 const DEFAULTDELAY = 50;
@@ -207,11 +209,12 @@ export class Solver {
   }
 
   doMove(move, message, possibleMoves) {
+    if (this.steps.length > MAXMOVES) return null;
     this.pushState(message, possibleMoves);
     //let toState = this.solitaire.dump();
     this.solitaire.doMove(move.source.cards, move.destination.cards, move.selection, move.zone);
     //let fromState = this.solitaire.dump();
-    return JSON.stringify(this.solitaire.dump());//move.description; // JSON.stringify({from: toState, to: fromState});
+    return JSON.stringify(this.solitaire.dump()); //move.description; // JSON.stringify({from: toState, to: fromState});
   }
 
   undoLastMove(message, possibleMoves) {
@@ -220,9 +223,6 @@ export class Solver {
   }
 
   resolveStep(n, lastMove) {
-    if (this.steps.length > MAXMOVES) {
-      return false;
-    }
     let possibleMoves = this.findMoves();
     // if (lastMove) {
     //   let reverseMoves = possibleMoves.filter(m => m.isReverseOf(lastMove));
@@ -234,6 +234,7 @@ export class Solver {
       for (let i = 0; i < movesCount; i++) {
         let move = possibleMoves[i];
         let state = this.doMove(move, `+E${n}-m${i + 1}/${movesCount}=${move.description}`, possibleMoves);
+        if (!state) return false;
         if (this.set.has(state)) {
           this.undoLastMove(`-E${n}-m${i + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
           continue;
