@@ -1,5 +1,5 @@
 <template>
-  <div if.bind="!finished">
+  <div>
     <div>${solver.status}</div>
     <div>${solver.stepStatus}</div>
     <div>${solver.possibleMoves}</div>
@@ -44,10 +44,6 @@
         </span>
       </div>
     </div>
-  </div>
-  <div if.bind="finished">
-    <h2>Wins: ${wins}</h2>
-    <h2>Win Rate: ${percentage}%</h2>
   </div>
   <!-- <div class="pull-right">${solver.state}</div> -->
 </template>

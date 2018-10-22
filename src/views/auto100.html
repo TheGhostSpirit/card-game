@@ -1,0 +1,11 @@
+<template>
+  <div>
+    <h2>Awaited Wins: ${awaitedWins}</h2>
+    <button class="btn btn-outline-primary" if.bind="games.length > 0" click.delegate="launch()">Launch</button>
+    <div if.bind="finished">
+      <h2>Wins: ${wins}</h2>
+      <h2>Win Rate: ${percentage}%</h2>
+      <h2>Time elapsed: ${time}s</h2>
+    </div>
+  </div>
+</template>
