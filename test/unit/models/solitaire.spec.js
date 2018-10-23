@@ -1,7 +1,7 @@
 import { Solitaire } from '../../../src/models/solitaire/solitaire';
 import { Deck } from '../../../src/models/solitaire/deck';
 import { Card } from '../../../src/models/card/card';
-import { ZONES } from '../../../src/models/card/card-const';
+import { ZONES } from '../../../src/models/solitaire/solitaire-const';
 
 
 describe('solitaire doMove & undoMove from stub to kingSlot', () => {

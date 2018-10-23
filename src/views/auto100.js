@@ -22,15 +22,21 @@ export class Auto100 {
   launch() {
     this.wins = 0;
     this.percentage = 0;
+    this.outOfRange = 0;
+    this.noSol = 0;
     let beginTime = Date.now();
     for (let i = 0; i < this.amount; i++) {
       this.solver.load(this.games[i].game);
       let outcome = this.solver.resolve();
       if (outcome) this.wins++;
+      if (outcome === false) this.outOfRange++;
+      if (typeof outcome === 'undefined') this.noSol++;
     }
     let finishTime = Date.now();
     this.time = ((finishTime - beginTime) / 1000);
     this.finished = true;
     this.percentage = (this.wins / this.amount) * 100;
+    this.outOfRange = (this.outOfRange / this.amount) * 100;
+    this.noSol = (this.noSol / this.amount) * 100;
   }
 }

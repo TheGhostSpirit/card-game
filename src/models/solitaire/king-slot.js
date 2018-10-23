@@ -1,5 +1,5 @@
 import { Card } from '../card/card';
-import { SUITS, SUITSYMBOLS } from '../card/card-const';
+import { SUITS, SUITSYMBOLS } from './solitaire-const';
 
 export class KingSlot {
 

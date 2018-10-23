@@ -10,7 +10,7 @@ import {
 } from 'models/solitaire/deck';
 import {
   ZONES
-} from 'models/card/card-const';
+} from './solitaire/solitaire-const';
 import {
   Move
 } from './move';

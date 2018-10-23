@@ -20,11 +20,11 @@ export class Menu {
     this.router.navigateToRoute('Auto');
   }
 
-  simpleGame() {
-    this.router.navigateToRoute('Simple');
-  }
-
   autoGame100() {
     this.router.navigateToRoute('AutoX100');
+  }
+
+  spider() {
+    this.router.navigateToRoute('Spider');
   }
 }
