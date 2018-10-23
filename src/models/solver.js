@@ -140,6 +140,16 @@ export class Solver {
         }
       }
     }
+    for (let i = 0; i < kingSlotNumber; i++) {
+      this.solitaire.stub.cards.filter(c => this.solitaire.kingSlots[i].canMoveTo([c])).forEach(c => moves.push(
+        new Move(
+          this.solitaire.stub,
+          this.solitaire.kingSlots[i],
+          [c],
+          `${c.symbol}:stub->kingslot`
+        )
+      ));
+    }
     for (let i = 0; i < slotNumber; i++) {
       let p = this.solitaire.slots[i].cards.length - this.solitaire.slots[i].cards.findIndex(c => !c.returned);
       for (let j = 1; j <= p; j++) {
@@ -162,16 +172,6 @@ export class Solver {
           }
         }
       }
-    }
-    for (let i = 0; i < kingSlotNumber; i++) {
-      this.solitaire.stub.cards.filter(c => this.solitaire.kingSlots[i].canMoveTo([c])).forEach(c => moves.push(
-        new Move(
-          this.solitaire.stub,
-          this.solitaire.kingSlots[i],
-          [c],
-          `${c.symbol}:stub->kingslot`
-        )
-      ));
     }
     for (let i = 0; i < slotNumber; i++) {
       this.solitaire.stub.cards.filter(c => this.solitaire.slots[i].canMoveTo([c])).forEach(c => moves.push(
@@ -223,6 +223,7 @@ export class Solver {
   }
 
   resolveStep(n, lastMove) {
+    if (this.steps.length > MAXMOVES) return null;
     let possibleMoves = this.findMoves();
     // if (lastMove) {
     //   let reverseMoves = possibleMoves.filter(m => m.isReverseOf(lastMove));
@@ -234,7 +235,7 @@ export class Solver {
       for (let i = 0; i < movesCount; i++) {
         let move = possibleMoves[i];
         let state = this.doMove(move, `+E${n}-m${i + 1}/${movesCount}=${move.description}`, possibleMoves);
-        if (!state) return false;
+        if (state === null) return;
         if (this.set.has(state)) {
           this.undoLastMove(`-E${n}-m${i + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
           continue;
@@ -245,11 +246,10 @@ export class Solver {
           return true;
         }
         let res = this.resolveStep(n + 1, move);
-        if (res) return true;
+        if (res === true) return true;
       }
-      this.undoLastMove(`-E${n}:ENDLOOP`, possibleMoves);
-    } else {
-      this.undoLastMove(`-E${n}:NOSOLUTION`, possibleMoves);
     }
+    this.undoLastMove(`-E${n}:NOSOLUTION`, possibleMoves);
+    return false;
   }
 }
