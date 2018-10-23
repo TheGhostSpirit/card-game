@@ -1,7 +1,7 @@
 import { Card } from '../card/card';
-import { SUITS, NAMES } from '../card/card-const';
+import { SUITS, NAMES } from './spider-const';
 
-export class SDeck {
+export class SpiderDeck {
 
   constructor() {
     this.initialize();
@@ -12,8 +12,12 @@ export class SDeck {
    */
   initialize() {
     this.cards = [];
-    for (let n = 0; n < NAMES.length; n++) {
-      this.cards.push(new Card(SUITS[0], NAMES[n]));
+    for (let g = 0; g < 4; g++) {
+      for (let s = 0; s < SUITS.length; s++) {
+        for (let n = 0; n < NAMES.length; n++) {
+          this.cards.push(new Card(SUITS[s], NAMES[n]));
+        }
+      }
     }
   }
 

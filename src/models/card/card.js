@@ -1,5 +1,5 @@
 import { computedFrom } from 'aurelia-framework';
-import { SUITS, SUITSYMBOLS, NAMES } from './card-const';
+import { SUITS, SUITSYMBOLS, NAMES } from '../solitaire/solitaire-const';
 
 /**
  * Describes a playable game card.
@@ -23,6 +23,7 @@ export class Card {
     this.selected = false;
     this.returned = false;
     this.symbol = `${this.name}${this.suitSymbol}`;
+    this.id = Math.random().toString(10).slice(-8);
   }
 
   static fromObject(jsonCard) {
@@ -43,6 +44,10 @@ export class Card {
 
   isSameColor(cardToCompare) {
     return this.color % 2 === cardToCompare.color % 2;
+  }
+
+  isSameSuit(cardToCompare) {
+    return this.suit === cardToCompare.suit;
   }
 
   isEqual(cardToCompare) {
