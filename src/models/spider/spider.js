@@ -1,8 +1,18 @@
-import { inject } from 'aurelia-framework';
-import { SpiderDeck } from './spider-deck';
-import { Foundation } from './foundation';
-import { SpiderStub } from './spider-stub';
-import { SpiderSlot } from './spider-slot';
+import {
+  inject
+} from 'aurelia-framework';
+import {
+  SpiderDeck
+} from './spider-deck';
+import {
+  Foundation
+} from './foundation';
+import {
+  SpiderStub
+} from './spider-stub';
+import {
+  SpiderSlot
+} from './spider-slot';
 
 @inject(SpiderDeck)
 export class Spider {
@@ -92,7 +102,10 @@ export class Spider {
     } else {
       let sourceSlot = this.slots[slotIndex];
       if (sourceSlot.canGetFrom(cardIndex)) {
-        this.previousSelection = { slot: sourceSlot, index: cardIndex };
+        this.previousSelection = {
+          slot: sourceSlot,
+          index: cardIndex
+        };
         this.selectCards(this.previousSelection);
       }
     }
