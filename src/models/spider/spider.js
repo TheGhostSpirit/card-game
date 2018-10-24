@@ -102,7 +102,7 @@ export class Spider {
     let beforeState = this.dump();
     this.moves.push(beforeState);
     selection.forEach((c, i) => {
-      source.splice(source.findIndex((sc, si) => sc.isEqual(c) && i === si), 1);
+      source.splice(source.findIndex((sc, si) => sc.isEqual(c) && si > source.length - selection.length), 1);
       destination.push(c);
     });
     this.returnNextCardInSlot(source);
