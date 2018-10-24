@@ -44,6 +44,7 @@ export class Auto100 {
         let finishTime = Date.now();
         this.time = ((finishTime - beginTime) / 1000);
         this.locked = (i < this.gamesCount - 1);
+        this.progress = Math.ceil((i / this.gamesCount) * 100);
       });
     }
   }

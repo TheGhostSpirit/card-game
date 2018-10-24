@@ -1,7 +1,9 @@
 <template>
   <div id="buttons-zone" class="btn-group">
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.undoMove()" if.bind="solitaire.isNotFinished" disabled.bind="solitaire.moves.length === 0">Undo</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.logJson()" if.bind="solitaire.isNotFinished">Log JSON</button>
+    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.undoMove()" if.bind="solitaire.isNotFinished"
+      disabled.bind="solitaire.moves.length === 0">Undo</button>
+    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.logJson()" if.bind="solitaire.isNotFinished">Log
+      JSON</button>
     <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.reset()">New Game</button>
     <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.autoSolveGame()" if.bind="solitaire.autoSolve && solitaire.isNotFinished">Solve</button>
     <button type="button" class="btn btn-dark btn-sm" click.trigger="quit()">Quit</button>
@@ -24,6 +26,7 @@
       </span>
       <span id="solitaire-king-slots">
         <ul repeat.for="i of 4" class="deck deck-clickable" click.trigger="solitaire.moveCard(-1, i, solitaire.zones.kingSlots)">
+          <span class="symbol-position" css="color: ${solitaire.kingSlots[i].color}" innerhtml.bind="solitaire.kingSlots[i].suitCss"></span>
           <li repeat.for="card of solitaire.kingSlots[i].cards" class="card-slot" click.trigger="solitaire.setSelectedCardIndex($index)">
             <compose view="../templates/card.html" containerless></compose>
           </li>

@@ -28,6 +28,7 @@
         </span>
         <span id="solitaire-king-slots">
           <ul repeat.for="i of 4" class="deck deck-clickable">
+            <span class="symbol-position" css="color: ${solitaire.kingSlots[i].color}" innerhtml.bind="solitaire.kingSlots[i].suitCss"></span>
             <li repeat.for="card of solitaire.kingSlots[i].cards" class="card-slot">
               <compose view="../templates/card.html" containerless></compose>
             </li>

@@ -64,6 +64,14 @@
     margin-right: @cardMargin  !important;
     padding: 0 !important;
     background-image: url('img/hatchedbrush.png');
+    position: relative;
+}
+
+.symbol-position {
+  position: absolute;
+  top: 30px;
+  left: 26px;
+  font-size: 2em;
 }
 
 ul.deck-clickable div.card {
@@ -81,6 +89,30 @@ ul.cards-column li.card-slot {
 
 .finished {
     margin-left: 300px;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.progress-bar {
+  height: 2rem;
+  width: 600px;
+  background-color: #ccc;
+  border-radius: 1rem;
+  margin: auto;
+}
+
+.progress {
+  height: 100%;
+  border-radius: inherit;
+  background-color: red;
+}
+
+.flex {
+  margin-top: 2rem;
+  display: flex;
+  flex-flow: row nowrap;
 }
 
 @media screen and(max-width: 800px) {

@@ -6,6 +6,8 @@ export class KingSlot {
   constructor(suit) {
     this.cards = [];
     this.suit = suit;
+    this.suitCss = `&${this.suit};`;
+    this.color = this.getColor(this.suit);
     this.id = `K${SUITSYMBOLS[SUITS.indexOf(suit)]}`;
   }
 
@@ -16,6 +18,11 @@ export class KingSlot {
   load(cards) {
     this.cards = [];
     this.cards = cards.map(c => Card.fromObject(c));
+  }
+
+  getColor(suit) {
+    let index = SUITS.indexOf(suit);
+    return index % 2 === 0 ? 'red' : 'black';
   }
 
   /**
