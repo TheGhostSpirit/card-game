@@ -1,12 +1,12 @@
 <template>
   <div id="buttons-zone" class="btn-group">
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.undoMove()" if.bind="solitaire.isNotFinished"
+    <button class="btn btn-dark btn-sm" click.trigger="solitaire.undoMove()" if.bind="solitaire.isNotFinished"
       disabled.bind="solitaire.moves.length === 0">Undo</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.logJson()" if.bind="solitaire.isNotFinished">Log
+    <button class="btn btn-dark btn-sm" click.trigger="solitaire.logJson()" if.bind="solitaire.isNotFinished">Log
       JSON</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.reset()">New Game</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="solitaire.autoSolveGame()" if.bind="solitaire.autoSolve && solitaire.isNotFinished">Solve</button>
-    <button type="button" class="btn btn-dark btn-sm" click.trigger="quit()">Quit</button>
+    <button class="btn btn-dark btn-sm" click.trigger="solitaire.reset()">New Game</button>
+    <button class="btn btn-dark btn-sm" click.trigger="solitaire.autoSolveGame()" if.bind="solitaire.autoSolve && solitaire.isNotFinished">Solve</button>
+    <button class="btn btn-dark btn-sm" click.trigger="quit()">Quit</button>
   </div>
   <div id="solitaire-game" class="playingCards container-background" show.bind="solitaire.isNotFinished">
     <div id="solitaire-top">
