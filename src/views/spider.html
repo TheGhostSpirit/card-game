@@ -1,9 +1,9 @@
 <template>
   <div id="buttons-zone" class="btn-group">
-    <button class="btn btn-outline-primary" click.delegate="quit()">Quit</button>
-    <button class="btn btn-outline-primary" click.delegate="spider.logJson()">Log JSON</button>
-    <button class="btn btn-outline-primary" click.delegate="spider.cheat()">Cheat</button>
-    <button class="btn btn-outline-primary" click.delegate="spider.undoMove()">Undo</button>
+    <button class="btn btn-dark btn-sm" click.delegate="quit()">Quit</button>
+    <button class="btn btn-dark btn-sm" click.delegate="spider.logJson()">Log JSON</button>
+    <button class="btn btn-dark btn-sm" click.delegate="spider.cheat()">Cheat</button>
+    <button class="btn btn-dark btn-sm" click.delegate="spider.undoMove()">Undo</button>
   </div>
   <div id="solitaire-game" class="playingCards container-background" show.bind="spider.isNotFinished">
     <div id="solitaire-top">
@@ -15,7 +15,7 @@
         </ul>
       </span>
       <span id="solitaire-king-slots">
-        <ul class="deck deck-clickable">
+        <ul class="spider-deck deck-clickable">
           <li repeat.for="card of spider.foundation.cards" class="card-slot">
             <compose view="../templates/card.html" containerless></compose>
           </li>
