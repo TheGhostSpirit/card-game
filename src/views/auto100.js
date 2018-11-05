@@ -1,12 +1,14 @@
 import { Solver } from 'models/solver';
+import { Solitaire } from 'models/solitaire/solitaire';
 import { Service } from 'services/service';
-import { inject, computedFrom, NewInstance } from 'aurelia-framework';
+import { inject, computedFrom } from 'aurelia-framework';
 
-@inject(NewInstance.of(Solver), Service)
+@inject(Solver, Solitaire, Service)
 export class Auto100 {
-  constructor(solver, service) {
-    this.service = service;
+  constructor(solver, solitaire, service) {
     this.solver = solver;
+    this.solitaire = solitaire;
+    this.service = service;
     this.expectedSuccess = 0;
     this.games = [];
     this.locked = true;
@@ -22,8 +24,8 @@ export class Auto100 {
   }
 
   showGameOutcome(outcome, i) {
-    if (outcome) this.success++;
-    if (outcome === false) this.fails++;
+    if (outcome.result) this.success++;
+    if (outcome.result === false) this.fails++;
     this.progress = Math.ceil((i / this.gamesCount) * 100);
   }
 
@@ -41,8 +43,8 @@ export class Auto100 {
     this.games.reduce((acc, g, i) => {
       return acc
         .then(() => {
-          this.solver.loadGame(g.game);
-          return this.solver.resolve();
+          this.solitaire.loadGame(g.game);
+          return this.solver.resolve(this.solitaire);
         })
         .then(o => this.showGameOutcome(o, i))
         .catch(error => this.showError(error));

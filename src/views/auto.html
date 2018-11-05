@@ -1,11 +1,11 @@
 <template>
 
   <div id="buttons-zone" class="btn-group">
-    <button class="btn btn-dark btn-sm" click.delegate="solver.loadGame()">New</button>
-    <button class="btn btn-dark btn-sm" click.delegate="solver.resolveGame()" disabled.bind="solver.resolutionRunning">Resolve</button>
-    <button class="btn btn-dark btn-sm" click.delegate="solver.playOrPause()" disabled.bind="solver.cannotPlayback">${solver.playLabel}</button>
-    <button class="btn btn-dark btn-sm" click.delegate="solver.stepByStep(false)" disabled.bind="solver.cannotGoBack">Prev</button>
-    <button class="btn btn-dark btn-sm" click.delegate="solver.stepByStep(true)" disabled.bind="solver.cannotGoNext">Next</button>
+    <button class="btn btn-dark btn-sm" click.delegate="loadGame()">New</button>
+    <button class="btn btn-dark btn-sm" click.delegate="resolveGame()" disabled.bind="resolutionRunning">Resolve</button>
+    <button class="btn btn-dark btn-sm" click.delegate="playOrPause()" disabled.bind="cannotPlayback">${playLabel}</button>
+    <button class="btn btn-dark btn-sm" click.delegate="stepByStep(false)" disabled.bind="cannotGoBack">Prev</button>
+    <button class="btn btn-dark btn-sm" click.delegate="stepByStep(true)" disabled.bind="cannotGoNext">Next</button>
     <a class="btn btn-dark btn-sm" href="/menu">Quit</a>
   </div>
 
@@ -46,10 +46,10 @@
   </div>
 
   <div id="result-zone">
-    <div if.bind="solver.status != 'running...'">${solver.status}</div>
-    <div>${solver.stepStatus}</div>
-    <div>${solver.possibleMoves}</div>
-    <i if.bind="solver.status == 'running...'" class="fas fa-2x fa-cog fa-spin"></i>
+    <div if.bind="!resolutionRunning">${status.message}</div>
+    <div>${status.stepStatus}</div>
+    <div>${status.possibleMoves}</div>
+    <i if.bind="resolutionRunning" class="fas fa-2x fa-cog fa-spin"></i>
   </div>
 
 </template>

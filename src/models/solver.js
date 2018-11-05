@@ -1,104 +1,28 @@
-import { inject, computedFrom } from 'aurelia-framework';
-import { Solitaire } from 'models/solitaire/solitaire';
-import { Deck } from 'models/solitaire/deck';
 import { ZONES } from './solitaire/solitaire-const';
 import { Move } from './move';
 
-const MAXMOVES = 15000;
-const DEFAULTDELAY = 50;
+const MAXMOVES = 1500;
 
-@inject(Solitaire)
 export class Solver {
 
-  constructor(solitaire) {
-    this.solitaire = solitaire;
-    this.shadowSolitaire = new Solitaire(new Deck());
+  resolve(solitaire) {
     this.set = new Set();
-    this.delay = DEFAULTDELAY;
-    this.playLabel = 'Play';
-  }
-
-  loadGame(game) {
     this.steps = [];
-    this.stepIndex = -1;
-    this.set.clear();
-    this.solitaire.loadGame(game);
+    this.solitaire = solitaire;
     this.solitaire.stub.fullTurn();
-    this.shadowSolitaire.loadGame(this.solitaire.dump());
-  }
-
-  resolveGame() {
-    this.status = 'running...';
-    this.resolve()
-      .then(result => {
-        this.status = (result) ? `Finished in ${this.steps.length} moves.` : `No solution found in ${this.steps.length} moves!`;
-        return result;
-      })
-      .catch(error => {
-        this.status = `${error.message} ${this.steps.length} moves!`;
-        return false;
-      });
-  }
-
-  playOrPause() {
-    if (this.interval) {
-      this.pause();
-    } else {
-      this.playLabel = 'Pause';
-      this.interval = setInterval(() => {
-        this.stepByStep(true, true);
-      }, this.delay);
-    }
-  }
-
-  stepByStep(forward, dealWithPause) {
-    this.stepIndex = (forward) ? ++this.stepIndex : --this.stepIndex;
-    if (this.stepIndex === -1) {
-      return;
-    }
-    if (this.stepIndex >= this.steps.length) {
-      this.pause();
-    } else {
-      let stepInfo = this.steps[this.stepIndex];
-      this.stepStatus = stepInfo.status;
-      this.state = stepInfo.state;
-      this.possibleMoves = stepInfo.possibleMoves;
-      this.shadowSolitaire.restore(stepInfo.game);
-      //  if (dealWithPause && stepInfo.pause) this.pause();
-    }
-  }
-
-  pause() {
-    if (this.interval) {
-      this.playLabel = 'Play';
-      clearInterval(this.interval);
-      this.interval = null;
-    }
-  }
-
-  @computedFrom('status')
-  get resolutionDone() {
-    return this.status && this.status !== 'running...';
-  }
-
-  @computedFrom('status')
-  get resolutionRunning() {
-    return this.status === 'running...';
-  }
-
-  @computedFrom('steps.length', 'resolutionDone')
-  get cannotPlayback() {
-    return this.steps.length === 0 || !this.resolutionDone;
-  }
-
-  @computedFrom('stepIndex', 'resolutionDone')
-  get cannotGoBack() {
-    return this.stepIndex === -1 || !this.resolutionDone;
-  }
-
-  @computedFrom('stepIndex', 'resolutionDone')
-  get cannotGoNext() {
-    return this.stepIndex === this.steps.length || !this.resolutionDone;
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          let result = this.resolveStep(0);
+          resolve({
+            result: result,
+            steps: this.steps
+          });
+        } catch (error) {
+          reject(error);
+        }
+      }, 10);
+    });
   }
 
   pushState(message, possibleMoves, pause) {
@@ -212,18 +136,6 @@ export class Solver {
     let map = new Map();
     moves.forEach(m => map.set(m.description, m));
     return Array.from(map.values());
-  }
-
-  resolve() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          resolve(this.resolveStep(0));
-        } catch (error) {
-          reject(error);
-        }
-      }, 10);
-    });
   }
 
   resolveStep(n) {
