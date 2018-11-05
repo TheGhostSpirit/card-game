@@ -1,9 +1,5 @@
-import {
-  Solver
-} from 'models/solver';
-import {
-  inject
-} from 'aurelia-framework';
+import { Solver } from 'models/solver';
+import { inject } from 'aurelia-framework';
 
 @inject(Solver)
 export class Auto {
@@ -17,4 +13,5 @@ export class Auto {
     this.solver.loadGame();
     this.solitaire = this.solver.shadowSolitaire;
   }
+
 }

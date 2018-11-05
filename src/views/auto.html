@@ -1,10 +1,12 @@
 <template>
 
   <div id="buttons-zone" class="btn-group">
-    <button class="btn btn-dark btn-sm" click.delegate="solver.resolve()">Resolve</button>
+    <button class="btn btn-dark btn-sm" click.delegate="solver.loadGame()">New</button>
+    <button class="btn btn-dark btn-sm" click.delegate="solver.resolveGame()" disabled.bind="solver.resolutionRunning">Resolve</button>
     <button class="btn btn-dark btn-sm" click.delegate="solver.playOrPause()" disabled.bind="solver.cannotPlayback">${solver.playLabel}</button>
     <button class="btn btn-dark btn-sm" click.delegate="solver.stepByStep(false)" disabled.bind="solver.cannotGoBack">Prev</button>
     <button class="btn btn-dark btn-sm" click.delegate="solver.stepByStep(true)" disabled.bind="solver.cannotGoNext">Next</button>
+    <a class="btn btn-dark btn-sm" href="/menu">Quit</a>
   </div>
 
   <div id="solitaire-game" class="playingCards container-background">
@@ -25,7 +27,7 @@
       </span>
       <span id="solitaire-king-slots">
         <ul repeat.for="i of 4" class="deck deck-clickable">
-          <span class="symbol-position" css="color: ${solitaire.kingSlots[i].color}" innerhtml.bind="solitaire.kingSlots[i].suitCss"></span>
+          <span class="king-slot-symbol" css="color: ${solitaire.kingSlots[i].color}" innerhtml.bind="solitaire.kingSlots[i].suitCss"></span>
           <li repeat.for="card of solitaire.kingSlots[i].cards" class="card-slot">
             <compose view="../templates/card.html" containerless></compose>
           </li>
@@ -44,9 +46,10 @@
   </div>
 
   <div id="result-zone">
-    <div>${solver.status}</div>
+    <div if.bind="solver.status != 'running...'">${solver.status}</div>
     <div>${solver.stepStatus}</div>
     <div>${solver.possibleMoves}</div>
+    <i if.bind="solver.status == 'running...'" class="fas fa-2x fa-cog fa-spin"></i>
   </div>
 
 </template>

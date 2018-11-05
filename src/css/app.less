@@ -5,16 +5,17 @@
 @cardHeightSm: 3.1em;
 @cardMarginSm: 1em;
 #buttons-zone {
-    margin: 1em 2.5em 3.5em 2em;
+    margin: 2em 4em;
 }
 
 #result-zone {
     position: absolute;
-    top: 18px;
-    left: 18em;
+    top: 35px;
+    left: 390px;
 }
 
 #solitaire-game {
+    margin-top: 2em;
     display: flex;
     flex-flow: column nowrap;
 }
@@ -73,11 +74,12 @@
     position: relative;
 }
 
-.symbol-position {
+.king-slot-symbol {
   position: absolute;
-  top: 30px;
-  left: 26px;
-  font-size: 2em;
+  top: 12px;
+  left: 20px;
+  font-size: 3em;
+  opacity: 0.5;
 }
 
 ul.deck-clickable div.card {
@@ -101,24 +103,27 @@ ul.cards-column li.card-slot {
     text-align: center;
 }
 
+.flex {
+    margin-top: 2rem;
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
 .progress-bar {
   height: 2rem;
   width: 600px;
   background-color: #ccc;
-  border-radius: 1rem;
-  margin: auto;
 }
 
 .progress {
   height: 100%;
-  border-radius: inherit;
   background-color: red;
 }
 
-.flex {
-  margin-top: 2rem;
-  display: flex;
-  flex-flow: row nowrap;
+#progress-zone {
+    margin: 0 3em;
+    padding: 1em;
+    border: silver solid 1px;
 }
 
 ul.spider-deck li {

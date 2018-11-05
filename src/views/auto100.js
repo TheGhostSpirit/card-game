@@ -1,14 +1,6 @@
-import {
-  Solver
-} from 'models/solver';
-import {
-  Service
-} from 'services/service';
-import {
-  inject,
-  computedFrom,
-  NewInstance
-} from 'aurelia-framework';
+import { Solver } from 'models/solver';
+import { Service } from 'services/service';
+import { inject, computedFrom, NewInstance } from 'aurelia-framework';
 
 @inject(NewInstance.of(Solver), Service)
 export class Auto100 {
@@ -29,14 +21,15 @@ export class Auto100 {
     });
   }
 
-  showGameOutcome(outcome) {
-    if (outcome === null || outcome instanceof Error) this.unknowns++;
-    else if (outcome) this.success++;
-    else if (outcome === false) this.fails++;
-    //  let finishTime = Date.now();
-    //  this.time = ((finishTime - beginTime) / 1000);
-    // this.locked = (i < this.gamesCount - 1);
-    // this.progress = Math.ceil((i / this.gamesCount) * 100);
+  showGameOutcome(outcome, i) {
+    if (outcome) this.success++;
+    if (outcome === false) this.fails++;
+    this.progress = Math.ceil((i / this.gamesCount) * 100);
+  }
+
+  showError(error) {
+    console.log(error.message);
+    this.unknowns++;
   }
 
   launch() {
@@ -44,14 +37,23 @@ export class Auto100 {
     this.success = 0;
     this.fails = 0;
     this.unknowns = 0;
-    // let beginTime = Date.now();
-    this.games.reduce((acc, g) => {
-      this.solver.load(g.game);
+    let beginTime = Date.now();
+    this.games.reduce((acc, g, i) => {
       return acc
-        .then(this.solver.resolve)
-        .then(o => this.showGameOutcome(o))
-        .catch(o => this.showGameOutcome(o));
-    }, Promise.resolve());
+        .then(() => {
+          this.solver.loadGame(g.game);
+          return this.solver.resolve();
+        })
+        .then(o => this.showGameOutcome(o, i))
+        .catch(error => this.showError(error));
+    }, Promise.resolve()).then(() => {
+      let finishTime = Date.now();
+      this.time = ((finishTime - beginTime) / 1000);
+      this.locked = false;
+    }).catch(error => {
+      console.log(error.message);
+      this.locked = false;
+    });
   }
 
   @computedFrom('success', 'gamesCount')

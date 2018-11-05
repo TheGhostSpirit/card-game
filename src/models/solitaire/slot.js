@@ -1,6 +1,4 @@
-import {
-  Card
-} from '../card/card';
+import { Card } from '../card/card';
 
 export class Slot {
 

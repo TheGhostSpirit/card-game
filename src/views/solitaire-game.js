@@ -18,7 +18,4 @@ export class SolitaireGame {
     }
   }
 
-  quit() {
-    this.router.navigateToRoute('Menu');
-  }
 }

@@ -1,6 +1,5 @@
 import { Card } from '../card/card';
 
-
 export class SpiderSlot {
   constructor() {
     this.cards = [];

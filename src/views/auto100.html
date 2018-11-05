@@ -1,20 +1,21 @@
 <template>
-  <div class="align-center">
-    <h2>Expected success: ${expectedSuccess}</h2>
-    <button class="btn btn-dark btn-sm" if.bind="games.length > 0" click.delegate="launch()" disabled.bind="locked">Launch</button>
-    <div>
-      <h2>Total number of games: ${gamesCount}</h2>
-      <h2>Success: ${success}</h2>
-      <h2>Fails: ${fails}</h2>
-      <h2>Unknowns: ${unknowns}</h2>
-      <h2>Success rate: ${rate}%</h2>
-      <h2>Time elapsed: ${time}s</h2>
-      <h2>Progress: ${progress ? progress : 0}%</h2>
-    </div>
-    <div class="flex">
-      <div class="progress-bar">
-        <div class="progress" css="width: ${progress ? progress : 0}%"></div>
+    <div id="buttons-zone" class="btn-group">
+        <button class="btn btn-dark btn-sm" if.bind="games.length > 0" click.delegate="launch()" disabled.bind="locked">Launch</button>
+        <a class="btn btn-dark btn-sm" href="/menu">Quit</a>
       </div>
+    <div id="progress-zone">
+        <h3>Expected success: ${expectedSuccess}</h3>
+        <h3>Total number of games: ${gamesCount}</h3>
+        <h3>Success: ${success}</h3>
+        <h3>Fails: ${fails}</h3>
+        <h3>Unknowns: ${unknowns}</h3>
+        <h3>Success rate: ${rate}%</h3>
+        <h3>Time elapsed: ${time}s</h3>
+        <h3>Progress: ${progress ? progress : 0}%</h3>
+        <div class="flex">
+            <div class="progress-bar">
+                <div class="progress" css="width: ${progress ? progress : 0}%"></div>
+            </div>
+        </div>
     </div>
-  </div>
 </template>

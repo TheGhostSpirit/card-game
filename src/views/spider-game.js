@@ -14,8 +14,4 @@ export class SpiderGame {
     this.spider.newGame();
   }
 
-  quit() {
-    this.router.navigateToRoute('Menu');
-  }
-
 }

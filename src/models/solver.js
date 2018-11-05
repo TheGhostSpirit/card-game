@@ -1,24 +1,11 @@
-import {
-  inject,
-  computedFrom
-} from 'aurelia-framework';
-import {
-  Solitaire
-} from 'models/solitaire/solitaire';
-import {
-  Deck
-} from 'models/solitaire/deck';
-import {
-  ZONES
-} from './solitaire/solitaire-const';
-import {
-  Move
-} from './move';
+import { inject, computedFrom } from 'aurelia-framework';
+import { Solitaire } from 'models/solitaire/solitaire';
+import { Deck } from 'models/solitaire/deck';
+import { ZONES } from './solitaire/solitaire-const';
+import { Move } from './move';
 
-const MAXMOVES = 1500;
+const MAXMOVES = 15000;
 const DEFAULTDELAY = 50;
-const doNext = f => f();
-//const doNext = f => setTimeout(f);
 
 @inject(Solitaire)
 export class Solver {
@@ -26,34 +13,29 @@ export class Solver {
   constructor(solitaire) {
     this.solitaire = solitaire;
     this.shadowSolitaire = new Solitaire(new Deck());
-    this.status = '';
     this.set = new Set();
     this.delay = DEFAULTDELAY;
     this.playLabel = 'Play';
-    this.steps = [];
   }
 
   loadGame(game) {
+    this.steps = [];
+    this.stepIndex = -1;
+    this.set.clear();
     this.solitaire.loadGame(game);
     this.solitaire.stub.fullTurn();
     this.shadowSolitaire.loadGame(this.solitaire.dump());
   }
 
-  resolve() {
-    this.steps = [];
-    this.stepIndex = -1;
-    this.set.clear();
-    this.resolutionDone = false;
+  resolveGame() {
     this.status = 'running...';
-    return this.resolveStep(0)
+    this.resolve()
       .then(result => {
-        this.resolutionDone = true;
-        this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
+        this.status = (result) ? `Finished in ${this.steps.length} moves.` : `No solution found in ${this.steps.length} moves!`;
         return result;
       })
       .catch(error => {
-        this.resolutionDone = true;
-        this.status = error.message;
+        this.status = `${error.message} ${this.steps.length} moves!`;
         return false;
       });
   }
@@ -94,6 +76,16 @@ export class Solver {
     }
   }
 
+  @computedFrom('status')
+  get resolutionDone() {
+    return this.status && this.status !== 'running...';
+  }
+
+  @computedFrom('status')
+  get resolutionRunning() {
+    return this.status === 'running...';
+  }
+
   @computedFrom('steps.length', 'resolutionDone')
   get cannotPlayback() {
     return this.steps.length === 0 || !this.resolutionDone;
@@ -110,6 +102,7 @@ export class Solver {
   }
 
   pushState(message, possibleMoves, pause) {
+    if (this.steps.length >= MAXMOVES) throw new Error('Out of moves!');
     let dump = this.solitaire.dump();
     this.steps.push({
       game: dump,
@@ -118,6 +111,19 @@ export class Solver {
       state: JSON.stringify(dump),
       pause: pause
     });
+  }
+
+  doMove(move, message, possibleMoves) {
+    this.pushState(message, possibleMoves);
+    //let toState = this.solitaire.dump();
+    this.solitaire.doMove(move.source.cards, move.destination.cards, move.selection, move.zone);
+    //let fromState = this.solitaire.dump();
+    return JSON.stringify(this.solitaire.dump()); //move.description; // JSON.stringify({from: toState, to: fromState});
+  }
+
+  undoLastMove(message, possibleMoves) {
+    this.pushState(message, possibleMoves, true);
+    this.solitaire.undoMove();
   }
 
   findMoves() {
@@ -208,40 +214,39 @@ export class Solver {
     return Array.from(map.values());
   }
 
-  doMove(move, message, possibleMoves) {
-    this.pushState(message, possibleMoves);
-    //let toState = this.solitaire.dump();
-    this.solitaire.doMove(move.source.cards, move.destination.cards, move.selection, move.zone);
-    //let fromState = this.solitaire.dump();
-    return JSON.stringify(this.solitaire.dump()); //move.description; // JSON.stringify({from: toState, to: fromState});
-  }
-
-  undoLastMove(message, possibleMoves) {
-    this.pushState(message, possibleMoves, true);
-    this.solitaire.undoMove();
-  }
-
-  resolveStep(n, moves, index) {
+  resolve() {
     return new Promise((resolve, reject) => {
-      if (this.steps.length >= MAXMOVES || n < 0) return reject(new Error('Out of moves!'));
-      let possibleMoves = moves || this.findMoves();
-      let currentIndex = index || 0;
-      let movesCount = possibleMoves.length;
-      if (movesCount > 0 && currentIndex < movesCount) {
-        let move = possibleMoves[currentIndex];
-        let state = this.doMove(move, `+E${n}-m${currentIndex + 1}/${movesCount}=${move.description}`, possibleMoves);
-        if (this.set.has(state)) {
-          this.undoLastMove(`-E${n}-m${currentIndex + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
-          return doNext(() => resolve(this.resolveStep(n, possibleMoves, currentIndex + 1)));
+      setTimeout(() => {
+        try {
+          resolve(this.resolveStep(0));
+        } catch (error) {
+          reject(error);
         }
-        this.set.add(state);
-        if (!this.solitaire.isGameNotFinished()) {
-          return resolve(true);
-        }
-        return doNext(() => resolve(this.resolveStep(n + 1)));
-      }
-      this.undoLastMove(`-E${n}:NOSOLUTION`, possibleMoves);
-      return doNext(() => resolve(this.resolveStep(n - 1)));
+      }, 10);
     });
+  }
+
+  resolveStep(n) {
+    let possibleMoves = this.findMoves();
+    let movesCount = possibleMoves.length;
+    if (movesCount > 0) {
+      for (let i = 0; i < movesCount; i++) {
+        let move = possibleMoves[i];
+        let state = this.doMove(move, `+E${n}-m${i + 1}/${movesCount}=${move.description}`, possibleMoves);
+        if (this.set.has(state)) {
+          this.undoLastMove(`-E${n}-m${i + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
+          continue;
+        } else {
+          this.set.add(state);
+        }
+        if (!this.solitaire.isGameNotFinished()) {
+          return true;
+        }
+        let res = this.resolveStep(n + 1, move);
+        if (res === true) return true;
+      }
+    }
+    this.undoLastMove(`-E${n}:NOSOLUTION`, possibleMoves);
+    return false;
   }
 }
