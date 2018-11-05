@@ -6,10 +6,11 @@ import {
 } from 'services/service';
 import {
   inject,
-  computedFrom
+  computedFrom,
+  NewInstance
 } from 'aurelia-framework';
 
-@inject(Solver, Service)
+@inject(NewInstance.of(Solver), Service)
 export class Auto100 {
   constructor(solver, service) {
     this.service = service;
@@ -29,9 +30,9 @@ export class Auto100 {
   }
 
   showGameOutcome(outcome) {
-    if (outcome) this.success++;
-    if (outcome === false) this.fails++;
-    if (outcome === null) this.unknowns++;
+    if (outcome === null || outcome instanceof Error) this.unknowns++;
+    else if (outcome) this.success++;
+    else if (outcome === false) this.fails++;
     //  let finishTime = Date.now();
     //  this.time = ((finishTime - beginTime) / 1000);
     // this.locked = (i < this.gamesCount - 1);
@@ -46,9 +47,10 @@ export class Auto100 {
     // let beginTime = Date.now();
     this.games.reduce((acc, g) => {
       this.solver.load(g.game);
-      return acc.then(() => {
-        return this.solver.resolve().then(o => this.showGameOutcome(o));
-      });
+      return acc
+        .then(this.solver.resolve)
+        .then(o => this.showGameOutcome(o))
+        .catch(o => this.showGameOutcome(o));
     }, Promise.resolve());
   }
 

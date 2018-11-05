@@ -17,6 +17,8 @@ import {
 
 const MAXMOVES = 1500;
 const DEFAULTDELAY = 50;
+const doNext = f => f();
+//const doNext = f => setTimeout(f);
 
 @inject(Solitaire)
 export class Solver {
@@ -31,19 +33,10 @@ export class Solver {
     this.steps = [];
   }
 
-  initialize() {
-    this.solitaire.newGame();
+  loadGame(game) {
+    this.solitaire.loadGame(game);
     this.solitaire.stub.fullTurn();
-    this.shadowSolitaire.initialize();
-    this.shadowSolitaire.restore(this.solitaire.dump());
-  }
-
-  load(game) {
-    this.solitaire.initialize();
-    this.solitaire.restore(game);
-    this.solitaire.stub.fullTurn();
-    this.shadowSolitaire.initialize();
-    this.shadowSolitaire.restore(this.solitaire.dump());
+    this.shadowSolitaire.loadGame(this.solitaire.dump());
   }
 
   resolve() {
@@ -52,11 +45,17 @@ export class Solver {
     this.set.clear();
     this.resolutionDone = false;
     this.status = 'running...';
-    return this.resolveStep(0).then(result => {
-      this.resolutionDone = true;
-      this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
-      return result;
-    });
+    return this.resolveStep(0)
+      .then(result => {
+        this.resolutionDone = true;
+        this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
+        return result;
+      })
+      .catch(error => {
+        this.resolutionDone = true;
+        this.status = error.message;
+        return false;
+      });
   }
 
   playOrPause() {
@@ -223,28 +222,26 @@ export class Solver {
   }
 
   resolveStep(n, moves, index) {
-    if (this.steps.length >= MAXMOVES || n < 0) return Promise.resolve(null);
-    let possibleMoves = moves || this.findMoves();
-    let currentIndex = index || 0;
-    let movesCount = possibleMoves.length;
-    if (movesCount > 0 && currentIndex < movesCount) {
-      let move = possibleMoves[currentIndex];
-      let state = this.doMove(move, `+E${n}-m${currentIndex + 1}/${movesCount}=${move.description}`, possibleMoves);
-      if (this.set.has(state)) {
-        this.undoLastMove(`-E${n}-m${currentIndex + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
-        return this.resolveStep(n, possibleMoves, currentIndex + 1);
+    return new Promise((resolve, reject) => {
+      if (this.steps.length >= MAXMOVES || n < 0) return reject(new Error('Out of moves!'));
+      let possibleMoves = moves || this.findMoves();
+      let currentIndex = index || 0;
+      let movesCount = possibleMoves.length;
+      if (movesCount > 0 && currentIndex < movesCount) {
+        let move = possibleMoves[currentIndex];
+        let state = this.doMove(move, `+E${n}-m${currentIndex + 1}/${movesCount}=${move.description}`, possibleMoves);
+        if (this.set.has(state)) {
+          this.undoLastMove(`-E${n}-m${currentIndex + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
+          return doNext(() => resolve(this.resolveStep(n, possibleMoves, currentIndex + 1)));
+        }
+        this.set.add(state);
+        if (!this.solitaire.isGameNotFinished()) {
+          return resolve(true);
+        }
+        return doNext(() => resolve(this.resolveStep(n + 1)));
       }
-      this.set.add(state);
-      if (!this.solitaire.isGameNotFinished()) {
-        return Promise.resolve(true);
-      }
-      // eslint-disable-next-line no-loop-func
-      return Promise.resolve().then(result => {
-        if (result) return Promise.resolve(true);
-        return this.resolveStep(n + 1);
-      });
-    }
-    this.undoLastMove(`-E${n}:NOSOLUTION`, possibleMoves);
-    return this.resolveStep(n - 1);
+      this.undoLastMove(`-E${n}:NOSOLUTION`, possibleMoves);
+      return doNext(() => resolve(this.resolveStep(n - 1)));
+    });
   }
 }
