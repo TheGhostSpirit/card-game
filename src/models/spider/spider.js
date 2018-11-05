@@ -20,14 +20,13 @@ export class Spider {
   constructor(spiderDeck) {
     this.deck = spiderDeck;
     this.logger = console;
-  }
-
-  newGame() {
     this.initialize();
-    this.deck.initialize();
-    this.distributeFromDeck(this.deck);
   }
 
+
+  /**
+   * Initializes the internal structures of the game.
+   */
   initialize() {
     this.isNotFinished = true;
     this.previousSelection = undefined;
@@ -40,17 +39,41 @@ export class Spider {
     }
   }
 
-  cheat() {
+  /**
+   * Generates a new game.
+   */
+  newGame() {
     this.initialize();
+    this.deck.initialize();
+    this.distributeFromDeck(this.deck);
+  }
+
+  /**
+   * Loads the specified game.
+   */
+  loadGame(game) {
+    if (game) {
+      this.initialize();
+      this.restore(game);
+    } else {
+      this.newGame();
+    }
+  }
+
+  /**
+   * Creates a cheated game.
+   */
+  cheat() {
     // let game2 = JSON.parse('{"foundation":[],"slots":[[{"suit":"hearts","name":"J","returned":true},{"suit":"hearts","name":"10","returned":true},{"suit":"hearts","name":"6","returned":true},{"suit":"hearts","name":"6","returned":true},{"suit":"spades","name":"Q","returned":true},{"suit":"spades","name":"7","returned":false},{"suit":"spades","name":"6","returned":false},{"suit":"spades","name":"5","returned":false},{"suit":"spades","name":"4","returned":false},{"suit":"spades","name":"3","returned":false}],[{"suit":"spades","name":"5","returned":true},{"suit":"spades","name":"8","returned":true},{"suit":"spades","name":"6","returned":true},{"suit":"hearts","name":"8","returned":true},{"suit":"spades","name":"K","returned":false},{"suit":"spades","name":"Q","returned":false},{"suit":"spades","name":"J","returned":false},{"suit":"spades","name":"10","returned":false},{"suit":"spades","name":"9","returned":false}],[{"suit":"hearts","name":"7","returned":true},{"suit":"spades","name":"K","returned":false}],[],[{"suit":"spades","name":"7","returned":true},{"suit":"hearts","name":"7","returned":true},{"suit":"spades","name":"5","returned":true},{"suit":"spades","name":"2","returned":false},{"suit":"hearts","name":"A","returned":false}],[{"suit":"hearts","name":"K","returned":true},{"suit":"spades","name":"2","returned":true},{"suit":"hearts","name":"2","returned":false}],[{"suit":"spades","name":"3","returned":true},{"suit":"spades","name":"K","returned":true},{"suit":"hearts","name":"5","returned":true},{"suit":"hearts","name":"A","returned":true},{"suit":"spades","name":"6","returned":false}],[{"suit":"hearts","name":"J","returned":true},{"suit":"hearts","name":"2","returned":true},{"suit":"hearts","name":"6","returned":true},{"suit":"spades","name":"K","returned":false},{"suit":"hearts","name":"Q","returned":false},{"suit":"hearts","name":"J","returned":false},{"suit":"hearts","name":"10","returned":false},{"suit":"hearts","name":"9","returned":false},{"suit":"hearts","name":"8","returned":false},{"suit":"hearts","name":"7","returned":false},{"suit":"hearts","name":"6","returned":false}],[{"suit":"spades","name":"4","returned":true},{"suit":"hearts","name":"9","returned":true},{"suit":"hearts","name":"K","returned":true},{"suit":"hearts","name":"K","returned":false}],[{"suit":"hearts","name":"5","returned":true},{"suit":"spades","name":"A","returned":true},{"suit":"spades","name":"10","returned":true},{"suit":"spades","name":"10","returned":true},{"suit":"hearts","name":"2","returned":false}]],"stub":{"cards":[{"suit":"hearts","name":"3","returned":true},{"suit":"spades","name":"7","returned":true},{"suit":"hearts","name":"4","returned":true},{"suit":"hearts","name":"3","returned":true},{"suit":"hearts","name":"8","returned":true},{"suit":"hearts","name":"Q","returned":true},{"suit":"hearts","name":"8","returned":true},{"suit":"hearts","name":"Q","returned":true},{"suit":"spades","name":"4","returned":true},{"suit":"spades","name":"A","returned":true},{"suit":"spades","name":"9","returned":true},{"suit":"spades","name":"8","returned":true},{"suit":"hearts","name":"5","returned":true},{"suit":"spades","name":"9","returned":true},{"suit":"spades","name":"3","returned":true},{"suit":"spades","name":"10","returned":true},{"suit":"hearts","name":"J","returned":true},{"suit":"spades","name":"5","returned":true},{"suit":"spades","name":"3","returned":true},{"suit":"hearts","name":"Q","returned":true},{"suit":"spades","name":"7","returned":true},{"suit":"hearts","name":"10","returned":true},{"suit":"hearts","name":"3","returned":true},{"suit":"spades","name":"8","returned":true},{"suit":"spades","name":"J","returned":true},{"suit":"spades","name":"2","returned":true},{"suit":"spades","name":"2","returned":true},{"suit":"hearts","name":"4","returned":true},{"suit":"spades","name":"9","returned":true},{"suit":"spades","name":"J","returned":true},{"suit":"spades","name":"4","returned":true},{"suit":"hearts","name":"A","returned":true},{"suit":"spades","name":"6","returned":true},{"suit":"spades","name":"A","returned":true},{"suit":"hearts","name":"K","returned":true},{"suit":"hearts","name":"A","returned":true},{"suit":"hearts","name":"9","returned":true},{"suit":"hearts","name":"3","returned":true},{"suit":"hearts","name":"2","returned":true},{"suit":"hearts","name":"9","returned":true},{"suit":"hearts","name":"5","returned":true},{"suit":"spades","name":"Q","returned":true},{"suit":"spades","name":"Q","returned":true},{"suit":"spades","name":"A","returned":true},{"suit":"hearts","name":"4","returned":true},{"suit":"hearts","name":"7","returned":true},{"suit":"spades","name":"8","returned":true},{"suit":"hearts","name":"10","returned":true},{"suit":"hearts","name":"4","returned":true},{"suit":"spades","name":"J","returned":true}]}}');
     let game = JSON.parse('{"foundation":[],"slots":[[{"suit":"spades","name":"6","returned":true},{"suit":"spades","name":"6","returned":true},{"suit":"hearts","name":"K","returned":false},{"suit":"hearts","name":"5","returned":false},{"suit":"hearts","name":"4","returned":false},{"suit":"hearts","name":"3","returned":false},{"suit":"spades","name":"J","returned":false}],[{"suit":"hearts","name":"10","returned":false},{"suit":"spades","name":"9","returned":false}],[{"suit":"spades","name":"6","returned":false},{"suit":"spades","name":"5","returned":false},{"suit":"spades","name":"4","returned":false},{"suit":"spades","name":"3","returned":false},{"suit":"spades","name":"2","returned":false},{"suit":"spades","name":"A","returned":false},{"suit":"spades","name":"6","returned":false},{"suit":"spades","name":"5","returned":false}],[{"suit":"spades","name":"Q","returned":true},{"suit":"hearts","name":"8","returned":false},{"suit":"spades","name":"7","returned":false},{"suit":"hearts","name":"6","returned":false},{"suit":"hearts","name":"5","returned":false},{"suit":"hearts","name":"7","returned":false}],[{"suit":"spades","name":"Q","returned":true},{"suit":"hearts","name":"9","returned":true},{"suit":"spades","name":"3","returned":true},{"suit":"hearts","name":"K","returned":false},{"suit":"spades","name":"Q","returned":false},{"suit":"spades","name":"J","returned":false},{"suit":"spades","name":"10","returned":false},{"suit":"spades","name":"9","returned":false},{"suit":"spades","name":"K","returned":false}],[{"suit":"spades","name":"9","returned":true},{"suit":"hearts","name":"A","returned":true},{"suit":"hearts","name":"2","returned":true},{"suit":"spades","name":"5","returned":true},{"suit":"spades","name":"8","returned":false},{"suit":"spades","name":"7","returned":false},{"suit":"hearts","name":"6","returned":false},{"suit":"spades","name":"5","returned":false},{"suit":"spades","name":"K","returned":false},{"suit":"spades","name":"2","returned":false}],[{"suit":"hearts","name":"8","returned":false},{"suit":"hearts","name":"7","returned":false},{"suit":"hearts","name":"6","returned":false},{"suit":"hearts","name":"5","returned":false},{"suit":"hearts","name":"4","returned":false},{"suit":"hearts","name":"3","returned":false},{"suit":"hearts","name":"2","returned":false},{"suit":"hearts","name":"A","returned":false},{"suit":"hearts","name":"9","returned":false}],[{"suit":"spades","name":"10","returned":true},{"suit":"hearts","name":"Q","returned":true},{"suit":"hearts","name":"K","returned":false},{"suit":"hearts","name":"Q","returned":false},{"suit":"spades","name":"J","returned":false},{"suit":"hearts","name":"10","returned":false},{"suit":"spades","name":"7","returned":false}],[{"suit":"spades","name":"10","returned":true},{"suit":"spades","name":"4","returned":true},{"suit":"spades","name":"3","returned":true},{"suit":"spades","name":"4","returned":true},{"suit":"hearts","name":"4","returned":false},{"suit":"hearts","name":"3","returned":false},{"suit":"hearts","name":"2","returned":false},{"suit":"hearts","name":"A","returned":false},{"suit":"hearts","name":"K","returned":false},{"suit":"hearts","name":"Q","returned":false},{"suit":"hearts","name":"J","returned":false},{"suit":"hearts","name":"10","returned":false}],[{"suit":"spades","name":"3","returned":false},{"suit":"spades","name":"2","returned":false},{"suit":"spades","name":"A","returned":false},{"suit":"hearts","name":"Q","returned":false}]],"stub":{"cards":[{"suit":"hearts","name":"J","returned":true},{"suit":"spades","name":"K","returned":true},{"suit":"hearts","name":"7","returned":true},{"suit":"spades","name":"7","returned":true},{"suit":"hearts","name":"8","returned":true},{"suit":"hearts","name":"9","returned":true},{"suit":"spades","name":"8","returned":true},{"suit":"hearts","name":"10","returned":true},{"suit":"hearts","name":"2","returned":true},{"suit":"hearts","name":"6","returned":true},{"suit":"spades","name":"8","returned":true},{"suit":"spades","name":"4","returned":true},{"suit":"spades","name":"A","returned":true},{"suit":"hearts","name":"5","returned":true},{"suit":"spades","name":"10","returned":true},{"suit":"hearts","name":"7","returned":true},{"suit":"spades","name":"8","returned":true},{"suit":"hearts","name":"3","returned":true},{"suit":"hearts","name":"6","returned":true},{"suit":"hearts","name":"A","returned":true},{"suit":"hearts","name":"J","returned":true},{"suit":"spades","name":"A","returned":true},{"suit":"hearts","name":"9","returned":true},{"suit":"hearts","name":"J","returned":true},{"suit":"spades","name":"J","returned":true},{"suit":"spades","name":"K","returned":true},{"suit":"spades","name":"2","returned":true},{"suit":"spades","name":"Q","returned":true},{"suit":"hearts","name":"8","returned":true},{"suit":"spades","name":"9","returned":true}]}}');
-    this.restore(game);
+    this.loadGame(game);
   }
 
-  logJson() {
-    this.logger.log(JSON.stringify(this.dump()));
-  }
 
+
+  /**
+   * Creates a memory dump of the game.
+   */
   dump() {
     return {
       foundation: this.foundation.dump(),
@@ -59,13 +82,26 @@ export class Spider {
     };
   }
 
-  restore(savedGame) {
-    let game = savedGame;
+  /**
+   * Restores the cards from a saved game.
+   */
+  restore(game) {
     this.foundation.load(game.foundation);
     this.slots.forEach((s, index) => s.load(game.slots[index]));
     this.stub.load(game.stub);
   }
 
+  /**
+   * Writes the memory dump to console.
+   */
+  logJson() {
+    this.logger.log(JSON.stringify(this.dump()));
+  }
+
+  /**
+   * Distributes the cards of the specified deck on the table.
+   * @param {Deck} deck - the deck used to distribute cards.
+   */
   distributeFromDeck(deck) {
     deck.shuffle();
     for (let i = 0; i < 10; i++) {
@@ -159,10 +195,6 @@ export class Spider {
     }
   }
 
-  isGameNotFinished() {
-    return !this.foundation.isFull();
-  }
-
   getCards(cardsSelection) {
     return cardsSelection.slot.cards.filter((c, i) => i >= cardsSelection.index);
   }
@@ -181,5 +213,9 @@ export class Spider {
 
   returnCard(card) {
     card.returned = !card.returned;
+  }
+
+  isGameNotFinished() {
+    return !this.foundation.isFull();
   }
 }

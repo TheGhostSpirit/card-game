@@ -3,7 +3,7 @@ import { inject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 
 @inject(Solitaire, Router)
-export class Game {
+export class SolitaireGame {
 
   constructor(solitaire, router) {
     this.solitaire = solitaire;

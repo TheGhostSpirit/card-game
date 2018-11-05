@@ -8,12 +8,12 @@ export class Menu {
     this.router = router;
   }
 
-  newGame() {
-    this.router.navigateToRoute('Game');
+  solitaire() {
+    this.router.navigateToRoute('Solitaire');
   }
 
-  cheatGame() {
-    this.router.navigateToRoute('Game', { cheat: true });
+  spider() {
+    this.router.navigateToRoute('Spider');
   }
 
   autoGame() {
@@ -22,9 +22,5 @@ export class Menu {
 
   autoGame100() {
     this.router.navigateToRoute('AutoX100');
-  }
-
-  spider() {
-    this.router.navigateToRoute('Spider');
   }
 }

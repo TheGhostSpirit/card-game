@@ -1,14 +1,15 @@
 <template>
   <div id="buttons-zone" class="btn-group">
-    <button class="btn btn-dark btn-sm" click.delegate="quit()">Quit</button>
-    <button class="btn btn-dark btn-sm" click.delegate="spider.logJson()">Log JSON</button>
-    <button class="btn btn-dark btn-sm" click.delegate="spider.cheat()">Cheat</button>
-    <button class="btn btn-dark btn-sm" click.delegate="spider.undoMove()">Undo</button>
+    <button class="btn btn-dark btn-sm" click.trigger="spider.newGame()">New Game</button>
+    <button class="btn btn-dark btn-sm" click.trigger="spider.cheat()">Cheat</button>
+    <button class="btn btn-dark btn-sm" click.trigger="spider.logJson()">Log JSON</button>
+    <button class="btn btn-dark btn-sm" click.trigger="spider.undoMove()">Undo</button>
+    <button class="btn btn-dark btn-sm" click.trigger="quit()">Quit</button>
   </div>
   <div id="solitaire-game" class="playingCards container-background" show.bind="spider.isNotFinished">
     <div id="solitaire-top">
       <span id="solitaire-stub">
-        <ul class="deck deck-clickable" click.delegate="spider.callStub()">
+        <ul class="deck deck-clickable" click.trigger="spider.callStub()">
           <li repeat.for="card of spider.stub.cards">
             <compose view="../templates/card.html" containerless></compose>
           </li>
