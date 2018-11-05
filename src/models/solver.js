@@ -52,10 +52,11 @@ export class Solver {
     this.set.clear();
     this.resolutionDone = false;
     this.status = 'running...';
-    let result = this.resolveStep(0);
-    this.resolutionDone = true;
-    this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
-    return result;
+    return this.resolveStep(0).then(result => {
+      this.resolutionDone = true;
+      this.status = (result) ? `finished in ${this.steps.length} moves.` : `no solution found in ${this.steps.length} moves!`;
+      return result;
+    });
   }
 
   playOrPause() {
@@ -209,7 +210,6 @@ export class Solver {
   }
 
   doMove(move, message, possibleMoves) {
-    if (this.steps.length > MAXMOVES) return null;
     this.pushState(message, possibleMoves);
     //let toState = this.solitaire.dump();
     this.solitaire.doMove(move.source.cards, move.destination.cards, move.selection, move.zone);
@@ -222,34 +222,29 @@ export class Solver {
     this.solitaire.undoMove();
   }
 
-  resolveStep(n, lastMove) {
-    if (this.steps.length > MAXMOVES) return null;
-    let possibleMoves = this.findMoves();
-    // if (lastMove) {
-    //   let reverseMoves = possibleMoves.filter(m => m.isReverseOf(lastMove));
-    //   possibleMoves = possibleMoves.filter(m => !m.isReverseOf(lastMove));
-    //   reverseMoves.forEach(m => possibleMoves.push(m));
-    // }
+  resolveStep(n, moves, index) {
+    if (this.steps.length >= MAXMOVES || n < 0) return Promise.resolve(null);
+    let possibleMoves = moves || this.findMoves();
+    let currentIndex = index || 0;
     let movesCount = possibleMoves.length;
-    if (movesCount > 0) {
-      for (let i = 0; i < movesCount; i++) {
-        let move = possibleMoves[i];
-        let state = this.doMove(move, `+E${n}-m${i + 1}/${movesCount}=${move.description}`, possibleMoves);
-        if (state === null) return;
-        if (this.set.has(state)) {
-          this.undoLastMove(`-E${n}-m${i + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
-          continue;
-        } else {
-          this.set.add(state);
-        }
-        if (!this.solitaire.isGameNotFinished()) {
-          return true;
-        }
-        let res = this.resolveStep(n + 1, move);
-        if (res === true) return true;
+    if (movesCount > 0 && currentIndex < movesCount) {
+      let move = possibleMoves[currentIndex];
+      let state = this.doMove(move, `+E${n}-m${currentIndex + 1}/${movesCount}=${move.description}`, possibleMoves);
+      if (this.set.has(state)) {
+        this.undoLastMove(`-E${n}-m${currentIndex + 1}/${movesCount}=${move.description}:CYCLE`, possibleMoves);
+        return this.resolveStep(n, possibleMoves, currentIndex + 1);
       }
+      this.set.add(state);
+      if (!this.solitaire.isGameNotFinished()) {
+        return Promise.resolve(true);
+      }
+      // eslint-disable-next-line no-loop-func
+      return Promise.resolve().then(result => {
+        if (result) return Promise.resolve(true);
+        return this.resolveStep(n + 1);
+      });
     }
     this.undoLastMove(`-E${n}:NOSOLUTION`, possibleMoves);
-    return false;
+    return this.resolveStep(n - 1);
   }
 }

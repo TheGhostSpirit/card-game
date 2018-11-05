@@ -28,25 +28,28 @@ export class Auto100 {
     });
   }
 
+  showGameOutcome(outcome) {
+    if (outcome) this.success++;
+    if (outcome === false) this.fails++;
+    if (outcome === null) this.unknowns++;
+    //  let finishTime = Date.now();
+    //  this.time = ((finishTime - beginTime) / 1000);
+    // this.locked = (i < this.gamesCount - 1);
+    // this.progress = Math.ceil((i / this.gamesCount) * 100);
+  }
+
   launch() {
     this.locked = true;
     this.success = 0;
     this.fails = 0;
     this.unknowns = 0;
-    let beginTime = Date.now();
-    for (let i = 0; i < this.gamesCount; i++) {
-      setTimeout(() => {
-        this.solver.load(this.games[i].game);
-        let outcome = this.solver.resolve();
-        if (outcome) this.success++;
-        if (outcome === false) this.fails++;
-        if (outcome === undefined) this.unknowns++;
-        let finishTime = Date.now();
-        this.time = ((finishTime - beginTime) / 1000);
-        this.locked = (i < this.gamesCount - 1);
-        this.progress = Math.ceil((i / this.gamesCount) * 100);
+    // let beginTime = Date.now();
+    this.games.reduce((acc, g) => {
+      this.solver.load(g.game);
+      return acc.then(() => {
+        return this.solver.resolve().then(o => this.showGameOutcome(o));
       });
-    }
+    }, Promise.resolve());
   }
 
   @computedFrom('success', 'gamesCount')
