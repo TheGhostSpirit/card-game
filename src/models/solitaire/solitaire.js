@@ -4,6 +4,7 @@ import { Stub } from './stub';
 import { KingSlot } from './king-slot';
 import { Slot } from './slot';
 import { SUITS, ZONES } from './solitaire-const';
+import { Move } from '../move';
 
 @inject(Deck)
 export class Solitaire {
@@ -186,5 +187,97 @@ export class Solitaire {
 
   isGameNotFinished() {
     return this.kingSlots.some(s => !s.isFull());
+  }
+
+  findMoves() {
+    let moves = [];
+    let kingSlotNumber = 4;
+    let slotNumber = 7;
+    for (let i = 0; i < kingSlotNumber; i++) {
+      for (let j = 0; j < slotNumber; j++) {
+        let c = this.slots[j].cards[this.slots[j].cards.length - 1];
+        if (c && this.kingSlots[i].canMoveTo([c])) {
+          moves.push(
+            new Move(
+              this.slots[j],
+              this.kingSlots[i],
+              [c],
+              `${c.symbol}:slot${j + 1}->kingslot`,
+              ZONES.slots
+            )
+          );
+        }
+      }
+    }
+    for (let i = 0; i < kingSlotNumber; i++) {
+      this.stub.cards.filter(c => this.kingSlots[i].canMoveTo([c])).forEach(c => moves.push(
+        new Move(
+          this.stub,
+          this.kingSlots[i],
+          [c],
+          `${c.symbol}:stub->kingslot`
+        )
+      ));
+    }
+    for (let i = 0; i < slotNumber; i++) {
+      let p = this.slots[i].cards.length - this.slots[i].cards.findIndex(c => !c.returned);
+      for (let j = 1; j <= p; j++) {
+        let selection = this.slots[i].cards.filter((c, ind) => ind >= this.slots[i].cards.length - p);
+        if (selection.length === 0) continue; // empty selection
+        let symbols = `(${selection.map(c => c.symbol).join('-')})`;
+        for (let k = 0; k < slotNumber; k++) {
+          let emptyDestinationSlot = this.slots[k].cards.length === 0;
+          let kingSelection = selection[0].value === 13 && selection[0] === this.slots[i].cards[0];
+          if (this.slots[k].canMoveTo(selection) && i !== k && !(emptyDestinationSlot && kingSelection)) {
+            moves.push(
+              new Move(
+                this.slots[i],
+                this.slots[k],
+                selection,
+                `${symbols}:slot${i + 1}->slot${k + 1}`,
+                ZONES.slots
+              )
+            );
+          }
+        }
+      }
+    }
+    for (let i = 0; i < slotNumber; i++) {
+      this.stub.cards.filter(c => this.slots[i].canMoveTo([c])).forEach(c => moves.push(
+        new Move(
+          this.stub,
+          this.slots[i],
+          [c],
+          `${c.symbol}:stub->slot${i + 1}`
+        )
+      ));
+    }
+    if (moves.length === 0) {
+      for (let i = 0; i < kingSlotNumber; i++) {
+        for (let j = 0; j < slotNumber; j++) {
+          let emptyDestinationSlot = this.slots[j].cards.length === 0;
+          if (emptyDestinationSlot) continue;
+          let c = this.kingSlots[i].cards[this.kingSlots[i].cards.length - 1];
+          if (c && this.slots[j].canMoveTo([c])) {
+            moves.push(
+              new Move(
+                this.kingSlots[i],
+                this.slots[j],
+                [c],
+                `${c.symbol}:kingslot->slot${j + 1}`,
+                ZONES.kingSlots
+              )
+            );
+          }
+        }
+      }
+    }
+    let map = new Map();
+    moves.forEach(m => map.set(m.description, m));
+    return Array.from(map.values());
+  }
+
+  prepareForResolution() {
+    this.stub.fullTurn();
   }
 }
