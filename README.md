@@ -1,7 +1,9 @@
-# Installation
-- Install NodeJS version 6.x or above [here]().
-- Install a Git Client [here]().
-- Install Visual Studio Code [here]().
+# card-game
+## Description
+This card-game application allows to play and solve automatically solitaire games.
+## Installation
+- Install NodeJS version 6.x or above [here](https://nodejs.org/en/).
+- Install a Git Client [here](https://git-scm.com/).
 - Install aurelia-cli:
 ```bash
 npm install -g aurelia-cli
