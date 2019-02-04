@@ -1,4 +1,4 @@
-# card-game
+# Card-Game
 ## Description
 This card-game application allows to play and solve automatically solitaire games.
 ## Installation
