@@ -1,6 +1,6 @@
 # Card-Game
 ## Description
-This card-game application allows to play and solve automatically solitaire games.
+This card-game application allows to play and solve solitaire games automatically.
 ## Installation
 - Install NodeJS version 6.x or above [here](https://nodejs.org/en/).
 - Install a Git Client [here](https://git-scm.com/).
