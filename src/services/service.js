@@ -6,7 +6,7 @@ export class Service {
 
   constructor(httpClient) {
     this.httpClient = httpClient;
-    this.url = '/assets/mock/100.games.json';
+    this.url = '/assets/mocks/100.games.json';
   }
 
   getGames() {
