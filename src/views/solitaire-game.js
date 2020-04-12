@@ -1,5 +1,5 @@
 import { inject, computedFrom } from 'aurelia-framework';
-import { Solitaire } from '../models/solitaire/solitaire';
+import { Solitaire } from '../models/solitaire';
 import { Solver } from 'models/solver';
 
 const DEFAULTDELAY = 50;

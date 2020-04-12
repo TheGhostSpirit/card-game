@@ -1,8 +1,13 @@
 <template>
-  <div id="buttons-zone" class="btn-group">
-    <button class="btn btn-outline-primary btn-sm" click.trigger="solitaire()">Solitaire</button>
-    <button class="btn btn-outline-primary btn-sm" click.trigger="spider()">Spider</button>
-    <button class="btn btn-outline-primary btn-sm" click.trigger="autoGame100()">Auto Game x100</button>
-
+  <h1 id="title">Solitaire App</h1>
+  <div id="menu">
+    <div class="jumbotron">
+      <h2>Solitaire</h2>
+      <button class="btn btn-primary btn-lg" click.trigger="solitaire()">Go to</button>
+    </div>
+    <div class="jumbotron">
+      <h2>Solver</h2>
+      <button class="btn btn-primary btn-lg" click.trigger="solver()">Go to</button>
+    </div>
   </div>
 </template>

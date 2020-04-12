@@ -1,5 +1,5 @@
 import { computedFrom } from 'aurelia-framework';
-import { SUITS, SUITSYMBOLS, NAMES } from '../solitaire/solitaire-const';
+import { SUITS, SUITSYMBOLS, NAMES } from './solitaire-const';
 
 /**
  * Describes a playable game card.

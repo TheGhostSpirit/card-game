@@ -1,4 +1,4 @@
-import { Card } from '../card/card';
+import { Card } from './card';
 import { SUITS, SUITSYMBOLS } from './solitaire-const';
 
 export class KingSlot {
@@ -50,7 +50,7 @@ export class KingSlot {
     return this.cards.length === 13;
   }
 
-  unselect(kingSlot) {
+  unselect(_) {
     this.cards.forEach(card => card.selected = false);
   }
 }

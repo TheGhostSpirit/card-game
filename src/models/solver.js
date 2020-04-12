@@ -36,10 +36,8 @@ export class Solver {
 
   doMove(move, message, possibleMoves) {
     this.pushState(message, possibleMoves);
-    //let toState = this._game.dump();
     this._game.doMove(move.source.cards, move.destination.cards, move.selection, move.zone);
-    //let fromState = this._game.dump();
-    return JSON.stringify(this._game.dump()); //move.description; // JSON.stringify({from: toState, to: fromState});
+    return JSON.stringify(this._game.dump());
   }
 
   undoLastMove(message, possibleMoves) {

@@ -4,7 +4,7 @@ import { Stub } from './stub';
 import { KingSlot } from './king-slot';
 import { Slot } from './slot';
 import { SUITS, ZONES } from './solitaire-const';
-import { Move } from '../move';
+import { Move } from './move';
 
 @inject(Deck)
 export class Solitaire {

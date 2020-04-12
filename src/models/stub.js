@@ -1,4 +1,4 @@
-import { Card } from '../card/card';
+import { Card } from './card';
 
 export class Stub {
 
@@ -70,20 +70,6 @@ export class Stub {
       this.turn();
     }
   }
-
-  // undoMove() {
-  //   if (this.cards.length > 0) {
-  //     let cardToUndo = this.cards.pop();
-  //     cardToUndo.returned = true;
-  //     this.returnedCards.push(cardToUndo);
-  //   } else {
-  //     while (this.returnedCards.length > 0) {
-  //       let cardToUndo = this.returnedCards.pop();
-  //       cardToUndo.returned = false;
-  //       this.cards.push(cardToUndo);
-  //     }
-  //   }
-  // }
 
   fill(deck) {
     while (deck.cards.length > 0) {

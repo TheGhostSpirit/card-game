@@ -1,5 +1,5 @@
 import { Solver } from 'models/solver';
-import { Solitaire } from 'models/solitaire/solitaire';
+import { Solitaire } from '../models/solitaire';
 import { Service } from 'services/service';
 import { inject, computedFrom } from 'aurelia-framework';
 
@@ -26,11 +26,10 @@ export class Auto100 {
   showGameOutcome(outcome, i) {
     if (outcome.result) this.success++;
     if (outcome.result === false) this.fails++;
-    this.progress = Math.ceil((i / this.gamesCount) * 100);
+    this.progress = Math.ceil(((i + 1) / this.gamesCount) * 100);
   }
 
-  showError(error) {
-    console.log(error.message);
+  showError(_) {
     this.unknowns++;
   }
 
@@ -52,8 +51,7 @@ export class Auto100 {
       let finishTime = Date.now();
       this.time = ((finishTime - beginTime) / 1000);
       this.locked = false;
-    }).catch(error => {
-      console.log(error.message);
+    }).catch(() => {
       this.locked = false;
     });
   }

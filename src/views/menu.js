@@ -12,15 +12,7 @@ export class Menu {
     this.router.navigateToRoute('Solitaire');
   }
 
-  spider() {
-    this.router.navigateToRoute('Spider');
-  }
-
-  autoGame() {
-    this.router.navigateToRoute('Auto');
-  }
-
-  autoGame100() {
-    this.router.navigateToRoute('AutoX100');
+  solver() {
+    this.router.navigateToRoute('Solver');
   }
 }
