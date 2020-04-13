@@ -3,8 +3,13 @@
   "description": "A web app to play and solve solitaire games. ",
   "version": "1.0.0",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheGhostSpirit/card-game.git"
+  },
   "scripts": {
-    "start": "npx au run"
+    "start": "npx au run",
+    "lint": "npx au lint"
   },
   "dependencies": {
     "aurelia-animator-css": "^1.0.2",
@@ -36,13 +41,19 @@
     "gulp-babel": "^6.1.2",
     "gulp-changed-in-place": "^2.0.3",
     "gulp-connect-php": "^1.0.3",
-    "gulp-eslint": "^6.0.0",
+    "gulp-eslint": "^2.0.0",
     "gulp-less": "^3.1.0",
-    "gulp-notify": "^3.2.0",
+    "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-watch": "^5.0.1",
+    "jasmine-core": "^2.4.1",
+    "karma": "^4.4.1",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-sourcemap-loader": "^0.3.7",
     "minimatch": "^3.0.2",
     "through2": "^2.0.1",
     "uglify-js": "^3.0.19",
