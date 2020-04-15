@@ -1,0 +1,74 @@
+<template>
+  <require from="./card/card.css"></require>
+  <div id="buttons-zone">
+    <div class="btn-group">
+      <a class="btn btn-dark btn-sm" href="/menu">Quit</a>
+      <button class="btn btn-dark btn-sm" click.delegate="loadGame()">New</button>
+      <button class="btn btn-dark btn-sm" click.trigger="solitaire.undoMove()" if.bind="solitaire.isNotFinished"
+        disabled.bind="solitaire.moves.length === 0">Undo</button>
+      <button class="btn btn-dark btn-sm" click.trigger="solitaire.logJson()" if.bind="solitaire.isNotFinished">Log
+        JSON</button>
+    </div>
+    <div class="btn-group" if.bind="solitaire.isNotFinished">
+      <button class="btn btn-dark btn-sm" click.delegate="resolveGame()"
+        disabled.bind="resolutionRunning">Resolve</button>
+      <button class="btn btn-dark btn-sm" click.delegate="playOrPause()"
+        disabled.bind="cannotPlayback">${playLabel}</button>
+      <button class="btn btn-dark btn-sm" click.delegate="stepByStep(false)" disabled.bind="cannotGoBack">Prev</button>
+      <button class="btn btn-dark btn-sm" click.delegate="stepByStep(true)" disabled.bind="cannotGoNext">Next</button>
+    </div>
+  </div>
+
+  <div id="solitaire-game" class="playingCards simpleCards container-background" show.bind="solitaire.isNotFinished">
+
+    <div id="solitaire-top">
+      <span id="solitaire-stub">
+        <ul class="deck deck-clickable" click.trigger="solitaire.turnStub()">
+          <li repeat.for="card of solitaire.stub.returnedCards" class="card-slot">
+            <compose view="./card/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+      <span id="solitaire-returned-stub">
+        <ul class="deck deck-clickable">
+          <li repeat.for="card of solitaire.stub.cards" class="card-slot"
+            click.trigger="solitaire.moveCard($index, 0, solitaire.zones.stub)">
+            <compose view="./card/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+      <span id="solitaire-king-slots">
+        <ul repeat.for="i of 4" class="deck deck-clickable"
+          click.trigger="solitaire.moveCard(-1, i, solitaire.zones.kingSlots)">
+          <span class="king-slot-symbol" css="color: ${solitaire.kingSlots[i].color}"
+            innerhtml.bind="solitaire.kingSlots[i].suitCss"></span>
+          <li repeat.for="card of solitaire.kingSlots[i].cards" class="card-slot"
+            click.trigger="solitaire.setSelectedCardIndex($index)">
+            <compose view="./card/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+    </div>
+
+    <div id="solitaire-bottom">
+      <span id="solitaire-slots">
+        <ul repeat.for="i of 7" class="cards-column" click.trigger="solitaire.moveCard(-1, i, solitaire.zones.slots)">
+          <li repeat.for="card of solitaire.slots[i].cards" class="card-slot"
+            click.trigger="solitaire.setSelectedCardIndex($index)">
+            <compose view="./card/card.html" containerless></compose>
+          </li>
+        </ul>
+      </span>
+    </div>
+  </div>
+
+  <div id="result-zone">
+    <div if.bind="!resolutionRunning">${status.message}</div>
+    <div>${status.stepStatus}</div>
+    <div>${status.possibleMoves}</div>
+    <i if.bind="resolutionRunning" class="fas fa-2x fa-cog fa-spin"></i>
+  </div>
+
+  <h2 class="finished" show.bind="!solitaire.isNotFinished">FINISHED !</h2>
+
+</template>

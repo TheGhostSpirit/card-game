@@ -1,11 +1,14 @@
-import { Card } from './card';
+import { Card } from '../index';
 
 export class Stub {
 
+  /**
+   * Creates an instance of the Card class.
+   * @param {String} cards - shown cards
+   * @param {String} name - hidden cards
+   */
   constructor() {
-    //visible cards
     this.cards = [];
-    //hidden cards
     this.returnedCards = [];
     this.id = 'Stub';
   }
@@ -46,7 +49,7 @@ export class Stub {
     return index === this.cards.length - 1 && this.cards.length !== 0;
   }
 
-  canMoveTo(src) {
+  canMoveTo(_) {
     return false;
   }
 

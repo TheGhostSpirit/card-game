@@ -1,5 +1,4 @@
-import { Card } from './card';
-import { SUITS, NAMES } from './solitaire-const';
+import { Card, NAMES, SUITS } from './card';
 
 export class Deck {
 

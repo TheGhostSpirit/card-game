@@ -1,10 +1,11 @@
-import { Solver } from 'models/solver';
-import { Solitaire } from '../models/solitaire';
-import { Service } from 'services/service';
 import { inject, computedFrom } from 'aurelia-framework';
 
+import { Solitaire } from 'models/solitaire';
+import { Solver } from 'models/index';
+import { Service } from 'services/service';
+
 @inject(Solver, Solitaire, Service)
-export class Auto100 {
+export class GameSolver {
   constructor(solver, solitaire, service) {
     this.solver = solver;
     this.solitaire = solitaire;

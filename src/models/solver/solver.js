@@ -1,4 +1,4 @@
-const MAXMOVES = 1500;
+const MAX_MOVES = 1500;
 
 export class Solver {
 
@@ -23,7 +23,7 @@ export class Solver {
   }
 
   pushState(message, possibleMoves, pause) {
-    if (this.steps.length >= MAXMOVES) throw new Error('Out of moves!');
+    if (this.steps.length >= MAX_MOVES) throw new Error('Out of moves!');
     let dump = this._game.dump();
     this.steps.push({
       game: dump,

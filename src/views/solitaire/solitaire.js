@@ -1,8 +1,9 @@
 import { inject, computedFrom } from 'aurelia-framework';
-import { Solitaire } from '../models/solitaire';
-import { Solver } from 'models/solver';
 
-const DEFAULTDELAY = 50;
+import { Solitaire } from 'models/solitaire';
+import { Solver } from 'models/index';
+
+const DEFAULT_DELAY = 50;
 
 @inject(Solitaire, Solver)
 export class SolitaireGame {
@@ -10,7 +11,7 @@ export class SolitaireGame {
   constructor(solitaire, solver) {
     this.solitaire = solitaire;
     this.solver = solver;
-    this.delay = DEFAULTDELAY;
+    this.delay = DEFAULT_DELAY;
     this.playLabel = 'Play';
     this.steps = [];
   }
@@ -68,7 +69,6 @@ export class SolitaireGame {
         possibleMoves: stepInfo.possibleMoves
       };
       this.solitaire.restore(stepInfo.game);
-      //  if (dealWithPause && stepInfo.pause) this.pause();
     }
   }
 

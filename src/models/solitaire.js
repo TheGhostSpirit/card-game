@@ -1,10 +1,12 @@
 import { inject } from 'aurelia-framework';
-import { Deck } from './deck';
-import { Stub } from './stub';
-import { KingSlot } from './king-slot';
-import { Slot } from './slot';
-import { SUITS, ZONES } from './solitaire-const';
-import { Move } from './move';
+
+import { Deck, KingSlot, Move, Slot, Stub, SUITS } from './index';
+
+export const ZONES = {
+  slots: 0,
+  kingSlots: 1,
+  stub: 2
+};
 
 @inject(Deck)
 export class Solitaire {

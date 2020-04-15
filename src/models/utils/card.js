@@ -1,5 +1,8 @@
 import { computedFrom } from 'aurelia-framework';
-import { SUITS, SUITSYMBOLS, NAMES } from './solitaire-const';
+
+export const SUITS = ['hearts', 'spades', 'diams', 'clubs'];
+export const SUITSYMBOLS = ['♡', '♠', '♢', '♣'];
+export const NAMES = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
 /**
  * Describes a playable game card.
@@ -17,7 +20,6 @@ export class Card {
     this.value = NAMES.indexOf(name) + 1;
     this.color = SUITS.indexOf(suit);
     this.suitSymbol = SUITSYMBOLS[this.color];
-    //css related
     this.rank = this.name.toLowerCase();
     this.suitCss = `&${this.suit};`;
     this.selected = false;
