@@ -1,6 +1,7 @@
 <template>
+  <require from="./solitaire.css"></require>
   <require from="./card/card.css"></require>
-  <div id="buttons-zone">
+  <div id="solitaire-menu">
     <div class="btn-group">
       <a class="btn btn-dark btn-sm" href="/menu">Quit</a>
       <button class="btn btn-dark btn-sm" click.delegate="loadGame()">New</button>
@@ -19,7 +20,7 @@
     </div>
   </div>
 
-  <div id="solitaire-game" class="playingCards simpleCards container-background" show.bind="solitaire.isNotFinished">
+  <div id="solitaire-game" class="container-background" show.bind="solitaire.isNotFinished">
 
     <div id="solitaire-top">
       <span id="solitaire-stub">
@@ -69,6 +70,6 @@
     <i if.bind="resolutionRunning" class="fas fa-2x fa-cog fa-spin"></i>
   </div>
 
-  <h2 class="finished" show.bind="!solitaire.isNotFinished">FINISHED !</h2>
+  <h2 id="solitaire-finished" show.bind="!solitaire.isNotFinished">FINISHED !</h2>
 
 </template>

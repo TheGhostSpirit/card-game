@@ -1,0 +1,133 @@
+@import './card/card.less';
+
+#solitaire-menu {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: left;
+  margin: 2em 4em;
+  white-space: nowrap;
+  & > * {
+    margin: 1rem;
+  }
+}
+
+#result-zone {
+  position: absolute;
+  top: 2rem;
+  left: 45rem;
+}
+
+#solitaire {
+  &-game {
+    margin-top: 2em;
+    display: flex;
+    flex-flow: column nowrap;
+
+    & .card-slot {
+      list-style: none;
+    }
+
+    & .deck-clickable,
+    & .cards-column {
+      border: 1px solid silver;
+      box-sizing: content-box;
+      border-radius: 0.3em;
+      min-width: @cardWidth;
+      max-width: @cardWidth;
+      min-height: @cardHeight;
+      max-height: @cardHeight;
+      margin-left: @cardMargin !important;
+      margin-right: @cardMargin !important;
+      padding: 0 !important;
+      background-image: url("assets/images/hatchedbrush.png");
+      position: relative;
+    }
+
+    & .deck-clickable .card {
+      margin-bottom: 0;
+    }
+
+    & .cards-column .card-slot {
+      height: @cardHeight / 2;
+    }
+
+    & .selected-card {
+      box-shadow: 0.2em 0.2em 0.5em #333;
+      border: 1px solid #333 !important;
+    }
+
+    & .deck {
+      list-style-type: none;
+      padding: 0;
+      margin: 0 0 1.5em 0;
+      position: relative;
+      clear: both;
+      height: 8em;
+
+      & li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        position: absolute;
+        .generate-deck-children(50);
+        .generate-deck-children(@n, @i: 1) when (@i =< @n) {
+          &:nth-child(@{i}) {
+            left: (@i - 1) * 1px;
+            bottom: (@i - 1) * 1px;
+          }
+          .generate-deck-children(@n, (@i + 1));
+        }
+      }
+
+    }
+
+  }
+
+  &-top {
+    order: 1;
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  &-stub {
+    flex-grow: 0;
+    order: 1;
+  }
+
+  &-returned-stub {
+    flex-grow: 0;
+    order: 2;
+  }
+
+  &-king-slots {
+    flex-grow: 4;
+    margin-left: @cardWidth + 2 * @cardMargin;
+    order: 3;
+    display: flex;
+    flex-flow: row nowrap;
+
+    & .king-slot-symbol {
+      position: absolute;
+      top: 12px;
+      left: 20px;
+      font-size: 3em;
+      opacity: 0.5;
+    }
+
+  }
+
+  &-bottom {
+    order: 2;
+  }
+
+  &-slots {
+    order: 4;
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  &-finished {
+    margin-left: 2em;
+  }
+
+}
