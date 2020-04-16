@@ -34,6 +34,10 @@ export class GameSolver {
     this.unknowns++;
   }
 
+  getElapsedTime(beginTime) {
+    return (Date.now() - beginTime) / 1000;
+  }
+
   launch() {
     this.locked = true;
     this.success = 0;
@@ -44,13 +48,13 @@ export class GameSolver {
       return acc
         .then(() => {
           this.solitaire.loadGame(g.game);
+          this.time = this.getElapsedTime(beginTime);
           return this.solver.resolve(this.solitaire);
         })
         .then(o => this.showGameOutcome(o, i))
         .catch(error => this.showError(error));
     }, Promise.resolve()).then(() => {
-      let finishTime = Date.now();
-      this.time = ((finishTime - beginTime) / 1000);
+      this.time = this.getElapsedTime(beginTime);
       this.locked = false;
     }).catch(() => {
       this.locked = false;
