@@ -1,9 +1,9 @@
 <template>
   <require from="./solver.css"></require>
   <div id="solver-menu" class="btn-group">
+    <a class="btn btn-dark btn-sm" href="/menu">Quit</a>
     <button class="btn btn-dark btn-sm" if.bind="games.length > 0" click.delegate="launch()"
       disabled.bind="locked">Launch</button>
-    <a class="btn btn-dark btn-sm" href="/menu">Quit</a>
   </div>
   <div id="progress-zone">
     <h4 class="understated">Minimum expected success: ${expectedSuccess}</h4>
