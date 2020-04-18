@@ -1,14 +1,26 @@
 <template>
   <require from="./menu.css"></require>
-  <h1 id="title">Solitaire App</h1>
-  <div id="menu">
-    <div class="jumbotron">
-      <h2>Solitaire</h2>
-      <a class="btn btn-primary btn-lg" href="/solitaire">Go to</a>
+  <main id="menu">
+    <h1 id="title">Solitaire App</h1>
+    <hr class="my-4">
+    <i class="fa"></i>
+    <div id="menu-body">
+      <div class="jumbotron">
+        <h2>Solitaire</h2>
+        <p class="lead">
+          Play or solve a regular solitaire game.
+        </p>
+        <hr class="my-4">
+        <a class="btn btn-primary btn-lg" href="/solitaire">Go to</a>
+      </div>
+      <div class="jumbotron">
+        <h2>Solver</h2>
+        <p class="lead">
+          Solve a hundred solitaire game at high-speed.
+        </p>
+        <hr class="my-4">
+        <a class="btn btn-primary btn-lg" href="/solver">Go to</a>
+      </div>
     </div>
-    <div class="jumbotron">
-      <h2>Solver</h2>
-      <a class="btn btn-primary btn-lg" href="/solver">Go to</a>
-    </div>
-  </div>
+  </main>
 </template>
