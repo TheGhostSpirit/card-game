@@ -1,59 +1,63 @@
 import gulp from 'gulp';
 import browserSync from 'browser-sync';
 import historyApiFallback from 'connect-history-api-fallback/lib';
-import { CLIOptions } from 'aurelia-cli';
 import project from '../aurelia.json';
+import { CLIOptions } from 'aurelia-cli';
 import build from './build';
 import watch from './watch';
 
 const bs = browserSync.create();
 
-let serve = gulp.series(
+const log = (message) => {
+  const logger = console;
+  logger.log(message);
+};
+
+const serve = gulp.series(
   build,
   done => {
     bs.init({
-      ghostMode: false,
-      tunnel: false,
-      open: 'local',
-      port: 8000,
-      online: true,
-      browser: ['chrome'],
+      online: false,
+      open: CLIOptions.hasFlag('open') || project.platform.open,
+      port: CLIOptions.getFlagValue('port') || project.platform.port,
+      host: CLIOptions.getFlagValue('host') || project.platform.host || 'localhost',
       logLevel: 'silent',
       server: {
-        baseDir: [project.platform.baseDir],
-        middleware: [historyApiFallback(), (req, res, next) => {
+        baseDir: [ project.platform.baseDir ],
+        middleware: [ historyApiFallback(), (_, res, next) => {
           res.setHeader('Access-Control-Allow-Origin', '*');
           next();
-        }]
+        } ]
       }
-    }, (err, cb) => {
+    }, (err, bs) => {
       if (err) return done(err);
-      let urls = cb.options.get('urls').toJS();
-      log(`Application available At: ${urls.local}`);
-      log(`BrowserSync available At: ${urls.ui}`);
+      const urls = bs.options.get('urls').toJS();
+      const host = bs.options.get('host');
+      const port = bs.options.get('port');
+
+      if (host !== 'localhost') {
+        log(`Application Available At: http://${host}:${port}`);
+      }
+
+      log(`Application Available At: ${urls.local}`);
+      log(`BrowserSync Available At: ${urls.ui}`);
       done();
     });
   }
 );
 
-function log(message) {
-  console.log(message); //eslint-disable-line no-console
-}
-
-function reload() {
+const reload = () => {
   log('Refreshing the browser');
   bs.reload();
-}
+};
 
-let run;
+const run = gulp.series(
+  serve,
+  done => { watch(reload); done(); }
+);
 
-if (CLIOptions.hasFlag('watch')) {
-  run = gulp.series(
-    serve,
-    done => { watch(reload); done(); }
-  );
-} else {
-  run = serve;
-}
+const shutdownAppServer = () => {
+  bs.exit();
+};
 
-export default run;
+export { run as default, serve, shutdownAppServer };

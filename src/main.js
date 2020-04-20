@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime';
 import environment from './environment';
 
 export function configure(aurelia) {

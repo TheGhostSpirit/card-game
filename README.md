@@ -6,7 +6,7 @@ This card-game application allows to play and solve solitaire games automaticall
 
 ## Installation
 
-- Install NodeJS version 6.x.
+- Install NodeJS version 8.9.0+ & npm 6+.
 
 - Install a Git Client.
 

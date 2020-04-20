@@ -1,3 +1,60 @@
 {
-  "extends": "./node_modules/aurelia-tools/.eslintrc.json"
+  "root": true,
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
+  },
+  "rules": {
+    "prefer-const": 1,
+    "prefer-destructuring": 1,
+    "no-alert": 1,
+    "no-unused-vars": 1,
+    "no-prototype-builtins": 1,
+    "no-console": 1,
+    "getter-return": 1,
+    "no-unreachable": 1,
+    "no-var": 1,
+    "no-else-return": 1,
+    "no-return-await": 1,
+    "prefer-arrow-callback": 1,
+    "no-duplicate-imports": 1,
+    "no-const-assign": 1,
+    "eol-last": [
+      1,
+      "always"
+    ],
+    "object-curly-spacing": [
+      1,
+      "always"
+    ],
+    "array-bracket-spacing": [
+      1,
+      "always"
+    ],
+    "semi": [
+      1,
+      "always"
+    ],
+    "quotes": [
+      1,
+      "single"
+    ],
+    "arrow-spacing": [
+      1,
+      {
+        "before": true,
+        "after": true
+      }
+    ]
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  }
 }

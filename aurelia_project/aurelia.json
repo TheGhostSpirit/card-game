@@ -1,15 +1,53 @@
 {
   "name": "card-game",
   "type": "project:application",
-  "bundler": {
-    "id": "cli",
-    "displayName": "Aurelia-CLI"
+  "paths": {
+    "root": "src"
+  },
+  "transpiler": {
+    "id": "babel",
+    "fileExtension": ".js",
+    "options": {
+      "plugins": [
+        [
+          "@babel/plugin-transform-modules-amd",
+          {
+            "loose": true
+          }
+        ]
+      ]
+    },
+    "source": [
+      "src/**/*.js"
+    ]
+  },
+  "markupProcessor": {
+    "source": [
+      "src/**/*.html"
+    ]
+  },
+  "cssProcessor": {
+    "source": [
+      "src/**/*.less"
+    ]
+  },
+  "jsonProcessor": {
+    "source": [
+      "src/**/*.json"
+    ]
+  },
+  "platform": {
+    "port": 9000,
+    "host": "localhost",
+    "open": false,
+    "index": "index.html",
+    "baseDir": ".",
+    "output": "scripts"
   },
   "build": {
     "targets": [
       {
-        "id": "web",
-        "displayName": "Web",
+        "port": 9000,
         "index": "index.html",
         "baseDir": ".",
         "output": "scripts"
@@ -17,75 +55,32 @@
     ],
     "options": {
       "minify": "stage & prod",
-      "sourcemaps": "dev & stage"
+      "sourcemaps": "dev & stage",
+      "rev": "prod",
+      "cache": "dev & stage"
     },
     "bundles": [
       {
         "name": "app-bundle.js",
         "source": [
-          "[**/*.js]",
-          "**/*.{css,html}"
+          "**/*.{js,json,css,html}"
         ]
       },
       {
         "name": "vendor-bundle.js",
         "prepend": [
-          "node_modules/bluebird/js/browser/bluebird.core.js",
-          {
-            "path": "node_modules/aurelia-cli/lib/resources/scripts/configure-bluebird-no-long-stacktraces.js",
-            "env": "stage & prod"
-          },
-          {
-            "path": "node_modules/aurelia-cli/lib/resources/scripts/configure-bluebird.js",
-            "env": "dev"
-          },
-          "node_modules/requirejs/require.js"
+          "node_modules/promise-polyfill/dist/polyfill.min.js",
+          "node_modules/alameda/alameda.js"
         ],
         "dependencies": [
-          "aurelia-binding",
           "aurelia-bootstrapper",
-          "aurelia-dependency-injection",
-          "aurelia-event-aggregator",
-          "aurelia-framework",
-          "aurelia-history",
-          "aurelia-history-browser",
-          "aurelia-loader",
           "aurelia-loader-default",
-          "aurelia-logging",
-          "aurelia-logging-console",
-          "aurelia-metadata",
-          "aurelia-pal",
           "aurelia-pal-browser",
-          "aurelia-path",
-          "aurelia-polyfills",
-          "aurelia-route-recognizer",
-          "aurelia-router",
-          "aurelia-task-queue",
-          "aurelia-templating",
-          "aurelia-templating-binding",
-          {
-            "name": "aurelia-templating-resources",
-            "path": "../node_modules/aurelia-templating-resources/dist/amd",
-            "main": "aurelia-templating-resources"
-          },
-          {
-            "name": "aurelia-templating-router",
-            "path": "../node_modules/aurelia-templating-router/dist/amd",
-            "main": "aurelia-templating-router"
-          },
           {
             "name": "aurelia-testing",
-            "path": "../node_modules/aurelia-testing/dist/amd",
-            "main": "aurelia-testing",
             "env": "dev"
           },
-          "text",
-          {
-            "name": "aurelia-fetch-client",
-            "main": "aurelia-fetch-client",
-            "path": "../node_modules/aurelia-fetch-client/dist/amd",
-            "resources": []
-          }
+          "text"
         ]
       }
     ],
@@ -100,60 +95,9 @@
             ".html",
             ".css"
           ],
-          "stub": true
+          "stub": false
         }
       ]
     }
-  },
-  "platform": {
-    "id": "web",
-    "displayName": "Web",
-    "index": "index.html",
-    "baseDir": ".",
-    "output": "scripts"
-  },
-  "transpiler": {
-    "id": "babel",
-    "displayName": "Babel",
-    "fileExtension": ".js",
-    "options": {
-      "plugins": [
-        "transform-es2015-modules-amd"
-      ]
-    },
-    "source": "src/**/*.js"
-  },
-  "markupProcessor": {
-    "id": "none",
-    "displayName": "None",
-    "fileExtension": ".html",
-    "source": "src/**/*.html"
-  },
-  "cssProcessor": {
-    "id": "less",
-    "displayName": "Less",
-    "fileExtension": ".less",
-    "source": "src/**/*.less"
-  },
-  "editor": {
-    "id": "vscode",
-    "displayName": "Visual Studio Code"
-  },
-  "unitTestRunner": {
-    "id": "karma",
-    "displayName": "Karma",
-    "source": "test/unit/**/*.js"
-  },
-  "paths": {
-    "root": "src",
-    "resources": "resources",
-    "elements": "resources/elements",
-    "attributes": "resources/attributes",
-    "valueConverters": "resources/value-converters",
-    "bindingBehaviors": "resources/binding-behaviors"
-  },
-  "testFramework": {
-    "id": "jasmine",
-    "displayName": "Jasmine"
   }
 }
