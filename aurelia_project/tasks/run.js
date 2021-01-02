@@ -29,11 +29,11 @@ const serve = gulp.series(
           next();
         } ]
       }
-    }, (err, bs) => {
+    }, (err, instance) => {
       if (err) return done(err);
-      const urls = bs.options.get('urls').toJS();
-      const host = bs.options.get('host');
-      const port = bs.options.get('port');
+      const urls = instance.options.get('urls').toJS();
+      const host = instance.options.get('host');
+      const port = instance.options.get('port');
 
       if (host !== 'localhost') {
         log(`Application Available At: http://${host}:${port}`);

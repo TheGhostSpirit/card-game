@@ -32,7 +32,11 @@ export class SolitaireGame {
     this.solver.resolve(this.solitaire)
       .then(resolution => {
         this.steps = resolution.steps;
-        this.status = { message: (resolution.result) ? `Finished in ${this.steps.length} moves.` : `No solution found in ${this.steps.length} moves!` };
+        this.status = {
+          message: (resolution.result)
+            ? `Finished in ${this.steps.length} moves.`
+            : `No solution found in ${this.steps.length} moves!`
+        };
         return resolution.result;
       })
       .catch(error => {
@@ -47,12 +51,12 @@ export class SolitaireGame {
     } else {
       this.playLabel = 'Pause';
       this.interval = setInterval(() => {
-        this.stepByStep(true, true);
+        this.stepByStep(true);
       }, this.delay);
     }
   }
 
-  stepByStep(forward, dealWithPause) {
+  stepByStep(forward) {
     this.stepIndex = (forward) ? ++this.stepIndex : --this.stepIndex;
     if (this.stepIndex === -1) {
       return;
@@ -60,7 +64,7 @@ export class SolitaireGame {
     if (this.stepIndex >= this.steps.length) {
       this.pause();
     } else {
-      let stepInfo = this.steps[this.stepIndex];
+      const stepInfo = this.steps[this.stepIndex];
       this.status = {
         stepStatus: stepInfo.status,
         possibleMoves: stepInfo.possibleMoves

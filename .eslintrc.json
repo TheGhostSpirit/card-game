@@ -50,7 +50,73 @@
         "before": true,
         "after": true
       }
-    ]
+    ],
+    "arrow-body-style": 1,
+    "camelcase": 1,
+    "comma-dangle": 1,
+    "complexity": 0,
+    "constructor-super": 1,
+    "dot-notation": 1,
+    "eqeqeq": [
+      1,
+      "always"
+    ],
+    "guard-for-in": 0,
+    "id-match": 1,
+    "max-classes-per-file": [
+      1,
+      1
+    ],
+    "max-len": [
+      1,
+      {
+        "code": 140
+      }
+    ],
+    "new-parens": 1,
+    "no-bitwise": 1,
+    "no-caller": 1,
+    "no-cond-assign": 1,
+    "no-debugger": 1,
+    "no-duplicate-case": 1,
+    "no-empty": 1,
+    "no-eval": 1,
+    "no-extra-bind": 1,
+    "no-fallthrough": 1,
+    "no-invalid-this": 0,
+    "no-new-func": 1,
+    "no-new-wrappers": 1,
+    "no-redeclare": 1,
+    "no-sequences": 0,
+    "no-shadow": [
+      1,
+      {
+        "hoist": "all"
+      }
+    ],
+    "no-sparse-arrays": 1,
+    "no-template-curly-in-string": 1,
+    "no-throw-literal": 1,
+    "no-trailing-spaces": 1,
+    "no-undef-init": 1,
+    "no-underscore-dangle": 1,
+    "no-unsafe-finally": 1,
+    "no-unused-expressions": 1,
+    "no-unused-labels": 1,
+    "object-shorthand": 1,
+    "one-var": [
+      1,
+      "never"
+    ],
+    "prefer-object-spread": 1,
+    "radix": 1,
+    "space-in-parens": [
+      1,
+      "never"
+    ],
+    "spaced-comment": 1,
+    "use-isnan": 1,
+    "valid-typeof": 0
   },
   "env": {
     "es6": true,

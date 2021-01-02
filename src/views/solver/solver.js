@@ -30,7 +30,7 @@ export class GameSolver {
     this.progress = Math.ceil(((i + 1) / this.gamesCount) * 100);
   }
 
-  showError(_) {
+  showError() {
     this.unknowns++;
   }
 
@@ -43,7 +43,7 @@ export class GameSolver {
     this.success = 0;
     this.fails = 0;
     this.unknowns = 0;
-    let beginTime = Date.now();
+    const beginTime = Date.now();
     this.games.reduce((acc, g, i) => {
       return acc
         .then(() => {
@@ -52,7 +52,7 @@ export class GameSolver {
           return this.solver.resolve(this.solitaire);
         })
         .then(o => this.showGameOutcome(o, i))
-        .catch(error => this.showError(error));
+        .catch(() => this.showError());
     }, Promise.resolve()).then(() => {
       this.time = this.getElapsedTime(beginTime);
       this.locked = false;

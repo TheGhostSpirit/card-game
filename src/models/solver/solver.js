@@ -10,7 +10,7 @@ export class Solver {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
-          let result = this.resolveStep(0);
+          const result = this.resolveStep(0);
           resolve({
             result: result,
             steps: this.steps
@@ -24,7 +24,7 @@ export class Solver {
 
   pushState(message, possibleMoves, pause) {
     if (this.steps.length >= MAX_MOVES) throw new Error('Out of moves!');
-    let dump = this._game.dump();
+    const dump = this._game.dump();
     this.steps.push({
       game: dump,
       status: message,
@@ -34,16 +34,43 @@ export class Solver {
     });
   }
 
-  doMove(move, message, possibleMoves) {
+  doMove(step, move, possibleMoves) {
+    const message = this.getMoveDescription(step, move, possibleMoves, true);
     this.pushState(message, possibleMoves);
     this._game.doMove(move.source.cards, move.destination.cards, move.selection, move.zone);
     return JSON.stringify(this._game.dump());
   }
 
-  undoLastMove(message, possibleMoves) {
+  undoLastMove(step, move, possibleMoves) {
+    const message = this.getMoveDescription(step, move, possibleMoves, false);
     this.pushState(message, possibleMoves, true);
     this._game.undoMove();
   }
+
+  getMoveDescription(step, move, possibleMoves, add) {
+    return add ? '+' : '-'
+      + `E${step}-m${possibleMoves.indexOf(move)}/${possibleMoves.length}=${move.description}`;
+  }
+
+  *traverseMoves(n) {
+    const possibleMoves = this._game.findMoves();
+
+    for (const move of possibleMoves) {
+      const state = this.doMove(n, move, possibleMoves);
+      yield *this.traverseMoves(n + 1);
+    }
+  }
+
+  foo() {
+    for (const move of this.traverseMoves(0)) {
+      if (!this._game.isGameNotFinished()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
 
   resolveStep(n) {
     let possibleMoves = this._game.findMoves();
